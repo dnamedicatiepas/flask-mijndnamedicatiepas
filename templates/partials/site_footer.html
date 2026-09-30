@@ -1,0 +1,17 @@
+{# The page footer and the gradient bar that closes the page. #}
+{% from "partials/macros.html" import cta_button %}
+<footer class="site-footer shell">
+  <div>
+    <p class="body-text">© Consortium B.V.</p>
+  </div>
+  <div class="logo">
+    <a href="{{ url_for('patienten') }}">
+      <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="DNAmedicatiepas, naar de homepage">
+    </a>
+  </div>
+  <div>
+    {{ cta_button("Informatie aanvragen", "#") }}
+  </div>
+</footer>
+
+<div class="border-bottom"></div>

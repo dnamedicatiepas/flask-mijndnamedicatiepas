@@ -1,0 +1,333 @@
+/* Voor Patiënten (index.html). Linked after styles.css, so a rule here beats a
+   shared rule of equal specificity. */
+
+/* ===== In één scan (hero) ===== */
+#in1scan {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.in1scan-body {
+  align-self: stretch;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 150%; /* 30px */
+}
+
+/* Block-level, so the button sits on its own line with no line-box spacing. */
+#in1scan .cta-button {
+  display: flex;
+  width: fit-content;
+}
+
+.hero-visual {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  aspect-ratio: 766 / 700;
+}
+
+.gradient-pill {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 27.42%;
+  height: 88.19%;
+  border-radius: 1000px;
+  border: 1px solid var(--color-ink-10);
+  background: linear-gradient(180deg, var(--brand-pink) 0%, var(--brand-lilac) 10%, var(--brand-blue) 80%, var(--brand-green) 100%);
+}
+
+.photo-frame {
+  position: absolute;
+  left: 27.94%;
+  top: 0%;
+  width: 55.35%;
+  height: 88.19%;
+  border-radius: 48px;
+  border: 1px solid var(--color-ink-10);
+  background: #D9D9D9;
+  overflow: hidden;
+}
+
+.photo-frame img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thin-pill {
+  position: absolute;
+  top: 0%;
+  width: 6.27%;
+  height: 88.19%;
+  border-radius: 24px;
+  border: 1px solid var(--color-ink-10);
+  background: var(--color-ink-06);
+  overflow: hidden;
+}
+
+.thin-pill.a {
+  left: 83.81%;
+}
+
+.thin-pill.b {
+  left: 90.60%;
+}
+
+.badge-frame {
+  position: absolute;
+  left: 4.83%;
+  top: 26.16%;
+  width: 95.17%;
+  height: 73.84%;
+}
+
+.badge-frame img {
+  position: absolute;
+  left: 28.11%;
+  top: -10.93%;
+  width: 106.23%;
+  height: 132.44%;
+  object-fit: cover;
+  transform: rotate(14.52deg);
+  transform-origin: center center;
+}
+
+.hero-visual img {
+  z-index: 2;
+}
+
+.hero-visual div {
+  padding: 10px;
+}
+
+/* ===== Hoe het werkt ===== */
+#section42 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+#section42 .sectie-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 640px; /* keeps the caption in a readable centered column */
+}
+
+/* ===== Hoe het werkt: stap-kaarten (Figma 7389:328 / 7389:414 / 7389:75) ===== */
+.stappen {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1120px;
+  margin-top: 64px;
+}
+
+.stap-kaart {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1280 / 640;
+  border-radius: 40px;
+  border: 1px solid var(--color-ink-10);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+
+/* The exports are left-crops of the same 1280x640 Figma frame with the right
+   edge intact, so matching the card's height and pinning right reproduces the
+   design's placement and scale; the box shrinks to the image so the fade below
+   lands on the image's own left edge. */
+.stap-visual {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.stap-visual img {
+  display: block;
+  height: 100%;
+  width: auto;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 48px);
+  mask-image: linear-gradient(to right, transparent 0, #000 48px);
+}
+
+.stap-tekst {
+  position: absolute;
+  top: 50%;
+  left: 8.36%;   /* 107 / 1280 */
+  width: 37.5%;  /* ~480 / 1280 */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(24px, 5vw, 64px);
+  text-align: left;
+  z-index: 2;
+}
+
+.stap-kop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.stap-badge {
+  padding: 4px 16px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  font-size: clamp(0.75rem, 1.25vw, 1rem);
+  line-height: 1.5;
+}
+
+.stap-titel {
+  font-weight: 500;
+  font-size: clamp(1.5rem, 3.75vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+/* ===== Feature-kaarten (Figma 7389:390 / 396 / 402 / 408) ===== */
+#features {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.feature-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 0 48px 0 24px;
+  border-left: 1px solid var(--color-ink-20);
+}
+
+.feature-card__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  background: #FFF;
+  border-radius: 40px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* Gradient ring only, drawn on a pseudo-element so the icon stays visible. */
+.feature-card__icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 40px;
+  padding: 1px;
+  background: linear-gradient(155deg, var(--brand-pink) 0%, var(--brand-lilac) 35%, var(--brand-blue) 65%, var(--brand-green) 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.feature-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature-card__title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.feature-card__body {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ===== Meer weten (shared block in styles.css) ===== */
+/* The landscape photo bleeds past the panel's right edge. */
+.mw-photo {
+  right: -3%;
+  width: 62%;
+  height: auto;
+}
+
+@media screen and (max-width: 1200px) {
+  #in1scan {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .stap-kaart {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: auto;
+  }
+
+  .stap-visual {
+    position: static;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  /* The exports carry the desktop frame's empty left half, so keep filling the
+     height and let the flex end-alignment clip that dead space away. */
+  .stap-visual img {
+    flex: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .stap-tekst {
+    position: static;
+    top: auto;
+    left: auto;
+    width: auto;
+    transform: none;
+    padding: 24px;
+  }
+}

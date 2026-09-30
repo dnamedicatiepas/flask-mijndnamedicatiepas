@@ -1,0 +1,150 @@
+{% extends "shell.html" %}
+{% from "partials/macros.html" import cta_button, logo_list %}
+
+{% block title %}DNAmedicatiepas – In één scan de juiste medicatie{% endblock %}
+{% block description %}De DNAmedicatiepas vertaalt het DNA van de patiënt naar concrete medicatieadviezen. Veilig gedeeld via een QR-code, direct beschikbaar voor artsen en apothekers.{% endblock %}
+
+{% block page_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/patienten.css') }}">
+{% endblock %}
+
+{% block content %}
+      <section id="in1scan">
+        <div>
+          <h1 class="display-heading">
+            <span class="display-heading__line">In één scan de</span>
+            <span class="display-heading__accent">juiste medicatie.</span>
+          </h1>
+
+          <div class="in1scan-body">
+            De DNAmedicatiepas vertaalt het DNA van de patiënt naar concrete medicatie adviezen. Veilig gedeeld via een QR-code, direct beschikbaar voor artsen en apothekers.
+          </div>
+
+          {{ cta_button("Bekijk hoe het werkt", "#section42", variant="dark", icon="arrow-down") }}
+        </div>
+
+        <div class="hero-visual">
+          <div class="gradient-pill"></div>
+          <div class="photo-frame">
+            <img src="{{ url_for('static', filename='images/hero-image.svg') }}" alt="Glimlachende patiënt">
+          </div>
+          <div class="thin-pill a"></div>
+          <div class="thin-pill b"></div>
+          <div class="badge-frame">
+            <img src="{{ url_for('static', filename='images/dna-medicatie-pas-badge.svg') }}" alt="DNAmedicatiepas badge houder">
+          </div>
+        </div>
+      </section>
+
+      <section id="section42">
+        <div class="sectie-intro">
+          <h2>Hoe het werkt!</h2>
+          <p class="h2-caption">
+            Met de DNAmedicatiepas krijgt u direct toegang tot het DNA-profiel van uw patiënt.
+            Zo ziet u in één oogopslag welke medicatie het beste past, voorkomt u bijwerkingen
+            en verhoogt u de behandelveiligheid.
+          </p>
+        </div>
+
+        <div class="stappen">
+          <article class="stap-kaart">
+            <div class="stap-tekst">
+              <div class="stap-kop">
+                <span class="stap-badge">001</span>
+                <h3 class="stap-titel">De arts vraagt de DNAmedicatiepas aan voor jou als patiënt.</h3>
+              </div>
+              <p class="body-text">
+                De arts vraagt de DNA-medicatiepas aan, die wordt verstrekt door aangesloten instellingen. Je ontvangt je eigen pas met je persoonlijke QR-code.
+              </p>
+            </div>
+            <div class="stap-visual">
+              <img src="{{ url_for('static', filename='images/how-it-works/stap-1.svg') }}" alt="DNAmedicatiepas met persoonlijke QR-code">
+            </div>
+          </article>
+
+          <article class="stap-kaart">
+            <div class="stap-tekst">
+              <div class="stap-kop">
+                <span class="stap-badge">002</span>
+                <h3 class="stap-titel">De QR-code wordt gescand bij de arts en/of apotheker.</h3>
+              </div>
+              <p class="body-text">
+                Elke smartphone of tablet kan uw persoonlijke QR-code scannen. Hierdoor is uw pas bij elk ziekenhuis, apotheek of zorginstelling eenvoudig te gebruiken.
+              </p>
+            </div>
+            <div class="stap-visual">
+              <img src="{{ url_for('static', filename='images/how-it-works/stap-2.svg') }}" alt="Smartphone die de QR-code op de DNAmedicatiepas scant">
+            </div>
+          </article>
+
+          <article class="stap-kaart">
+            <div class="stap-tekst">
+              <div class="stap-kop">
+                <span class="stap-badge">003</span>
+                <h3 class="stap-titel">Persoonlijke medicatie adviezen verschijnen op uw telefoon of tablet.</h3>
+              </div>
+              <p class="body-text">
+                Dit ondersteunt uw klinische besluitvorming, verbetert de patiëntveiligheid en maakt precisiegeneeskunde praktisch toepasbaar in de dagelijkse workflow.
+              </p>
+            </div>
+            <div class="stap-visual">
+              <img src="{{ url_for('static', filename='images/how-it-works/stap-3.svg') }}" alt="Medicatieoverzicht met adviezen op een smartphone">
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="features">
+        <ul class="feature-grid">
+          <li class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true"><i class="fa-regular fa-credit-card"></i></span>
+            <div class="feature-card__text">
+              <h3 class="feature-card__title">Altijd bij de hand</h3>
+              <p class="feature-card__body">Met de DNAmedicatiepas heb je je persoonlijke medicatie-informatie veilig op zak.</p>
+            </div>
+          </li>
+          <li class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true"><i class="fa-regular fa-pills"></i></span>
+            <div class="feature-card__text">
+              <h3 class="feature-card__title">Minder bijwerkingen</h3>
+              <p class="feature-card__body">Het advies houdt rekening met jouw DNA, zodat medicijnen beter bij jou passen.</p>
+            </div>
+          </li>
+          <li class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true"><i class="fa-regular fa-clock"></i></span>
+            <div class="feature-card__text">
+              <h3 class="feature-card__title">Sneller de juiste medicatie</h3>
+              <p class="feature-card__body">Artsen en apothekers zien meteen wat voor jou werkt, zonder trial &amp; error.</p>
+            </div>
+          </li>
+          <li class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true"><i class="fa-sharp fa-thin fa-sparkles"></i></span>
+            <div class="feature-card__text">
+              <h3 class="feature-card__title">Altijd up-to-date</h3>
+              <p class="feature-card__body">Nieuwe inzichten of aanpassingen worden direct via je pas beschikbaar.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      {% include "partials/faq_section.html" %}
+
+      <section id="meer-weten">
+        <div class="background-text background-text--on-dark" aria-hidden="true"></div>
+
+        <img class="mw-photo" src="{{ url_for('static', filename='images/meer-weten/person-card.svg') }}" alt="Patiënt houdt de DNAmedicatiepas vast">
+        <div class="mw-scrim" aria-hidden="true"></div>
+
+        <div class="mw-content">
+          <h2 class="mw-title">Meer weten over de DNAmedicatiepas?</h2>
+          <p class="mw-body">
+            Heeft u interesse in wat DNAmedicatiepas voor uw situatie kan betekenen?
+            Klik op het logo van uw ziekenhuis voor meer informatie of vraag direct om
+            meer informatie.
+          </p>
+          {{ cta_button("Informatie aanvragen", "#", variant="invert") }}
+        </div>
+
+        {{ logo_list("on-dark") }}
+      </section>
+{% endblock %}

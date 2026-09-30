@@ -1,0 +1,30 @@
+{#
+  The "Veelgestelde Vragen" block, identical on the patients and professionals
+  pages. Each question is a native <details>/<summary>, so the open/closed
+  state, keyboard support and hiding closed answers from screen readers come
+  from the browser. The questions are FAQ_ITEMS in app.py.
+#}
+{% from "partials/macros.html" import cta_button %}
+<section id="veelgestelde-vragen" aria-labelledby="faq-title">
+  <div class="faq-intro">
+    <h2 id="faq-title">Veelgestelde Vragen</h2>
+    <div>
+      <p class="h2-caption">Meer vragen?</p>
+      <p class="h2-caption">
+        Neem contact op met het team via
+        <a href="mailto:consortium@mijndnamedicatiepas.nl">consortium@mijndnamedicatiepas.nl</a>
+      </p>
+    </div>
+  </div>
+  <div class="faq-list">
+    {%- for item in faq_items %}
+    <details class="faq-item">
+      <summary class="faq-item__question">{{ item.question }}</summary>
+      <div class="faq-item__answer">
+        <p class="body-text">{{ item.answer }}</p>
+      </div>
+    </details>
+    {%- endfor %}
+    {{ cta_button("Bekijk alle veelgestelde vragen", "#", variant="dark", icon="plus") }}
+  </div>
+</section>

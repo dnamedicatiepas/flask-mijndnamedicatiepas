@@ -1,0 +1,18 @@
+/* 404 page (404.html). Linked after styles.css. */
+#not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+  padding: 140px 24px;
+}
+
+#not-found .display-heading {
+  align-items: center;
+  text-align: center;
+}
+
+#not-found .h2-caption {
+  max-width: 480px;
+}
