@@ -35,12 +35,16 @@
 </a>
 {%- endmacro %}
 
+
+
+
 {#
   logo_list: the row of partner hospital logos.
 
     theme  "on-dark" or "on-light"; picks the matching folder in images/logos/.
     order  Logo slugs in display order.
 #}
+
 {% macro logo_list(theme, order=["amsterdam-umc", "lumc", "prinses-maxima", "maasstad"]) -%}
 {%- set names = {
   "amsterdam-umc": "Amsterdam UMC",
