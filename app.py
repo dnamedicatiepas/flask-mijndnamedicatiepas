@@ -43,6 +43,11 @@ def professionals():
     return render_template("pages/professionals.html", current_page="professionals")
 
 
+#here starts the app routing for the qr platform
+@app.route('/app/<gen_sequence>')
+def medication(gen_sequence):
+    return render_template("qr-platform/medicatie.html", gen_sequence=gen_sequence)
+
 @app.errorhandler(404)
 def not_found(e):
     # No current_page: neither nav tab is the page being shown.
