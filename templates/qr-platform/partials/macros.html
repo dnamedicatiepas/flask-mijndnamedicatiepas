@@ -1,0 +1,62 @@
+{#
+  Shared markup snippets. Import what a template needs:
+
+    {% from "partials/macros.html" import cta_button, logo_list %}
+
+  The dicts live inside the macros: top-level {% set %}s in this file are not
+  visible to a macro once it has been imported elsewhere.
+#}
+
+{#
+  cta_button: the pill-shaped call-to-action link used across the site.
+
+    label    Button text.
+    href     Link target.
+    variant  "default" (translucent), "invert" (light) or "dark".
+    icon     "arrow-up-right" (default), "arrow-down" or "plus".
+    target   Optional link target; "_blank" also sets rel="noopener noreferrer".
+
+  {{ cta_button("Informatie aanvragen", "#") }}
+  {{ cta_button("Bekijk hoe het werkt", "#section42", variant="dark", icon="arrow-down") }}
+
+  To add a variant, add a .cta-button--<name> rule in styles.css that sets
+  --cta-bg and --cta-fg.
+#}
+{% macro cta_button(label, href, variant="default", icon="arrow-up-right", target=None) -%}
+    {%- set icons = {
+  "arrow-up-right": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>',
+  "arrow-down": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>',
+  "plus": '<svg viewBox="0 0 640 640" fill="currentColor"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>',
+} -%}
+    <a class="cta-button{% if variant != 'default' %} cta-button--{{ variant }}{% endif %}" href="{{ href }}"
+            {%- if target %} target="{{ target }}"{% if target == "_blank" %} rel="noopener noreferrer"
+            {% endif %}{% endif %}>
+        <span class="cta-button__label">{{ label }}</span>
+        <span class="cta-button__icon" aria-hidden="true">{{ icons[icon] | safe }}</span>
+    </a>
+{%- endmacro %}
+
+
+
+
+{#
+  logo_list: the row of partner hospital logos.
+
+    theme  "on-dark" or "on-light"; picks the matching folder in images/logos/.
+    order  Logo slugs in display order.
+#}
+
+{% macro logo_list(theme, order=["amsterdam-umc", "lumc", "prinses-maxima", "maasstad"]) -%}
+    {%- set names = {
+  "amsterdam-umc": "Amsterdam UMC",
+  "lumc": "Leids Universitair Medisch Centrum",
+  "prinses-maxima": "Prinses Máxima Centrum",
+  "maasstad": "Maasstad Ziekenhuis",
+} -%}
+    <ul class="mw-logos">
+        {%- for slug in order %}
+            <li><img src="{{ url_for('static', filename='images/logos/' ~ theme ~ '/' ~ slug ~ '.svg') }}"
+                     alt="{{ names[slug] }}"></li>
+        {%- endfor %}
+    </ul>
+{%- endmacro %}

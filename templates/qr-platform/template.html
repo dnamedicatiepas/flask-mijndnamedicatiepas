@@ -6,24 +6,64 @@
     <title>{% block title %}DNAmedicatiepas{% endblock %}</title>
     <style>
         /* Prototype styles for the fixed bottom pill nav. */
-        body { font-family: sans-serif; margin: 0; padding: 1rem 1rem 6rem; }
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 1rem 1rem 6rem;
+        }
+
         .pill-nav {
-            position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
-            display: flex; gap: .25rem; padding: .35rem;
-            background: #fff; border-radius: 999px;
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: .25rem;
+            padding: .35rem;
+            background: #fff;
+            border-radius: 999px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
         }
+
         .pill-nav a {
-            padding: .6rem 1rem; border-radius: 999px;
-            color: #333; text-decoration: none; font-size: .9rem;
+            padding: .6rem 1rem;
+            border-radius: 999px;
+            color: #333;
+            text-decoration: none;
+            font-size: .9rem;
         }
-        .pill-nav a[aria-current="page"] { background: #222; color: #fff; }
+
+        .pill-nav a[aria-current="page"] {
+            background: #222;
+            color: #fff;
+        }
     </style>
+    <meta name="description" content="{% block description %}{% endblock %}">
+    {% block meta %}
+        <link rel="canonical" href="{{ site_url }}{{ request.path }}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="DNAmedicatiepas">
+        <meta property="og:locale" content="nl_NL">
+        <meta property="og:title" content="{{ self.title() }}">
+        <meta property="og:description" content="{{ self.description() }}">
+        <meta property="og:url" content="{{ site_url }}{{ request.path }}">
+    {% endblock %}
+
+    <meta name="theme-color" content="#FBF9FA">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% block page_css %}{% endblock %}
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/switzer" rel="stylesheet">
+    {% block icon_font %}
+        <link href="https://cdn.jsdelivr.net/npm/fontawesome6pro@1.0.2/css/all.min.css" rel="stylesheet">
+    {% endblock %}
 </head>
 <body>
 
 <header>
-
+    {% include "partials/site_header.html" %}
 </header>
 
 <main>
@@ -100,7 +140,6 @@
   Important: the href must be a route that goes through render_page(),
   otherwise the AJAX response is a full document and gets nested in #page.
 #}
-
 
 
 <script src="{{ url_for('static', filename='script/spa.js') }}"></script>

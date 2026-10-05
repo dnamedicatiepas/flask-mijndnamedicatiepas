@@ -6,27 +6,27 @@
 
 {# Not indexed, so no canonical or og tags. #}
 {% block meta %}
-  <meta name="robots" content="noindex">
+    <meta name="robots" content="noindex">
 {% endblock %}
 
 {% block page_css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/not-found.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/not-found.css') }}">
 {% endblock %}
 
 {# This page uses no Font Awesome icons. #}
 {% block icon_font %}{% endblock %}
 
 {% block content %}
-      <section id="not-found">
+    <section id="not-found">
         <h1 class="display-heading">
-          <span class="display-heading__line">404 —</span>
-          <span class="display-heading__accent">pagina niet gevonden.</span>
+            <span class="display-heading__line">404 —</span>
+            <span class="display-heading__accent">pagina niet gevonden.</span>
         </h1>
 
         <p class="h2-caption">
-          De pagina die u zoekt bestaat niet (meer) of is verplaatst. Controleer de link of ga terug naar de homepage.
+            De pagina die u zoekt bestaat niet (meer) of is verplaatst. Controleer de link of ga terug naar de homepage.
         </p>
 
         {{ cta_button("Terug naar de homepage", url_for("patienten")) }}
-      </section>
+    </section>
 {% endblock %}

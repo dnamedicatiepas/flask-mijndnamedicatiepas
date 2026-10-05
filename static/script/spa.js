@@ -1,5 +1,5 @@
 (function () {
-    var AJAX_HEADERS = { "X-Requested-With": "fetch" };
+    var AJAX_HEADERS = {"X-Requested-With": "fetch"};
 
     function swap(target, html, mode) {
         if (mode === "outerHTML") {
@@ -14,7 +14,7 @@
         if (body && !(body instanceof FormData)) {
             headers["Content-Type"] = "application/x-www-form-urlencoded";
         }
-        return fetch(url, { method: method, headers: headers, body: body }).then(function (res) {
+        return fetch(url, {method: method, headers: headers, body: body}).then(function (res) {
             return res.text();
         });
     }
@@ -41,7 +41,7 @@
         request(method, url, null).then(function (html) {
             swap(target, html, swapMode);
             if (push) {
-                history.pushState({ url: url }, "", url);
+                history.pushState({url: url}, "", url);
             }
             syncActiveNav();
         }).catch(function () {

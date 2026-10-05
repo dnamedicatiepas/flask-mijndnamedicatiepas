@@ -34,9 +34,10 @@ QR_NAV = [
     {"key": "varianten", "label": "Varianten", "endpoint": "varianten"},
 ]
 
-#checks if the X-Requested-With is given in the fetch
-#If it is, only the inner page fragment gets returned.
-#If not, the return will also include the outer template/shell in the response
+
+# checks if the X-Requested-With is given in the fetch
+# If it is, only the inner page fragment gets returned.
+# If not, the return will also include the outer template/shell in the response
 def render_page(template, active_nav, **context):
     context.update(nav=QR_NAV, active=active_nav)
     if request.headers.get("X-Requested-With") == "fetch":
@@ -59,14 +60,16 @@ def professionals():
     return render_template("pages/professionals.html", current_page="professionals")
 
 
-#here starts the app routing for the qr platform
+# here starts the app routing for the qr platform
 @app.route('/app/<gen_sequence>')
 def medication(gen_sequence):
     return render_page("qr-platform/pages/medicatie.html", "medicatie", gen_sequence=gen_sequence)
 
+
 @app.route('/app/<gen_sequence>/genoverzicht')
 def genoverzicht(gen_sequence):
     return render_page("qr-platform/pages/genoverzicht.html", "genoverzicht", gen_sequence=gen_sequence)
+
 
 @app.route('/app/<gen_sequence>/varianten')
 def varianten(gen_sequence):
