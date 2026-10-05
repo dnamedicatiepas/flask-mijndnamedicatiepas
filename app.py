@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -62,6 +63,15 @@ def professionals():
 @app.route('/app/<gen_sequence>')
 def medication(gen_sequence):
     return render_template("qr-platform/pages/medicatie.html", gen_sequence=gen_sequence)
+
+@app.route('/app/<gen_sequence>/genoverzicht')
+def genoverzicht(gen_sequence):
+    return f'<p>Genoverzicht pagina {gen_sequence}</p>'
+
+@app.route('/app/<gen_sequence>/varianten')
+def varianten(gen_sequence):
+    return f'<p>Varianten pagina {gen_sequence}</p>'
+
 
 @app.errorhandler(404)
 def not_found(e):
