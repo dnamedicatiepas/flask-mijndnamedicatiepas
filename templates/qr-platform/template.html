@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}DNAmedicatiepas{% endblock %}</title>
+    <style>
+        /* Prototype styles for the fixed bottom pill nav. */
+        body { font-family: sans-serif; margin: 0; padding: 1rem 1rem 6rem; }
+        .pill-nav {
+            position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+            display: flex; gap: .25rem; padding: .35rem;
+            background: #fff; border-radius: 999px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+        }
+        .pill-nav a {
+            padding: .6rem 1rem; border-radius: 999px;
+            color: #333; text-decoration: none; font-size: .9rem;
+        }
+        .pill-nav a[aria-current="page"] { background: #222; color: #fff; }
+    </style>
 </head>
 <body>
 
@@ -13,7 +28,7 @@
   This is the outer layout. render_page() in app.py renders it on a normal
   (full) page load and passes the page to show as `inner_template`. On an
   AJAX request (header X-Requested-With: fetch) it skips this file and returns
-  only the page fragment, which app.js drops into <div id="page"> below.
+  only the page fragment, which spa.js drops into <div id="page"> below.
 
   Rules for this to work:
   1. Pages in qr-platform/pages/ must be FRAGMENTS: no <html>, <head> or <body>,
@@ -43,13 +58,13 @@
       {% endfor %}
     </nav>
 
-  What the attributes do (all read by static/script/app.js):
+  What the attributes do (all read by static/script/spa.js):
     data-ajax       Required. Makes the link load via fetch instead of a full
                     page load. Without JS it falls back to a normal link.
     data-push="true" Updates the address bar / history, so back, forward and
                     reload work. Leave it out for swaps that shouldn't be
                     a history entry.
-    data-nav-link   Lets app.js keep aria-current="page" in sync after each
+    data-nav-link   Lets spa.js keep aria-current="page" in sync after each
                     swap. The nav is outside #page, so Jinja's `active` is
                     only correct on the first full load. Style the active
                     tab with a[aria-current="page"] { ... } in your CSS.
@@ -65,6 +80,19 @@
     {% include inner_template %}
 </div>
 
-<script src="{{ url_for('static', filename='script/app.js') }}"></script>
+{# Fixed pill nav, outside #page so it persists across swaps. #}
+<nav class="pill-nav">
+    {% for item in nav %}
+        <a href="{{ url_for(item.endpoint, gen_sequence=gen_sequence) }}"
+           data-ajax
+           data-push="true"
+           data-nav-link
+           {% if item.key == active %}aria-current="page"{% endif %}>
+            {{ item.label }}
+        </a>
+    {% endfor %}
+</nav>
+
+<script src="{{ url_for('static', filename='script/spa.js') }}"></script>
 </body>
 </html>

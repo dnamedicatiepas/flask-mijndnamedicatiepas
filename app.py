@@ -29,9 +29,9 @@ FAQ_ITEMS = [
 ]
 
 QR_NAV = [
-    {"key": "medicatie", "label": "Medicatie", "url": "/medicatie"},
-    {"key": "genoverzicht", "label": "Genoverzicht", "url": "/genoverzicht"},
-    {"key": "varianten", "label": "Varianten", "url": "/varianten"},
+    {"key": "medicatie", "label": "Medicatie", "endpoint": "medication"},
+    {"key": "genoverzicht", "label": "Genoverzicht", "endpoint": "genoverzicht"},
+    {"key": "varianten", "label": "Varianten", "endpoint": "varianten"},
 ]
 
 #checks if the X-Requested-With is given in the fetch
@@ -62,15 +62,15 @@ def professionals():
 #here starts the app routing for the qr platform
 @app.route('/app/<gen_sequence>')
 def medication(gen_sequence):
-    return render_template("qr-platform/pages/medicatie.html", gen_sequence=gen_sequence)
+    return render_page("qr-platform/pages/medicatie.html", "medicatie", gen_sequence=gen_sequence)
 
 @app.route('/app/<gen_sequence>/genoverzicht')
 def genoverzicht(gen_sequence):
-    return f'<p>Genoverzicht pagina {gen_sequence}</p>'
+    return render_page("qr-platform/pages/genoverzicht.html", "genoverzicht", gen_sequence=gen_sequence)
 
 @app.route('/app/<gen_sequence>/varianten')
 def varianten(gen_sequence):
-    return f'<p>Varianten pagina {gen_sequence}</p>'
+    return render_page("qr-platform/pages/varianten.html", "varianten", gen_sequence=gen_sequence)
 
 
 @app.errorhandler(404)
