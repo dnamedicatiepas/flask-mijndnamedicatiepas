@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}DNAmedicatiepas{% endblock %}</title>
+</head>
+<body>
+
+{#
+  QR-PLATFORM SHELL
+  -----------------
+  This is the outer layout. render_page() in app.py renders it on a normal
+  (full) page load and passes the page to show as `inner_template`. On an
+  AJAX request (header X-Requested-With: fetch) it skips this file and returns
+  only the page fragment, which app.js drops into <div id="page"> below.
+
+  Rules for this to work:
+  1. Pages in qr-platform/pages/ must be FRAGMENTS: no <html>, <head> or <body>,
+     only the markup that belongs inside #page. (medicatie.html is still a
+     full document, strip it down once you switch its route to render_page.)
+  2. Routes must call render_page("qr-platform/pages/x.html", "x") instead of
+     render_template. The 2nd argument is the nav key, exposed as `active`.
+  3. Everything outside <div id="page"> (the nav, the footer) stays on screen
+     and is NOT re-rendered when navigating.
+#}
+
+{#
+  NAV COMPONENT (build this yourself, e.g. in qr-platform/partials/nav.html)
+  --------------------------------------------------------------------------
+  render_page() puts `nav` (the QR_NAV list: key / label / url) and `active`
+  (the key of the current page) in the template context. Loop over them:
+
+    <nav>
+      {% for item in nav %}
+        <a href="{{ item.url }}"
+           data-ajax
+           data-push="true"
+           data-nav-link
+           {% if item.key == active %}aria-current="page"{% endif %}>
+          {{ item.label }}
+        </a>
+      {% endfor %}
+    </nav>
+
+  What the attributes do (all read by static/script/app.js):
+    data-ajax       Required. Makes the link load via fetch instead of a full
+                    page load. Without JS it falls back to a normal link.
+    data-push="true" Updates the address bar / history, so back, forward and
+                    reload work. Leave it out for swaps that shouldn't be
+                    a history entry.
+    data-nav-link   Lets app.js keep aria-current="page" in sync after each
+                    swap. The nav is outside #page, so Jinja's `active` is
+                    only correct on the first full load. Style the active
+                    tab with a[aria-current="page"] { ... } in your CSS.
+    data-target     Optional. CSS selector of what to fill. Default "#page".
+    data-swap       Optional. "innerHTML" (default) or "outerHTML".
+
+  Important: the href must be a route that goes through render_page(),
+  otherwise the AJAX response is a full document and gets nested in #page.
+#}
+
+<div id="page">
+    {# Full load: render the requested page fragment into the shell. #}
+    {% include inner_template %}
+</div>
+
+<script src="{{ url_for('static', filename='script/app.js') }}"></script>
+</body>
+</html>

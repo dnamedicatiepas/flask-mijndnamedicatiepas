@@ -40,7 +40,7 @@ def render_page(template, active_nav, **context):
     context.update(nav=QR_NAV, active=active_nav)
     if request.headers.get("X-Requested-With") == "fetch":
         return render_template(template, **context)
-    return render_template("shell.html", inner_template=template, **context)
+    return render_template("qr-platform/template.html", inner_template=template, **context)
 
 
 @app.context_processor
