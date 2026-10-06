@@ -1,0 +1,31 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0 0 6rem;
+}
+
+.pill-nav {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: .25rem;
+    padding: .35rem;
+    background: #fff;
+    border-radius: 999px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+}
+
+.pill-nav a {
+    padding: .6rem 1rem;
+    border-radius: 999px;
+    color: #333;
+    text-decoration: none;
+    font-size: .9rem;
+}
+
+.pill-nav a[aria-current="page"] {
+    background: #222;
+    color: #fff;
+}

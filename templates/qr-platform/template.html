@@ -4,40 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}DNAmedicatiepas{% endblock %}</title>
-    <style>
-        /* Prototype styles for the fixed bottom pill nav. */
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 1rem 1rem 6rem;
-        }
-
-        .pill-nav {
-            position: fixed;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: .25rem;
-            padding: .35rem;
-            background: #fff;
-            border-radius: 999px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
-        }
-
-        .pill-nav a {
-            padding: .6rem 1rem;
-            border-radius: 999px;
-            color: #333;
-            text-decoration: none;
-            font-size: .9rem;
-        }
-
-        .pill-nav a[aria-current="page"] {
-            background: #222;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/qr-platform/styles.css') }}">
     <meta name="description" content="{% block description %}{% endblock %}">
     {% block meta %}
         <link rel="canonical" href="{{ site_url }}{{ request.path }}">
@@ -85,7 +52,6 @@
     </div>
 
     {# Fixed pill nav, outside #page so it persists across swaps. #}
-
 </main>
 
 {#
