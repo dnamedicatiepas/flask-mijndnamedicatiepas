@@ -30,7 +30,8 @@
 <body>
 
 
-{% include "partials/site_header.html" %}
+
+{% include "qr-platform/partials/platform_header.html" %}
 
 
 <main>
@@ -64,10 +65,10 @@
 
   Rules for this to work:
   1. Pages in qr-platform/pages/ must be FRAGMENTS: no <html>, <head> or <body>,
-     only the markup that belongs inside #page. (medicatie.html is still a
-     full document, strip it down once you switch its route to render_page.)
-  2. Routes must call render_page("qr-platform/pages/x.html", "x") instead of
-     render_template. The 2nd argument is the nav key, exposed as `active`.
+     only the markup that belongs inside #page.
+  2. Routes must call render_page("qr-platform/pages/mijn-pas/x.html", "x")
+     instead of render_template. The 2nd argument is the nav key, exposed as
+     `active`. The optional current_page (default "pas") picks the header tab.
   3. Everything outside <div id="page"> (the nav, the footer) stays on screen
      and is NOT re-rendered when navigating.
 #}

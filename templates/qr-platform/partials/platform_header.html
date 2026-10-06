@@ -1,8 +1,8 @@
 {#
   The gradient bar at the top of the page, the decorative DNA text behind it
-  and the main nav. The tab whose `page` equals `current_page` (passed by the
-  route) is marked active; without current_page (the 404 page) neither is.
-  Tabs come from NAV_TABS in app.py.
+  and the QR-platform nav. The tab whose `page` equals `current_page` (set by
+  render_page) is marked active. Tabs come from QR_TABS in app.py; a tab
+  without an endpoint is shown but not linked.
 #}
 {% from "partials/macros.html" import cta_button %}
 <div class="border-top"></div>
@@ -18,10 +18,14 @@
 
         <div class="nav-item">
             <div class="segmented-toggle">
-                {%- for tab in nav_tabs %}
+                {%- for tab in qr_tabs %}
                     {%- set state = "active" if tab.page == current_page else "inactive" %}
                     <div class="segmented-toggle__tab segmented-toggle__tab--{{ state }}">
-                        <a href="{{ url_for(tab.endpoint) }}"{% if state == "active" %} aria-current="page"{% endif %}>
+                        {%- if tab.endpoint %}
+                        <a href="{{ url_for(tab.endpoint, gen_sequence=gen_sequence) }}"{% if state == "active" %} aria-current="page"{% endif %}>
+                        {%- else %}
+                        <a aria-disabled="true">
+                        {%- endif %}
                             <p class="segmented-toggle__label segmented-toggle__label--{{ state }}">{{ tab.label }}</p>
                             <div class="segmented-toggle__pointer"></div>
                         </a>

@@ -34,12 +34,21 @@ QR_NAV = [
     {"key": "varianten", "label": "Varianten", "endpoint": "varianten"},
 ]
 
+# The "Mijn Pas" / "Informatie & Contact" toggle in the QR-platform header.
+# `page` is matched against `current_page` to mark the active tab. An endpoint
+# of None renders the tab without a link (section not built yet).
+QR_TABS = [
+    {"page": "pas", "endpoint": "medication", "label": "Mijn Pas"},
+    {"page": "contact", "endpoint": None, "label": "Informatie & Contact"},
+]
+
 
 # checks if the X-Requested-With is given in the fetch
 # If it is, only the inner page fragment gets returned.
 # If not, the return will also include the outer template/shell in the response
-def render_page(template, active_nav, **context):
-    context.update(nav=QR_NAV, active=active_nav)
+# `current_page` picks the active header tab (see QR_TABS).
+def render_page(template, active_nav, current_page="pas", **context):
+    context.update(nav=QR_NAV, active=active_nav, current_page=current_page)
     if request.headers.get("X-Requested-With") == "fetch":
         return render_template(template, **context)
     return render_template("qr-platform/template.html", inner_template=template, **context)
@@ -47,7 +56,7 @@ def render_page(template, active_nav, **context):
 
 @app.context_processor
 def inject_globals():
-    return {"site_url": SITE_URL, "nav_tabs": NAV_TABS, "faq_items": FAQ_ITEMS}
+    return {"site_url": SITE_URL, "nav_tabs": NAV_TABS, "faq_items": FAQ_ITEMS, "qr_tabs": QR_TABS}
 
 
 @app.route("/")
@@ -63,17 +72,17 @@ def professionals():
 # here starts the app routing for the qr platform
 @app.route('/app/<gen_sequence>')
 def medication(gen_sequence):
-    return render_page("qr-platform/pages/medicatie.html", "medicatie", gen_sequence=gen_sequence)
+    return render_page("qr-platform/pages/mijn-pas/medicatie.html", "medicatie", gen_sequence=gen_sequence)
 
 
 @app.route('/app/<gen_sequence>/genoverzicht')
 def genoverzicht(gen_sequence):
-    return render_page("qr-platform/pages/genoverzicht.html", "genoverzicht", gen_sequence=gen_sequence)
+    return render_page("qr-platform/pages/mijn-pas/genoverzicht.html", "genoverzicht", gen_sequence=gen_sequence)
 
 
 @app.route('/app/<gen_sequence>/varianten')
 def varianten(gen_sequence):
-    return render_page("qr-platform/pages/varianten.html", "varianten", gen_sequence=gen_sequence)
+    return render_page("qr-platform/pages/mijn-pas/varianten.html", "varianten", gen_sequence=gen_sequence)
 
 
 @app.errorhandler(404)
