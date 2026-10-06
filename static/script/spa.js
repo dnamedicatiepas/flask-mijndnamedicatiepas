@@ -61,6 +61,8 @@
         if (link.origin !== location.origin) return;
 
         e.preventDefault();
+        // Already on this page: don't fire a redundant request.
+        if (link.pathname === location.pathname && link.search === location.search) return;
         swapFromEl(link, "GET", link.pathname + link.search);
     });
 
