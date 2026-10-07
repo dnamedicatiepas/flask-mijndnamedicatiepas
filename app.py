@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -70,17 +69,17 @@ def professionals():
 
 
 # here starts the app routing for the qr platform
-@app.route('/app/<gen_sequence>')
+@app.route('/app/<gen_sequence>/')
 def medication(gen_sequence):
     return render_page("qr-platform/pages/mijn-pas/medicatie.html", "medicatie", gen_sequence=gen_sequence)
 
 
-@app.route('/app/<gen_sequence>/genoverzicht')
+@app.route('/app/<gen_sequence>/genoverzicht/')
 def genoverzicht(gen_sequence):
     return render_page("qr-platform/pages/mijn-pas/genoverzicht.html", "genoverzicht", gen_sequence=gen_sequence)
 
 
-@app.route('/app/<gen_sequence>/varianten')
+@app.route('/app/<gen_sequence>/varianten/')
 def varianten(gen_sequence):
     return render_page("qr-platform/pages/mijn-pas/varianten.html", "varianten", gen_sequence=gen_sequence)
 
