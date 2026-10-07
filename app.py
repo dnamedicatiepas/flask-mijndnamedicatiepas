@@ -20,11 +20,11 @@ FAQ_LOREM = (
 
 # The "Veelgestelde Vragen" block, shared by the patients and professionals pages.
 FAQ_ITEMS = [
-    {"question": "Wie kan mijn gegevens inzien?", "answer": FAQ_LOREM},
-    {"question": "Kan iedereen een medicatiepas krijgen?", "answer": FAQ_LOREM},
-    {"question": "Hoe vraag ik een pas aan?", "answer": FAQ_LOREM},
-    {"question": "Moet ik betalen voor een pas?", "answer": f"{FAQ_LOREM} {FAQ_LOREM}"},
-    {"question": "Is mijn kaart beveiligd?", "answer": FAQ_LOREM},
+    {"question": "Wie kan mijn gegevens inzien?", "answer": "De patiënt bepaalt zelf wie hij toestemming geeft om de persoonlijke medicatieadviezen in te zien. Op de DNAmedicatiepas wordt niet bijgehouden welke geneesmiddelen worden gebruikt. Dit kan bij door eigen apotheker worden opgevraagd (medicatieoverzicht of medicijnpaspoort)."},
+    {"question": "Kan iedereen een medicatiepas krijgen?", "answer": "Op dit moment wordt gewerkt aan het automatiseren van de aanvraag voor de DNAmedicatiepas. Als dit gereed is, zullen nieuwe patienten van de klinische genetica van het Amsterdam UMC en hun ouders, die een uitgebreide DNA-analyse krijgen, standaard worden gevraagd of zij een DNAmedicatiepas willen."},
+    {"question": "Hoe vraag ik een pas aan?", "answer": "U kunt niet zelf een pas aanvragen. De klinisch geneticus biedt u de DNAmedicatiepas aan wanneer een uitgebreide DNA-analyse moet worden uitgevoerd."},
+    {"question": "Moet ik betalen voor een pas?", "answer": "De kosten van ca 500 euro worden vergoed door de zorgverzekeraar en belasten het jaarlijkse eigen risico."},
+    {"question": "Is mijn kaart beveiligd?", "answer": "Door middel van een QR-code zijn uw relevante DNA-gegevens op uw DNAmedicatiepas beveiligd. Gegevens die in het informatiesysteem van uw (huis)arts of apotheek worden opgeslagen zijn ook beveiligd."},
 ]
 
 QR_NAV = [
@@ -116,6 +116,8 @@ def professionals():
 
 
 # here starts the app routing for the qr platform
+# Later the parameter will be encoded with the lab origin as well
+# currently it is bound to the literal name of the lab.
 @app.route('/app/<gen_sequence>/')
 def medication(gen_sequence):
     return render_mijn_pas("medicatie", gen_sequence)
