@@ -41,6 +41,45 @@ QR_TABS = [
     {"page": "contact", "endpoint": None, "label": "Informatie & Contact"},
 ]
 
+# DUMMY DATA for the "Uw resultaat, uitgegeven door:" card on the Mijn Pas pages
+# (qr-platform/partials/issuer_card.html), keyed by issuer slug. Replace
+# get_issuer() with the real lookup once the pas data is available.
+#   name     Short name, used in the body text and the button label.
+#   logo     Path under static/; a light logo, since the card is dark.
+#   logo_alt Full name, read out instead of the logo.
+#   website  The issuer's website, opened from the card's button.
+DUMMY_ISSUERS = {
+    "lumc": {
+        "name": "LUMC",
+        "logo": "images/logos/on-dark/lumc.svg",
+        "logo_alt": "Leids Universitair Medisch Centrum",
+        "website": "https://www.lumc.nl",
+    },
+    "amsterdam-umc": {
+        "name": "Amsterdam UMC",
+        "logo": "images/logos/on-dark/amsterdam-umc.svg",
+        "logo_alt": "Amsterdam UMC",
+        "website": "https://www.amsterdamumc.nl",
+    },
+    "prinses-maxima": {
+        "name": "Prinses Máxima Centrum",
+        "logo": "images/logos/on-dark/prinses-maxima.svg",
+        "logo_alt": "Prinses Máxima Centrum",
+        "website": "https://www.prinsesmaximacentrum.nl",
+    },
+    "maasstad": {
+        "name": "Maasstad Ziekenhuis",
+        "logo": "images/logos/on-dark/maasstad.svg",
+        "logo_alt": "Maasstad Ziekenhuis",
+        "website": "https://www.maasstadziekenhuis.nl",
+    },
+}
+
+
+def get_issuer(gen_sequence):
+    # Dummy lookup: /app/<issuer slug>/ shows that issuer, anything else LUMC.
+    return DUMMY_ISSUERS.get(gen_sequence, DUMMY_ISSUERS["lumc"])
+
 
 # checks if the X-Requested-With is given in the fetch
 # If it is, only the inner page fragment gets returned.
@@ -51,6 +90,14 @@ def render_page(template, active_nav, current_page="pas", **context):
     if request.headers.get("X-Requested-With") == "fetch":
         return render_template(template, **context)
     return render_template("qr-platform/template.html", inner_template=template, **context)
+
+
+# A Mijn Pas page: qr-platform/pages/mijn-pas/<page>.html, whose nav key is also
+# <page>. Each of these pages includes the issuer card, so `issuer` is passed on
+# full and AJAX loads alike.
+def render_mijn_pas(page, gen_sequence):
+    return render_page(f"qr-platform/pages/mijn-pas/{page}.html", page,
+                       gen_sequence=gen_sequence, issuer=get_issuer(gen_sequence))
 
 
 @app.context_processor
@@ -71,17 +118,17 @@ def professionals():
 # here starts the app routing for the qr platform
 @app.route('/app/<gen_sequence>/')
 def medication(gen_sequence):
-    return render_page("qr-platform/pages/mijn-pas/medicatie.html", "medicatie", gen_sequence=gen_sequence)
+    return render_mijn_pas("medicatie", gen_sequence)
 
 
 @app.route('/app/<gen_sequence>/genoverzicht/')
 def genoverzicht(gen_sequence):
-    return render_page("qr-platform/pages/mijn-pas/genoverzicht.html", "genoverzicht", gen_sequence=gen_sequence)
+    return render_mijn_pas("genoverzicht", gen_sequence)
 
 
 @app.route('/app/<gen_sequence>/varianten/')
 def varianten(gen_sequence):
-    return render_page("qr-platform/pages/mijn-pas/varianten.html", "varianten", gen_sequence=gen_sequence)
+    return render_mijn_pas("varianten", gen_sequence)
 
 
 @app.errorhandler(404)

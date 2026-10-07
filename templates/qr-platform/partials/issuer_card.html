@@ -1,0 +1,30 @@
+{#
+  The dark "Uw resultaat, uitgegeven door:" card at the top of every Mijn Pas
+  page: who issued the pas, with their logo and a link to their website.
+  Include it from a page fragment in qr-platform/pages/mijn-pas/; it reads
+  `issuer` (name / logo / logo_alt / website), which render_mijn_pas() in
+  app.py puts in the context.
+#}
+{% from "partials/macros.html" import cta_button %}
+{% if issuer %}
+<section class="issuer-card shell" aria-labelledby="issuer-card-title">
+    <div class="background-text background-text--on-dark issuer-card__dna" aria-hidden="true"></div>
+    <div class="issuer-card__glow" aria-hidden="true"></div>
+
+    <div class="issuer-card__content">
+        <h1 class="mw-title" id="issuer-card-title">Uw resultaat,<br> uitgegeven door:</h1>
+        <p class="mw-body">
+            Uw DNAmedicatiepas is uitgegeven door {{ issuer.name }}.<br>
+            Zij beschikken over uw medische gegevens en DNA-analyse. Heeft u vragen over uw
+            medicatieadviezen of de toepassing van uw pas? Neem dan contact op met uw pasverstrekker.
+        </p>
+        {{ cta_button("Website " ~ issuer.name, issuer.website, variant="invert", target="_blank") }}
+    </div>
+
+    <div class="issuer-card__seal">
+        <img class="issuer-card__circle" src="{{ url_for('static', filename='images/qr-platform/issuer-circle.svg') }}"
+             width="536" height="536" alt="">
+        <img class="issuer-card__logo" src="{{ url_for('static', filename=issuer.logo) }}" alt="{{ issuer.logo_alt }}">
+    </div>
+</section>
+{% endif %}

@@ -15,6 +15,7 @@ body {
     background: #fff;
     border-radius: 999px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+    z-index: 5;
 }
 
 .pill-nav a {
@@ -28,4 +29,119 @@ body {
 .pill-nav a[aria-current="page"] {
     background: #222;
     color: #fff;
+}
+
+/* ===== Issuer card (qr-platform/partials/issuer_card.html) =====
+   The dark "Uw resultaat, uitgegeven door:" card on the Mijn Pas pages. It
+   reuses .mw-title / .mw-body / .background-text--on-dark from styles.css,
+   which loads AFTER this file, so overrides of those classes are scoped under
+   .issuer-card to win on specificity rather than source order. */
+.issuer-card {
+    position: relative;
+    isolation: isolate; /* keeps the glow's blend mode inside the card */
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    max-width: 1280px;
+    margin-bottom: 64px;
+    padding: 64px;
+    border-radius: 24px;
+    background: var(--color-ink);
+}
+
+.issuer-card .issuer-card__dna {
+    padding: 0;
+    /* Fades in towards the bottom, unlike the "Meer weten" panel. */
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
+}
+
+/* The blurred colour band along the bottom edge. `color` blending tints the
+   DNA text under it without lighting up the dark background. */
+.issuer-card__glow {
+    position: absolute;
+    z-index: 1;
+    left: calc(50% - 0.5px);
+    bottom: -130.31px;
+    width: 1415px;
+    height: 370.31px;
+    transform: translateX(-50%);
+    border-radius: 224.256px;
+    background-image: linear-gradient(90deg, var(--color-paper) 0%, var(--brand-pink) 50%, #7E7FE3 75%, #5FE219 87.5%, #F1F1F1 100%);
+    box-shadow: inset 8.97px 0 107.643px 107.643px var(--color-paper);
+    filter: blur(63.789px);
+    mix-blend-mode: color;
+    pointer-events: none;
+}
+
+.issuer-card__content {
+    position: relative;
+    z-index: 3;
+    flex: 0 1 650px;
+    min-width: 0;
+}
+
+.issuer-card .mw-title {
+    margin-bottom: 128px;
+}
+
+.issuer-card .mw-body {
+    max-width: 549px;
+}
+
+/* The glass circle with the issuer's logo. The negative margins put it 16px
+   from the card's top and right edges instead of inside the 64px padding. */
+.issuer-card__seal {
+    position: relative;
+    z-index: 2;
+    flex: 0 1 536px;
+    min-width: 0;
+    aspect-ratio: 1;
+    margin: -48px -48px -48px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.issuer-card__circle {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.issuer-card__logo {
+    position: relative;
+    display: block;
+    height: 60px;
+    width: auto;
+    max-width: 60%;
+    object-fit: contain;
+}
+
+@media screen and (max-width: 1000px) {
+    .issuer-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 40px 24px 32px;
+    }
+
+    .issuer-card__content {
+        flex: none;
+    }
+
+    .issuer-card .mw-title {
+        margin-bottom: 32px;
+    }
+
+    .issuer-card__seal {
+        flex: none;
+        width: min(100%, 360px);
+        margin: 0 auto;
+    }
 }
