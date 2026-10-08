@@ -143,7 +143,7 @@ main {
 }
 
 .explanation-text__secondary {
-    color: var(--color-ink-60);
+    color: var(--color-ink-70);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -237,10 +237,17 @@ main {
     padding: 32px;
     border-radius: 24px;
     overflow: hidden;
+    /* With enlarged text spacing on a phone, words in the 36px quote are wider
+       than the card; break them rather than let the card clip them. */
+    overflow-wrap: break-word;
 }
 
+/* The number and its source link. Wraps (the link drops below the number,
+   still right-aligned) when both don't fit, instead of the card clipping the
+   link. */
 .stat-card div {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
 }
 
@@ -249,7 +256,8 @@ main {
     align-items: center;
     gap: 4px;
     align-self: flex-end;
-    color: var(--color-ink-60);
+    margin-left: auto;
+    color: var(--color-ink-70);
     font-size: 1rem;
     line-height: 1.5;
 }
@@ -275,12 +283,16 @@ main {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Ink, not the light #F5EEF8 of the design: light text on these pastels was
+   1.5-2.8:1, ink is 5.4:1 or more everywhere on the gradient (WCAG 1.4.3).
+   The source link sits in the pink/lilac top-right corner, where ink-80 still
+   clears 5:1. */
 .stat-card--gradient .stat-card__source {
-    color: rgba(245, 238, 248, 0.6);
+    color: var(--color-ink-80);
 }
 
 .stat-card__number {
-    color: #F5EEF8;
+    color: var(--color-ink);
     font-size: 8rem;
     font-weight: 500;
     line-height: 0.84;
@@ -289,7 +301,7 @@ main {
 
 .stat-card__body {
     max-width: 574px;
-    color: #F5EEF8;
+    color: var(--color-ink);
     font-size: 1.25rem;
     font-weight: 400;
     line-height: 1.5;

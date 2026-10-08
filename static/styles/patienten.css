@@ -127,6 +127,7 @@
 
 /* ===== Hoe het werkt: stap-kaarten (Figma 7389:328 / 7389:414 / 7389:75) ===== */
 .stappen {
+    list-style: none;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -135,8 +136,16 @@
     margin-top: 64px;
 }
 
+/* The text sits in normal flow, so the card is 2:1 by default but grows when
+   enlarged or re-spaced text needs more room (WCAG 1.4.4 / 1.4.12) instead of
+   cutting it off. That needs `clip`, not `hidden`: a scroll container can't
+   grow past its aspect-ratio height. A size container so .stap-visual can keep
+   the 2:1 height when the card grows. */
 .stap-kaart {
+    container-type: inline-size;
     position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
     aspect-ratio: 1280 / 640;
     border-radius: 40px;
@@ -144,16 +153,18 @@
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    overflow: hidden;
+    overflow: clip;
 }
 
 /* The exports are left-crops of the same 1280x640 Figma frame with the right
-   edge intact, so matching the card's height and pinning right reproduces the
-   design's placement and scale; the box shrinks to the image so the fade below
-   lands on the image's own left edge. */
+   edge intact, so giving them the 2:1 card height and pinning top-right
+   reproduces the design's placement and scale; the box shrinks to the image so
+   the fade below lands on the image's own left edge. 50cqw rather than 100%:
+   when enlarged text makes the card taller the image keeps its size instead of
+   growing leftwards under the text. */
 .stap-visual {
     position: absolute;
-    inset: 0 0 0 auto;
+    inset: 0 0 auto auto;
     display: flex;
     justify-content: flex-end;
     overflow: hidden;
@@ -162,24 +173,23 @@
 
 .stap-visual img {
     display: block;
-    height: 100%;
+    height: 50cqw;
     width: auto;
     -webkit-mask-image: linear-gradient(to right, transparent 0, #000 48px);
     mask-image: linear-gradient(to right, transparent 0, #000 48px);
 }
 
 .stap-tekst {
-    position: absolute;
-    top: 50%;
-    left: 8.36%; /* 107 / 1280 */
+    position: relative;
+    z-index: 2;
     width: 37.5%; /* ~480 / 1280 */
-    transform: translateY(-50%);
+    margin-left: 8.36%; /* 107 / 1280 */
+    padding-block: 24px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: clamp(24px, 5vw, 64px);
     text-align: left;
-    z-index: 2;
 }
 
 .stap-kop {
@@ -204,6 +214,10 @@
     font-size: clamp(1.5rem, 3.75vw, 3rem);
     line-height: 1;
     letter-spacing: -0.04em;
+    /* "DNAmedicatiepas" is wider than a 320px phone card once text spacing is
+       enlarged. `anywhere`, not `break-word`: the title is sized to its content
+       (align-items: flex-start), and only `anywhere` lowers that size. */
+    overflow-wrap: anywhere;
 }
 
 /* ===== Feature-kaarten (Figma 7389:390 / 396 / 402 / 408) ===== */
@@ -215,10 +229,12 @@
     padding-right: 24px;
 }
 
+/* minmax(0, …): a plain 1fr can't shrink below its longest word, so with
+   enlarged text spacing the fourth card was pushed off-screen at ~820px. */
 .feature-grid {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 4px;
 }
 
@@ -262,10 +278,16 @@
     pointer-events: none;
 }
 
+/* Just above 800px a column's content box is ~95px, narrower than some words,
+   which then run into the card's 48px right padding. That's fine, but no
+   further: with enlarged text spacing a longer word breaks instead of crossing
+   into the next card. */
 .feature-card__text {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    max-width: calc(100% + 48px);
+    overflow-wrap: break-word;
 }
 
 .feature-card__title {
@@ -301,8 +323,8 @@
     }
 
     .stap-kaart {
-        display: flex;
         flex-direction: column;
+        align-items: stretch;
         aspect-ratio: auto;
     }
 
@@ -316,16 +338,14 @@
        height and let the flex end-alignment clip that dead space away. */
     .stap-visual img {
         flex: none;
+        height: 100%;
         -webkit-mask-image: none;
         mask-image: none;
     }
 
     .stap-tekst {
-        position: static;
-        top: auto;
-        left: auto;
         width: auto;
-        transform: none;
+        margin-left: 0;
         padding: 24px;
     }
 }
