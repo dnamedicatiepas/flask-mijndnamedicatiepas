@@ -145,3 +145,270 @@ body {
         margin: 0 auto;
     }
 }
+
+/* ===== Page spacing =====
+   The global #nav padding and `main` margin are sized for the landing pages
+   (200px from the nav to the content). The Figma has 48px from the logo to
+   the issuer card, so both are overridden here with selectors that outrank
+   the global ones. The card's own 64px margin-bottom spaces it from the page
+   content below. */
+.site-header #nav {
+    padding-bottom: 35px; /* + 13px under the logo image in its .nav-item = 48px */
+}
+
+body > main {
+    margin-top: 0;
+}
+
+/* The content under the issuer card on every Mijn Pas page, aligned with
+   the card. */
+.mijn-pas__content {
+    max-width: 1280px;
+}
+
+/* Medicatie: the intro on the left (355px in the design), the chips and
+   list on the right (745px). */
+.mijn-pas__content--split {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 64px;
+}
+
+.advice-intro {
+    flex: 0 1 355px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+}
+
+/* Beats the global h2 (65px, medium) with the design's 48px regular. */
+.advice-intro h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin-bottom: 0; /* the 32px flex gap spaces it */
+}
+
+.advice-intro p {
+    font-size: 1.25rem;
+    line-height: 1.5;
+}
+
+/* #5541F0 is about 5.7:1 on the page, so it passes 4.5:1 (WCAG 1.4.3). */
+.advice-intro .advice-intro__warning {
+    color: #5541F0;
+}
+
+.mijn-pas__content--split #information-tables {
+    flex: 0 1 745px;
+    min-width: 0;
+}
+
+@media screen and (max-width: 1000px) {
+    .mijn-pas__content--split {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 32px;
+    }
+
+    .advice-intro,
+    .mijn-pas__content--split #information-tables {
+        flex: none;
+    }
+
+    .advice-intro {
+        gap: 16px;
+    }
+}
+
+/* ===== Uw Adviezen (qr-platform/pages/mijn-pas/medicatie.html) =====
+   The phenotype filter chips and the list of medications. Each row is a
+   <details>; static/script/medicatie.js hides the rows a chip filters out.
+   Figma's muted text is ink at 0.6, which fails 4.5:1 (WCAG 1.4.3), so the
+   muted text here uses --color-ink-70 instead. */
+.med-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 2px;
+    margin-bottom: 24px;
+}
+
+/* The grey pill used for a row's phenotype and for the filter chips. */
+.med-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background-color: var(--color-ink-06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--color-ink);
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.med-filter__chip {
+    border: 0;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.med-filter__chip:hover {
+    background-color: var(--color-ink-10);
+}
+
+.med-filter__chip[aria-pressed="true"] {
+    background-color: var(--color-ink);
+    color: #fff;
+}
+
+.med-list {
+    overflow: clip;
+    border: 1px solid var(--color-ink-10);
+    border-radius: 24px;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.med-item {
+    border-bottom: 1px solid var(--color-ink-20);
+}
+
+.med-item:last-child {
+    border-bottom: 0;
+}
+
+.med-item[open] {
+    background-color: rgba(29, 28, 26, 0.04);
+}
+
+.med-item__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    list-style: none;
+    cursor: pointer;
+}
+
+/* Safari still draws the disclosure triangle without this. */
+.med-item__summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Inset, so the ring stays inside the card's rounded corners. */
+.med-item__summary:focus-visible {
+    outline-offset: -2px;
+}
+
+.med-item__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    min-width: 0;
+}
+
+.med-item__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+}
+
+.med-item__name {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+}
+
+.med-item__reason,
+.med-item__explanation,
+.med-advice p {
+    color: var(--color-ink-70);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.med-item__toggle {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: var(--color-ink-06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 1rem;
+    line-height: 1;
+    transition: background-color 0.2s, color 0.2s, transform 0.3s ease;
+}
+
+.med-item__summary:hover .med-item__toggle {
+    background-color: var(--color-ink-10);
+}
+
+.med-item[open] .med-item__toggle {
+    background-color: var(--color-ink);
+    color: #fff;
+    transform: scaleY(-1);
+}
+
+.med-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 24px 24px;
+}
+
+/* The 1.5px gradient border is a masked ::before, since border-image ignores
+   border-radius. */
+.med-advice {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--color-ink-06);
+}
+
+.med-advice::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    background-image: var(--gradient-bar);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+
+.med-advice .med-advice__title {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+/* Where supported, slide the row open instead of showing it instantly. */
+@supports selector(::details-content) {
+    .med-item::details-content {
+        block-size: 0;
+        overflow-y: clip;
+        transition: block-size 0.2s ease-out, content-visibility 0.2s ease-out allow-discrete;
+    }
+
+    .med-item[open]::details-content {
+        block-size: auto;
+    }
+}

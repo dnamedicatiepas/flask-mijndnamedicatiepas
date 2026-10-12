@@ -81,6 +81,51 @@ def get_issuer(gen_sequence):
     return DUMMY_ISSUERS.get(gen_sequence, DUMMY_ISSUERS["lumc"])
 
 
+# DUMMY DATA for the "Uw Adviezen" list on the Medicatie page
+# (qr-platform/pages/mijn-pas/medicatie.html). Replace get_medications() with
+# the real lookup once the pas data is available.
+#   name         Medication name, the row's title.
+#   summary      One-line reason shown under the name.
+#   phenotype    The tag on the row; the filter chips are built from these.
+#   explanation  Shown when the row is opened.
+#   advice       The text in the "Advies" box under the explanation.
+# Only Escitalopram has real text (from the design); the rest is placeholder.
+DUMMY_MEDICATIONS = [
+    {"name": "Clopidogrel", "phenotype": "Poor metabolizer"},
+    {
+        "name": "Escitalopram",
+        "phenotype": "Poor metabolizer",
+        "explanation": (
+            "Het risico op omzetting van de patiënt naar een ander antidepressivum is verhoogd. "
+            "Daarnaast is het risico op QT- verlenging en torsade de pointes in theorie verhoogd, "
+            "doordat de genvariatie tot een toename van de plasmaconcentratie van escitalopram leidt. "
+            "Bij volgen van onderstaand dosisadvies worden de verhoogde plasmaconcentratie en daarmee "
+            "het theoretisch verhoogde risico op QT-verlenging en het verhoogde risico op omzetting van "
+            "de patiënt naar een ander antidepressivum teniet gedaan."
+        ),
+        "advice": (
+            "Geef maximaal de volgende doseringen (50% van de normale maximumdosering): "
+            "volwassenen tot 65 jaar 10 mg/dag, vanaf 65 jaar 5 mg/dag"
+        ),
+    },
+    {"name": "Flucytosine", "phenotype": "Genactiviteitsscore 1"},
+    {"name": "Fluorouracil/Capecitabine", "phenotype": "Genactiviteitsscore 1"},
+    {"name": "Imipramine", "phenotype": "Poor metabolizer"},
+    {"name": "Mavacamten", "phenotype": "Poor metabolizer"},
+    {"name": "Rosuvastatine", "phenotype": "521CC"},
+    {"name": "Tegafur", "phenotype": "Genactiviteitsscore 1"},
+]
+for _medication in DUMMY_MEDICATIONS:
+    _medication.setdefault("summary", "Er is een Contraindicatie CYP2C19")
+    _medication.setdefault("explanation", FAQ_LOREM)
+    _medication.setdefault("advice", FAQ_LOREM)
+
+
+def get_medications(gen_sequence):
+    # Dummy lookup: every pas shows the same list.
+    return DUMMY_MEDICATIONS
+
+
 # checks if the X-Requested-With is given in the fetch
 # If it is, only the inner page fragment gets returned.
 # If not, the return will also include the outer template/shell in the response
@@ -94,10 +139,10 @@ def render_page(template, active_nav, current_page="pas", **context):
 
 # A Mijn Pas page: qr-platform/pages/mijn-pas/<page>.html, whose nav key is also
 # <page>. Each of these pages includes the issuer card, so `issuer` is passed on
-# full and AJAX loads alike.
-def render_mijn_pas(page, gen_sequence):
+# full and AJAX loads alike. Extra keyword arguments are passed to the page.
+def render_mijn_pas(page, gen_sequence, **context):
     return render_page(f"qr-platform/pages/mijn-pas/{page}.html", page,
-                       gen_sequence=gen_sequence, issuer=get_issuer(gen_sequence))
+                       gen_sequence=gen_sequence, issuer=get_issuer(gen_sequence), **context)
 
 
 @app.context_processor
@@ -120,7 +165,7 @@ def professionals():
 # currently it is bound to the literal name of the lab.
 @app.route('/app/<gen_sequence>/')
 def medication(gen_sequence):
-    return render_mijn_pas("medicatie", gen_sequence)
+    return render_mijn_pas("medicatie", gen_sequence, medications=get_medications(gen_sequence))
 
 
 @app.route('/app/<gen_sequence>/genoverzicht/')
