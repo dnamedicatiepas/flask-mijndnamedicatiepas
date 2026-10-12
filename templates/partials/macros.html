@@ -52,7 +52,7 @@
   "prinses-maxima": "Prinses Máxima Centrum",
   "maasstad": "Maasstad Ziekenhuis",
 } -%}
-<ul class="mw-logos">
+<ul class="mw-logos" role="list">{# Safari drops list semantics from list-style: none lists. #}
   {%- for slug in order %}
   <li><img src="{{ url_for('static', filename='images/logos/' ~ theme ~ '/' ~ slug ~ '.svg') }}" alt="{{ names[slug] }}"></li>
   {%- endfor %}

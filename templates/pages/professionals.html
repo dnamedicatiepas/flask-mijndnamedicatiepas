@@ -56,7 +56,8 @@
                 </p>
 
                 <p class="explanation-text__secondary">
-                    De DNAmedicatie adviezen zijn opgesteld door de Dutch Working Group on Pharmacogenetics,
+                    De DNAmedicatie adviezen zijn opgesteld door de
+                    <span lang="en">Dutch Working Group on Pharmacogenetics</span>,
                     internationaal gepubliceerd en beschikbaar via de G-standaard. Het zijn dezelfde adviezen,
                     die kunnen gegenereerd in Nederlandse huisarts-, ziekenhuis- en apotheeksystemen.
                     De farmacogenetische uitslagen kunt u opslaan in uw automatiseringssysteem als contra-indicatie,
@@ -97,8 +98,10 @@
             <article class="stat-card stat-card--gradient">
                 <div>
                     <p class="stat-card__number">-30%</p>
+                    {# The hidden text tells the two "Bron: PubMed" links apart for screen
+                       readers. The wrapper keeps it out of the link's flex layout. #}
                     <a class="stat-card__source" href="#">
-                        Bron: PubMed
+                        <span>Bron: PubMed<span class="visually-hidden">, Europese studie naar ernstige bijwerkingen</span></span>
                         <i class="fa-light fa-arrow-up-right" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -114,7 +117,7 @@
                     “In een Amerikaanse studie waren aanzienlijke besparingen in zorgkosten gerealiseerd.”
                 </p>
                 <a class="stat-card__source" href="#">
-                    Bron: PubMed
+                    <span>Bron: PubMed<span class="visually-hidden">, Amerikaanse studie naar zorgkosten</span></span>
                     <i class="fa-light fa-arrow-up-right" aria-hidden="true"></i>
                 </a>
             </article>
@@ -134,7 +137,7 @@
             <p class="mw-body">
                 Artsen kunnen DNAmedicatiepassen aanvragen op indicatie bij het Maasstadziekenhuis in Rotterdam.
                 De andere aangesloten ziekenhuizen geven de passen uit na diagnostiek bij de klinische genetica
-                waarbij een Whole Genome Sequencing DNA analyse is uitgevoerd.
+                waarbij een <span lang="en">Whole Genome Sequencing</span> DNA analyse is uitgevoerd.
             </p>
         </div>
 

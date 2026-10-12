@@ -17,10 +17,10 @@
                 <span class="display-heading__accent">juiste medicatie.</span>
             </h1>
 
-            <div class="in1scan-body">
+            <p class="in1scan-body">
                 De DNAmedicatiepas vertaalt het DNA van de patiënt naar concrete medicatie adviezen. Veilig gedeeld via
                 een QR-code, direct beschikbaar voor artsen en apothekers.
-            </div>
+            </p>
 
             {{ cta_button("Bekijk hoe het werkt", "#section42", variant="dark", icon="arrow-down") }}
         </div>
@@ -39,9 +39,15 @@
         </div>
     </section>
 
-    <section id="section42">
+    {#
+      The target of "Bekijk hoe het werkt". tabindex="-1" lets that link move
+      focus here, so the next Tab continues after this section; the section
+      itself holds no controls, so Tab alone passes over it (WCAG 2.1.1/2.4.3
+      only concern operable content). aria-labelledby makes it a named landmark.
+    #}
+    <section id="section42" aria-labelledby="section42-title" tabindex="-1">
         <div class="sectie-intro">
-            <h2>Hoe het werkt!</h2>
+            <h2 id="section42-title">Hoe het werkt!</h2>
             <p class="h2-caption">
                 Met de DNAmedicatiepas krijgt u direct toegang tot het DNA-profiel van uw patiënt.
                 Zo ziet u in één oogopslag welke medicatie het beste past, voorkomt u bijwerkingen
@@ -49,8 +55,9 @@
             </p>
         </div>
 
-        <div class="stappen">
-            <article class="stap-kaart">
+        {# role="list": Safari drops list semantics from list-style: none lists. #}
+        <ol class="stappen" role="list">
+            <li class="stap-kaart">
                 <div class="stap-tekst">
                     <div class="stap-kop">
                         <span class="stap-badge">001</span>
@@ -65,9 +72,9 @@
                     <img src="{{ url_for('static', filename='images/how-it-works/stap-1.svg') }}"
                          alt="DNAmedicatiepas met persoonlijke QR-code">
                 </div>
-            </article>
+            </li>
 
-            <article class="stap-kaart">
+            <li class="stap-kaart">
                 <div class="stap-tekst">
                     <div class="stap-kop">
                         <span class="stap-badge">002</span>
@@ -82,9 +89,9 @@
                     <img src="{{ url_for('static', filename='images/how-it-works/stap-2.svg') }}"
                          alt="Smartphone die de QR-code op de DNAmedicatiepas scant">
                 </div>
-            </article>
+            </li>
 
-            <article class="stap-kaart">
+            <li class="stap-kaart">
                 <div class="stap-tekst">
                     <div class="stap-kop">
                         <span class="stap-badge">003</span>
@@ -100,12 +107,14 @@
                     <img src="{{ url_for('static', filename='images/how-it-works/stap-3.svg') }}"
                          alt="Medicatieoverzicht met adviezen op een smartphone">
                 </div>
-            </article>
-        </div>
+            </li>
+        </ol>
     </section>
 
     <section id="features">
-        <ul class="feature-grid">
+        {# Without its own h2 the h3s below would sit under "Hoe het werkt!". #}
+        <h2 class="visually-hidden">Voordelen van de DNAmedicatiepas</h2>
+        <ul class="feature-grid" role="list">
             <li class="feature-card">
                 <span class="feature-card__icon" aria-hidden="true"><i class="fa-regular fa-credit-card"></i></span>
                 <div class="feature-card__text">
