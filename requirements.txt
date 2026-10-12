@@ -1,2 +1,5 @@
 flask>=3.0
+xlrd
+pytest
+pandas
 
