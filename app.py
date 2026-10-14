@@ -126,6 +126,30 @@ def get_medications(gen_sequence):
     return DUMMY_MEDICATIONS
 
 
+# DUMMY DATA for the gene table on the Genoverzicht page
+# (qr-platform/pages/mijn-pas/genoverzicht.html). Replace get_genes() with the
+# real lookup once the pas data is available.
+#   gene       Gene name, the row's first column.
+#   diplotype  The two alleles, e.g. "*1/*1".
+#   phenotype  The resulting phenotype, right-aligned in the last column.
+# The values are copied from the design.
+DUMMY_GENES = [
+    {"gene": "CYP2B6", "diplotype": "*1/*1", "phenotype": "CYP2B6 Normal Metaboliser"},
+    {"gene": "CYP2C19", "diplotype": "*2/*2", "phenotype": "CYP2C19 Poor Metaboliser"},
+    {"gene": "CYP2C9", "diplotype": "*1/*1", "phenotype": "CYP2C9 *1/*1"},
+    {"gene": "CYP3A5", "diplotype": "*3/*3", "phenotype": "CYP3A5 Non-expresser (meest voorkomend)"},
+    {"gene": "DPYD", "diplotype": "*1/*13", "phenotype": "DPD Genactiviteitssore 1"},
+    {"gene": "HLA-B", "diplotype": "wt/wt", "phenotype": "HLA-B*5701-Negatief"},
+    {"gene": "SLCO1B1", "diplotype": "*5/*5", "phenotype": "SLCO1B1 521CC"},
+    {"gene": "VKORC1", "diplotype": "wt/wt", "phenotype": "VKORC1-1639GG (1173CC) (wild type)"},
+]
+
+
+def get_genes(gen_sequence):
+    # Dummy lookup: every pas shows the same genes.
+    return DUMMY_GENES
+
+
 # checks if the X-Requested-With is given in the fetch
 # If it is, only the inner page fragment gets returned.
 # If not, the return will also include the outer template/shell in the response
@@ -170,7 +194,7 @@ def medication(gen_sequence):
 
 @app.route('/app/<gen_sequence>/genoverzicht/')
 def genoverzicht(gen_sequence):
-    return render_mijn_pas("genoverzicht", gen_sequence)
+    return render_mijn_pas("genoverzicht", gen_sequence, genes=get_genes(gen_sequence))
 
 
 @app.route('/app/<gen_sequence>/varianten/')

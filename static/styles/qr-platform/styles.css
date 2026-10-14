@@ -166,8 +166,8 @@ body > main {
     max-width: 1280px;
 }
 
-/* Medicatie: the intro on the left (355px in the design), the chips and
-   list on the right (745px). */
+/* Medicatie and Genoverzicht: the intro on the left (355px in the design),
+   the list or table on the right (745px). */
 .mijn-pas__content--split {
     display: flex;
     justify-content: space-between;
@@ -202,7 +202,8 @@ body > main {
     color: #5541F0;
 }
 
-.mijn-pas__content--split #information-tables {
+.mijn-pas__content--split #information-tables,
+.mijn-pas__content--split #genoverzicht-table {
     flex: 0 1 745px;
     min-width: 0;
 }
@@ -215,7 +216,8 @@ body > main {
     }
 
     .advice-intro,
-    .mijn-pas__content--split #information-tables {
+    .mijn-pas__content--split #information-tables,
+    .mijn-pas__content--split #genoverzicht-table {
         flex: none;
     }
 
@@ -268,7 +270,9 @@ body > main {
     color: #fff;
 }
 
-.med-list {
+/* The card around the medication list and the gene table. */
+.med-list,
+.gene-table {
     overflow: clip;
     border: 1px solid var(--color-ink-10);
     border-radius: 24px;
@@ -410,5 +414,90 @@ body > main {
 
     .med-item[open]::details-content {
         block-size: auto;
+    }
+}
+
+/* ===== Gene table (qr-platform/pages/mijn-pas/genoverzicht.html) =====
+   Gen and Diplotype are 128px columns, Phenotype takes the rest, right
+   aligned. The card itself is shared with .med-list above. As there, Figma's
+   muted ink at 0.6 is --color-ink-70 here (WCAG 1.4.3). */
+.gene-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1;
+    overflow-wrap: anywhere;
+}
+
+.gene-table th,
+.gene-table td {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-ink-10);
+    font-weight: 400;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.gene-table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+/* border-box (the global reset), so the 24px row padding is inside these. */
+.gene-table .gene-table__gene {
+    width: calc(128px + 24px);
+    padding-left: 24px;
+}
+
+.gene-table .gene-table__diplotype {
+    width: 128px;
+}
+
+.gene-table .gene-table__phenotype {
+    padding-right: 24px;
+    text-align: right;
+}
+
+.gene-table thead th {
+    padding-top: 24px;
+    padding-bottom: 16px;
+    color: var(--color-ink-70);
+}
+
+.gene-table tbody th {
+    color: var(--color-ink);
+}
+
+.gene-table tbody .gene-table__diplotype {
+    color: var(--color-ink-70);
+}
+
+/* Phone: the fixed columns would squeeze Phenotype to a few characters, so
+   they size to their content and the phenotype wraps instead. */
+@media screen and (max-width: 800px) {
+    .gene-table th,
+    .gene-table td {
+        padding-block: 16px;
+        line-height: 1.5;
+    }
+
+    .gene-table thead th {
+        padding-top: 16px;
+        padding-bottom: 12px;
+    }
+
+    .gene-table .gene-table__gene,
+    .gene-table .gene-table__diplotype {
+        width: auto;
+        padding-right: 16px;
+        overflow-wrap: normal;
+        white-space: nowrap;
+    }
+
+    .gene-table .gene-table__gene {
+        padding-left: 16px;
+    }
+
+    .gene-table .gene-table__phenotype {
+        padding-right: 16px;
     }
 }
