@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Blueprint
 
 app = Flask(__name__)
 
@@ -198,19 +198,19 @@ def professionals():
 # here starts the app routing for the qr platform
 # Later the parameter will be encoded with the lab origin as well
 # currently it is bound to the literal name of the lab.
-@app.route('/app/<gen_sequence>/')
-def medication(gen_sequence):
-    return render_mijn_pas("medicatie", gen_sequence, medications=get_medications(gen_sequence))
+@app.route('/app/<encoded_profile>/')
+def medication(encoded_profile):
+    return render_mijn_pas("medicatie", encoded_profile, medications=get_medications(encoded_profile))
 
 
-@app.route('/app/<gen_sequence>/genoverzicht/')
-def genoverzicht(gen_sequence):
-    return render_mijn_pas("genoverzicht", gen_sequence, genes=get_genes(gen_sequence))
+@app.route('/app/<encoded_profile>/genoverzicht/')
+def genoverzicht(encoded_profile):
+    return render_mijn_pas("genoverzicht", encoded_profile, genes=get_genes(encoded_profile))
 
 
-@app.route('/app/<gen_sequence>/varianten/')
-def varianten(gen_sequence):
-    return render_mijn_pas("varianten", gen_sequence)
+@app.route('/app/<encoded_profile>/varianten/')
+def varianten(encoded_profile):
+    return render_mijn_pas("varianten", encoded_profile)
 
 
 @app.errorhandler(404)
