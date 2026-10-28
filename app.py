@@ -76,9 +76,9 @@ DUMMY_ISSUERS = {
 }
 
 
-def get_issuer(gen_sequence):
+def get_issuer(encoded_profile):
     # Dummy lookup: /app/<issuer slug>/ shows that issuer, anything else LUMC.
-    return DUMMY_ISSUERS.get(gen_sequence, DUMMY_ISSUERS["lumc"])
+    return DUMMY_ISSUERS.get(encoded_profile, DUMMY_ISSUERS["lumc"])
 
 
 # DUMMY DATA for the "Uw Adviezen" list on the Medicatie page
@@ -121,7 +121,7 @@ for _medication in DUMMY_MEDICATIONS:
     _medication.setdefault("advice", FAQ_LOREM)
 
 
-def get_medications(gen_sequence):
+def get_medications(encoded_profile):
     # Dummy lookup: every pas shows the same list.
     return DUMMY_MEDICATIONS
 
@@ -156,7 +156,7 @@ DUMMY_VARIANTS = [
 ]
 
 
-def get_genes(gen_sequence):
+def get_genes(encoded_profile):
     # Dummy lookup: every pas shows the same genes.
     return DUMMY_GENES
 
@@ -175,9 +175,9 @@ def render_page(template, active_nav, current_page="pas", **context):
 # A Mijn Pas page: qr-platform/pages/mijn-pas/<page>.html, whose nav key is also
 # <page>. Each of these pages includes the issuer card, so `issuer` is passed on
 # full and AJAX loads alike. Extra keyword arguments are passed to the page.
-def render_mijn_pas(page, gen_sequence, **context):
+def render_mijn_pas(page, encoded_profile, **context):
     return render_page(f"qr-platform/pages/mijn-pas/{page}.html", page,
-                       gen_sequence=gen_sequence, issuer=get_issuer(gen_sequence), **context)
+                       encoded_profile=encoded_profile, issuer=get_issuer(encoded_profile), **context)
 
 
 @app.context_processor

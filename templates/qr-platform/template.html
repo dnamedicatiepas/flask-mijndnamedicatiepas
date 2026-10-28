@@ -37,7 +37,7 @@
 <main>
     <nav class="pill-nav">
         {% for item in nav %}
-            <a href="{{ url_for(item.endpoint, gen_sequence=gen_sequence) }}"
+            <a href="{{ url_for(item.endpoint, encoded_profile=encoded_profile) }}"
                data-ajax
                data-push="true"
                data-nav-link
