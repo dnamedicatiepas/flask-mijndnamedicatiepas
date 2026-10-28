@@ -203,7 +203,8 @@ body > main {
 }
 
 .mijn-pas__content--split #information-tables,
-.mijn-pas__content--split #genoverzicht-table {
+.mijn-pas__content--split #genoverzicht-table,
+.mijn-pas__content--split #variant-table{
     flex: 0 1 745px;
     min-width: 0;
 }
@@ -217,7 +218,8 @@ body > main {
 
     .advice-intro,
     .mijn-pas__content--split #information-tables,
-    .mijn-pas__content--split #genoverzicht-table {
+    .mijn-pas__content--split #genoverzicht-table,
+    .mijn-pas__content--split #variant-table {
         flex: none;
     }
 

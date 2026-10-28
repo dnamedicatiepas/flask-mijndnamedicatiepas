@@ -1,7 +1,39 @@
 <header>
     {% include "qr-platform/partials/issuer_card.html" %}
 </header>
-<div class="mijn-pas__content shell">
-    <h2>PARAMETER TEST</h2>
-    <p>The parameter is: {{ gen_sequence }}</p>
+<div class="mijn-pas__content mijn-pas__content--split shell">
+    <div class="advice-intro">
+        <h2>Uw adviezen</h2>
+        <p>De onderstaande resultaten kunnen overgenomen worden in uw medisch dossier.</p>
+    </div>
+    <div id="variant-table">
+        <table>
+            <caption class="visually-hidden">
+                Varianten
+            </caption>
+            <thead>
+            <tr>
+                <th scope="col" class="gene-table__gen">Gen</th>
+                <th scope="col" class="gene-table__allele_a">Allele A</th>
+                <th scope="col" class="gene-table__allele_b">Allele B</th>
+                <th scope="col" class="gene-table__unphased">Unphased</th>
+                <th scope="col" class="gene-table__covered">Covered</th>
+                <th scope="col" class="gene-table__not_covered">Not Covered</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for variant in variants %}
+                <tr>
+                    <td class="gene-table__gen">{{ variant.gen }}</td>
+                    <td class="gene-table__allele_a">{{ variant.allele_a }}</td>
+                    <td class="gene-table__allele_b">{{ variant.allele_b }}</td>
+                    <td class="gene-table__unphased">{{ variant.unphased }}</td>
+                    <td class="gene-table__covered">{{ variant.covered }}</td>
+                    <td class="gene-table__not_covered">{{ variant.not_covered }}</td>
+                </tr>
+                {%- endfor %}
+
+            </tbody>
+        </table>
+    </div>
 </div>

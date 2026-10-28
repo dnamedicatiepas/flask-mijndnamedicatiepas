@@ -144,6 +144,17 @@ DUMMY_GENES = [
     {"gene": "VKORC1", "diplotype": "wt/wt", "phenotype": "VKORC1-1639GG (1173CC) (wild type)"},
 ]
 
+DUMMY_VARIANTS = [
+    {"gen": "CYP2B6", "covered": ["rs2279343", "rs28399499", "rs3745274", "rs3211371"]},
+    {"gen": "SYP2C19", "allele a": "rs4244285", "allele b": "rs4244285", "covered": ["rs12248560", "rs17884712", "rs28399504", "rs41291556", "rs4244285", "rs4986893", "rs56337013", "rs6413438", "rs72552267"]},
+    {"gen": "CYP2C9", "covered": ["rs1057910", "rs1799853", "rs28371685", "rs28371686"]},
+    {"gen": "CYP3A5", "covered": ["rs10264272", "rs41303343", "rs776746"]},
+    {"gen": "DPYD", "allele b": "rs55886062", "covered": ["rs3918290", "rs55886062", "rs56038477", "rs67376798"]},
+    {"gen": "HLA-B", "covered": ["rs2395029"]},
+    {"gen": "SLCO1B1", "allele a": "rs4149056", "allele b": "rs4149056", "covered": ["rs4149056"]},
+    {"gen": "VKORC1", "covered": ["rs9934438"]}
+]
+
 
 def get_genes(gen_sequence):
     # Dummy lookup: every pas shows the same genes.
