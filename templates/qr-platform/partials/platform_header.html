@@ -22,7 +22,7 @@
                     {%- set state = "active" if tab.page == current_page else "inactive" %}
                     <div class="segmented-toggle__tab segmented-toggle__tab--{{ state }}">
                         {%- if tab.endpoint %}
-                        <a href="{{ url_for(tab.endpoint, gen_sequence=gen_sequence) }}"{% if state == "active" %} aria-current="page"{% endif %}>
+                        <a href="{{ url_for(tab.endpoint, encoded_profile=encoded_profile) }}"{% if state == "active" %} aria-current="page"{% endif %}>
                         {%- else %}
                         <a aria-disabled="true">
                         {%- endif %}

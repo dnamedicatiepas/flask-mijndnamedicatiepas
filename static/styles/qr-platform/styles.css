@@ -15,6 +15,7 @@ body {
     background: #fff;
     border-radius: 999px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+    z-index: 5;
 }
 
 .pill-nav a {
@@ -28,4 +29,477 @@ body {
 .pill-nav a[aria-current="page"] {
     background: #222;
     color: #fff;
+}
+
+/* ===== Issuer card (qr-platform/partials/issuer_card.html) =====
+   The dark "Uw resultaat, uitgegeven door:" card on the Mijn Pas pages. It
+   reuses .mw-title / .mw-body / .background-text--on-dark from styles.css,
+   which loads AFTER this file, so overrides of those classes are scoped under
+   .issuer-card to win on specificity rather than source order. */
+.issuer-card {
+    position: relative;
+    isolation: isolate; /* keeps the glow's blend mode inside the card */
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    max-width: 1280px;
+    margin-bottom: 64px;
+    padding: 64px;
+    border-radius: 24px;
+    background: var(--color-ink);
+}
+
+.issuer-card .issuer-card__dna {
+    padding: 0;
+    /* Fades in towards the bottom, unlike the "Meer weten" panel. */
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
+}
+
+/* The blurred colour band along the bottom edge. `color` blending tints the
+   DNA text under it without lighting up the dark background. */
+.issuer-card__glow {
+    position: absolute;
+    z-index: 1;
+    left: calc(50% - 0.5px);
+    bottom: -130.31px;
+    width: 1415px;
+    height: 370.31px;
+    transform: translateX(-50%);
+    border-radius: 224.256px;
+    background-image: linear-gradient(90deg, var(--color-paper) 0%, var(--brand-pink) 50%, #7E7FE3 75%, #5FE219 87.5%, #F1F1F1 100%);
+    box-shadow: inset 8.97px 0 107.643px 107.643px var(--color-paper);
+    filter: blur(63.789px);
+    mix-blend-mode: color;
+    pointer-events: none;
+}
+
+.issuer-card__content {
+    position: relative;
+    z-index: 3;
+    flex: 0 1 650px;
+    min-width: 0;
+}
+
+.issuer-card .mw-title {
+    margin-bottom: 128px;
+}
+
+.issuer-card .mw-body {
+    max-width: 549px;
+}
+
+/* The glass circle with the issuer's logo. The negative margins put it 16px
+   from the card's top and right edges instead of inside the 64px padding. */
+.issuer-card__seal {
+    position: relative;
+    z-index: 2;
+    flex: 0 1 536px;
+    min-width: 0;
+    aspect-ratio: 1;
+    margin: -48px -48px -48px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.issuer-card__circle {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.issuer-card__logo {
+    position: relative;
+    display: block;
+    height: 60px;
+    width: auto;
+    max-width: 60%;
+    object-fit: contain;
+}
+
+@media screen and (max-width: 1000px) {
+    .issuer-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 40px 24px 32px;
+    }
+
+    .issuer-card__content {
+        flex: none;
+    }
+
+    .issuer-card .mw-title {
+        margin-bottom: 32px;
+    }
+
+    .issuer-card__seal {
+        flex: none;
+        width: min(100%, 360px);
+        margin: 0 auto;
+    }
+}
+
+/* ===== Page spacing =====
+   The global #nav padding and `main` margin are sized for the landing pages
+   (200px from the nav to the content). The Figma has 48px from the logo to
+   the issuer card, so both are overridden here with selectors that outrank
+   the global ones. The card's own 64px margin-bottom spaces it from the page
+   content below. */
+.site-header #nav {
+    padding-bottom: 35px; /* + 13px under the logo image in its .nav-item = 48px */
+}
+
+body > main {
+    margin-top: 0;
+}
+
+/* The content under the issuer card on every Mijn Pas page, aligned with
+   the card. */
+.mijn-pas__content {
+    max-width: 1280px;
+}
+
+/* Medicatie and Genoverzicht: the intro on the left (355px in the design),
+   the list or table on the right (745px). */
+.mijn-pas__content--split {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 64px;
+}
+
+.advice-intro {
+    flex: 0 1 355px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+}
+
+/* Beats the global h2 (65px, medium) with the design's 48px regular. */
+.advice-intro h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin-bottom: 0; /* the 32px flex gap spaces it */
+}
+
+.advice-intro p {
+    font-size: 1.25rem;
+    line-height: 1.5;
+}
+
+/* #5541F0 is about 5.7:1 on the page, so it passes 4.5:1 (WCAG 1.4.3). */
+.advice-intro .advice-intro__warning {
+    color: #5541F0;
+}
+
+.mijn-pas__content--split #information-tables,
+.mijn-pas__content--split #genoverzicht-table,
+.mijn-pas__content--split #variant-table{
+    flex: 0 1 745px;
+    min-width: 0;
+}
+
+@media screen and (max-width: 1000px) {
+    .mijn-pas__content--split {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 32px;
+    }
+
+    .advice-intro,
+    .mijn-pas__content--split #information-tables,
+    .mijn-pas__content--split #genoverzicht-table,
+    .mijn-pas__content--split #variant-table {
+        flex: none;
+    }
+
+    .advice-intro {
+        gap: 16px;
+    }
+}
+
+/* ===== Uw Adviezen (qr-platform/pages/mijn-pas/medicatie.html) =====
+   The phenotype filter chips and the list of medications. Each row is a
+   <details>; static/script/medicatie.js hides the rows a chip filters out.
+   Figma's muted text is ink at 0.6, which fails 4.5:1 (WCAG 1.4.3), so the
+   muted text here uses --color-ink-70 instead. */
+.med-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 2px;
+    margin-bottom: 24px;
+}
+
+/* The grey pill used for a row's phenotype and for the filter chips. */
+.med-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background-color: var(--color-ink-06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--color-ink);
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.med-filter__chip {
+    border: 0;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.med-filter__chip:hover {
+    background-color: var(--color-ink-10);
+}
+
+.med-filter__chip[aria-pressed="true"] {
+    background-color: var(--color-ink);
+    color: #fff;
+}
+
+/* The card around the medication list and the gene table. */
+.med-list,
+.gene-table {
+    overflow: clip;
+    border: 1px solid var(--color-ink-10);
+    border-radius: 24px;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.med-item {
+    border-bottom: 1px solid var(--color-ink-20);
+}
+
+.med-item:last-child {
+    border-bottom: 0;
+}
+
+.med-item[open] {
+    background-color: rgba(29, 28, 26, 0.04);
+}
+
+.med-item__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    list-style: none;
+    cursor: pointer;
+}
+
+/* Safari still draws the disclosure triangle without this. */
+.med-item__summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Inset, so the ring stays inside the card's rounded corners. */
+.med-item__summary:focus-visible {
+    outline-offset: -2px;
+}
+
+.med-item__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    min-width: 0;
+}
+
+.med-item__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+}
+
+.med-item__name {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+}
+
+.med-item__reason,
+.med-item__explanation,
+.med-advice p {
+    color: var(--color-ink-70);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.med-item__toggle {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: var(--color-ink-06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 1rem;
+    line-height: 1;
+    transition: background-color 0.2s, color 0.2s, transform 0.3s ease;
+}
+
+.med-item__summary:hover .med-item__toggle {
+    background-color: var(--color-ink-10);
+}
+
+.med-item[open] .med-item__toggle {
+    background-color: var(--color-ink);
+    color: #fff;
+    transform: scaleY(-1);
+}
+
+.med-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 24px 24px;
+}
+
+/* The 1.5px gradient border is a masked ::before, since border-image ignores
+   border-radius. */
+.med-advice {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--color-ink-06);
+}
+
+.med-advice::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    background-image: var(--gradient-bar);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+
+.med-advice .med-advice__title {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+/* Where supported, slide the row open instead of showing it instantly. */
+@supports selector(::details-content) {
+    .med-item::details-content {
+        block-size: 0;
+        overflow-y: clip;
+        transition: block-size 0.2s ease-out, content-visibility 0.2s ease-out allow-discrete;
+    }
+
+    .med-item[open]::details-content {
+        block-size: auto;
+    }
+}
+
+/* ===== Gene table (qr-platform/pages/mijn-pas/genoverzicht.html) =====
+   Gen and Diplotype are 128px columns, Phenotype takes the rest, right
+   aligned. The card itself is shared with .med-list above. As there, Figma's
+   muted ink at 0.6 is --color-ink-70 here (WCAG 1.4.3). */
+.gene-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1;
+    overflow-wrap: anywhere;
+}
+
+.gene-table th,
+.gene-table td {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-ink-10);
+    font-weight: 400;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.gene-table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+/* border-box (the global reset), so the 24px row padding is inside these. */
+.gene-table .gene-table__gene {
+    width: calc(128px + 24px);
+    padding-left: 24px;
+}
+
+.gene-table .gene-table__diplotype {
+    width: 128px;
+}
+
+.gene-table .gene-table__phenotype {
+    padding-right: 24px;
+    text-align: right;
+}
+
+.gene-table thead th {
+    padding-top: 24px;
+    padding-bottom: 16px;
+    color: var(--color-ink-70);
+}
+
+.gene-table tbody th {
+    color: var(--color-ink);
+}
+
+.gene-table tbody .gene-table__diplotype {
+    color: var(--color-ink-70);
+}
+
+/* Phone: the fixed columns would squeeze Phenotype to a few characters, so
+   they size to their content and the phenotype wraps instead. */
+@media screen and (max-width: 800px) {
+    .gene-table th,
+    .gene-table td {
+        padding-block: 16px;
+        line-height: 1.5;
+    }
+
+    .gene-table thead th {
+        padding-top: 16px;
+        padding-bottom: 12px;
+    }
+
+    .gene-table .gene-table__gene,
+    .gene-table .gene-table__diplotype {
+        width: auto;
+        padding-right: 16px;
+        overflow-wrap: normal;
+        white-space: nowrap;
+    }
+
+    .gene-table .gene-table__gene {
+        padding-left: 16px;
+    }
+
+    .gene-table .gene-table__phenotype {
+        padding-right: 16px;
+    }
 }
