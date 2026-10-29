@@ -337,7 +337,8 @@ body > main {
 
 .med-item__reason,
 .med-item__explanation,
-.med-advice p {
+.med-advice p,
+.med-advice__text {
     color: var(--color-ink-70);
     font-size: 1rem;
     line-height: 1.5;
@@ -399,6 +400,17 @@ body > main {
     -webkit-mask-composite: xor;
     mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
     pointer-events: none;
+}
+
+/* The G-Standaard advice text: lists, sometimes nested, and paragraphs. */
+.med-advice__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.med-advice__text ul {
+    padding-left: 1.25em;
 }
 
 .med-advice .med-advice__title {

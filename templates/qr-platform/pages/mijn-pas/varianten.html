@@ -22,14 +22,20 @@
             </tr>
             </thead>
             <tbody>
+                {#- `variants` is the variant table of the pas, see pongs.get_pas().
+                    A v2 (allele) profile carries no variants, so it is empty. #}
                 {% for variant in variants %}
                 <tr>
-                    <td class="gene-table__gen">{{ variant.gen }}</td>
+                    <td class="gene-table__gen">{{ variant.gene }}</td>
                     <td class="gene-table__allele_a">{{ variant.allele_a }}</td>
                     <td class="gene-table__allele_b">{{ variant.allele_b }}</td>
                     <td class="gene-table__unphased">{{ variant.unphased }}</td>
                     <td class="gene-table__covered">{{ variant.covered }}</td>
                     <td class="gene-table__not_covered">{{ variant.not_covered }}</td>
+                </tr>
+                {%- else %}
+                <tr>
+                    <td colspan="6">Voor deze pas zijn geen varianten beschikbaar.</td>
                 </tr>
                 {%- endfor %}
 

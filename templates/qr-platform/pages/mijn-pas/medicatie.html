@@ -15,7 +15,7 @@
       The phenotype chips filter the list below; static/script/medicatie.js
       handles the clicks. Each row is a native <details>, like the FAQ, so
       opening and closing works without JS. `medications` comes from
-      get_medications() in app.py.
+      get_medications() in app.py; explanation and advice are G-Standaard HTML.
     #}
     <div id="information-tables">
         <div class="med-filter" role="group" aria-label="Filter op fenotype">
@@ -41,10 +41,12 @@
                         <span class="med-item__toggle" aria-hidden="true"><i class="fa-light fa-chevron-down"></i></span>
                     </summary>
                     <div class="med-item__body">
+                        {%- if medication.explanation %}
                         <p class="med-item__explanation">{{ medication.explanation }}</p>
+                        {%- endif %}
                         <div class="med-advice">
                             <p class="med-advice__title">Advies</p>
-                            <p>{{ medication.advice }}</p>
+                            <div class="med-advice__text">{{ medication.advice }}</div>
                         </div>
                     </div>
                 </details>
