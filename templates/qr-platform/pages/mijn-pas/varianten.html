@@ -1,45 +1,49 @@
 <header>
     {% include "qr-platform/partials/issuer_card.html" %}
 </header>
+{# Not a <main>: the shell in template.html already has the page's one <main>. #}
 <div class="mijn-pas__content mijn-pas__content--split shell">
     <div class="advice-intro">
         <h2>Uw adviezen</h2>
         <p>De onderstaande resultaten kunnen overgenomen worden in uw medisch dossier.</p>
     </div>
+    {#- `variants` is the variant table of the pas, see pongs.get_pas().
+        A v2 (allele) profile carries no variants, so it is empty. #}
     <div id="variant-table">
-        <table>
-            <caption class="visually-hidden">
-                Varianten
-            </caption>
-            <thead>
-            <tr>
-                <th scope="col" class="gene-table__gen">Gen</th>
-                <th scope="col" class="gene-table__allele_a">Allele A</th>
-                <th scope="col" class="gene-table__allele_b">Allele B</th>
-                <th scope="col" class="gene-table__unphased">Unphased</th>
-                <th scope="col" class="gene-table__covered">Covered</th>
-                <th scope="col" class="gene-table__not_covered">Not Covered</th>
-            </tr>
-            </thead>
-            <tbody>
-                {#- `variants` is the variant table of the pas, see pongs.get_pas().
-                    A v2 (allele) profile carries no variants, so it is empty. #}
-                {% for variant in variants %}
-                <tr>
-                    <td class="gene-table__gen">{{ variant.gene }}</td>
-                    <td class="gene-table__allele_a">{{ variant.allele_a }}</td>
-                    <td class="gene-table__allele_b">{{ variant.allele_b }}</td>
-                    <td class="gene-table__unphased">{{ variant.unphased }}</td>
-                    <td class="gene-table__covered">{{ variant.covered }}</td>
-                    <td class="gene-table__not_covered">{{ variant.not_covered }}</td>
-                </tr>
-                {%- else %}
-                <tr>
-                    <td colspan="6">Voor deze pas zijn geen varianten beschikbaar.</td>
-                </tr>
-                {%- endfor %}
-
-            </tbody>
-        </table>
+        {%- if variants %}
+        {# On a phone the six columns scroll sideways, so the card is a
+           focusable, labelled region for keyboard users (WCAG 2.1.1). #}
+        <div class="gene-table gene-table--variants" role="region" aria-label="Varianten" tabindex="0">
+            <table>
+                <caption class="visually-hidden">Uw varianten per gen</caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="gene-table__gene">Gen</th>
+                        <th scope="col" class="gene-table__variants">Allele A</th>
+                        <th scope="col" class="gene-table__variants">Allele B</th>
+                        <th scope="col" class="gene-table__variants">Unphased</th>
+                        <th scope="col" class="gene-table__variants">Covered</th>
+                        <th scope="col" class="gene-table__variants">Not Covered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for variant in variants %}
+                        <tr>
+                            <th scope="row" class="gene-table__gene">{{ variant.gene }}</th>
+                            <td class="gene-table__variants">{{ variant.allele_a }}</td>
+                            <td class="gene-table__variants">{{ variant.allele_b }}</td>
+                            <td class="gene-table__variants">{{ variant.unphased }}</td>
+                            <td class="gene-table__variants">{{ variant.covered }}</td>
+                            <td class="gene-table__variants">{{ variant.not_covered }}</td>
+                        </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+        </div>
+        {%- else %}
+        <div class="gene-table">
+            <p class="gene-table__empty">Voor deze pas zijn geen varianten beschikbaar.</p>
+        </div>
+        {%- endif %}
     </div>
 </div>

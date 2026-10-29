@@ -515,3 +515,68 @@ body > main {
         padding-right: 16px;
     }
 }
+
+/* ===== Variant table (qr-platform/pages/mijn-pas/varianten.html) =====
+   The gene table's card and rows, with five variant columns after Gen. Each
+   cell is a comma-separated list of variants that can run over several
+   lines, so the rows are top aligned at 1.5 line height and Gen only takes
+   the width of the gene name. Comes after the gene table rules so these win
+   on source order. */
+.gene-table--variants {
+    overflow-x: auto;
+}
+
+.gene-table--variants table {
+    line-height: 1.5;
+}
+
+.gene-table--variants tbody th,
+.gene-table--variants tbody td {
+    vertical-align: top;
+}
+
+.gene-table--variants .gene-table__gene {
+    width: 1%;
+    padding-right: 16px;
+    white-space: nowrap;
+}
+
+.gene-table--variants .gene-table__variants {
+    padding-right: 16px;
+}
+
+.gene-table--variants .gene-table__variants:last-child {
+    padding-right: 24px;
+}
+
+.gene-table--variants tbody .gene-table__variants {
+    color: var(--color-ink-70);
+}
+
+/* Inset, so the ring stays inside the card's rounded corners. */
+.gene-table--variants:focus-visible {
+    outline-offset: -2px;
+}
+
+.gene-table__empty {
+    padding: 24px;
+    color: var(--color-ink-70);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Phone: six columns don't fit, so the table keeps a readable width and
+   scrolls sideways inside the card. */
+@media screen and (max-width: 800px) {
+    .gene-table--variants table {
+        min-width: 640px;
+    }
+
+    .gene-table--variants .gene-table__variants:last-child {
+        padding-right: 16px;
+    }
+
+    .gene-table__empty {
+        padding: 16px;
+    }
+}
