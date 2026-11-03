@@ -1,7 +1,12 @@
 body {
     font-family: sans-serif;
     margin: 0;
-    padding: 0 0 6rem;
+}
+
+/* Room for the fixed pill nav. On .page rather than body, so it falls inside
+   .page's min-height: 100vh instead of adding a scroll on short pages. */
+.page {
+    padding-bottom: 6rem;
 }
 
 .pill-nav {
