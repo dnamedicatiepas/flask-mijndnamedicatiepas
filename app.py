@@ -47,6 +47,12 @@ QR_NAV = [
     {"key": "varianten", "label": "Varianten", "endpoint": "varianten"},
 ]
 
+# A v2 profile encodes alleles, not variants, so it has no Varianten page.
+QR_NAV_V2 = [
+    {"key": "medicatie", "label": "Medicatie", "endpoint": "medication"},
+    {"key": "genoverzicht", "label": "Genoverzicht", "endpoint": "genoverzicht"},
+]
+
 # The "Mijn Pas" / "Informatie & Contact" toggle in the QR-platform header.
 # `page` is matched against `current_page` to mark the active tab. An endpoint
 # of None renders the tab without a link (section not built yet).
@@ -147,8 +153,10 @@ def load_pas(scheme, encoded_profile):
 # If it is, only the inner page fragment gets returned.
 # If not, the return will also include the outer template/shell in the response
 # `current_page` picks the active header tab (see QR_TABS).
+# The pill nav depends on the scheme in the URL (see QR_NAV / QR_NAV_V2).
 def render_page(template, active_nav, current_page="pas", **context):
-    context.update(nav=QR_NAV, active=active_nav, current_page=current_page)
+    nav = QR_NAV_V2 if request.view_args.get("scheme") == "v2" else QR_NAV
+    context.update(nav=nav, active=active_nav, current_page=current_page)
     if request.headers.get("X-Requested-With") == "fetch":
         return render_template(template, **context)
     return render_template("qr-platform/template.html", inner_template=template, **context)
@@ -202,7 +210,8 @@ def genoverzicht(scheme, encoded_profile):
     return render_mijn_pas("genoverzicht", encoded_profile, pas, genes=pas["genes"])
 
 
-@app.route('/app/<any(v1, v2):scheme>/<encoded_profile>/varianten/')
+# v1 only: a v2 profile has no variants (see QR_NAV_V2).
+@app.route('/app/<any(v1):scheme>/<encoded_profile>/varianten/')
 def varianten(scheme, encoded_profile):
     pas = load_pas(scheme, encoded_profile)
     return render_mijn_pas("varianten", encoded_profile, pas, variants=pas["variants"])
