@@ -29,8 +29,10 @@
 </head>
 <body>
 
-
-
+{# .page clips the absolutely positioned hero DNA text (see styles.css). Without
+   it that text, which is very tall when wrapped on a phone, stretches the
+   document past short content like a filtered medication list. #}
+<div class="page">
 {% include "qr-platform/partials/platform_header.html" %}
 
 
@@ -54,6 +56,7 @@
 
     {# Fixed pill nav, outside #page so it persists across swaps. #}
 </main>
+</div>
 
 {#
   QR-PLATFORM SHELL

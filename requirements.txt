@@ -1,5 +1,9 @@
 flask>=3.0
+Flask-SQLAlchemy
 xlrd
 pytest
 pandas
-
+-r ./gstandaard/requirements.txt
+-e ./gstandaard/
+-r ./pongs-translation/requirements.txt
+-e ./pongs-translation

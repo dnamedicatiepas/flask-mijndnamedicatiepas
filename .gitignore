@@ -3,3 +3,10 @@ __pycache__/
 *.pyc
 .env
 .idea
+# Separate clones, installed with pip install -e (see README)
+gstandaard/
+pongs-translation/
+
+# G-Standaard data is licensed: never commit it
+instance/
+*.db
