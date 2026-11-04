@@ -4,10 +4,6 @@
 /* ===== Layout overrides ===== */
 /* This page sits tighter under the nav and stacks its sections without the
    100px gap the other pages use. */
-main {
-    margin-top: 0;
-    gap: 0;
-}
 
 #nav {
     padding-bottom: 50px;

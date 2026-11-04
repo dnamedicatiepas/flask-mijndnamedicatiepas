@@ -44,6 +44,10 @@
     interpolate-size: allow-keywords;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 /* ===== Reset & base ===== */
 * {
     padding: 0;
@@ -146,7 +150,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: 100px;
-    margin-top: 100px;
 }
 
 section {
