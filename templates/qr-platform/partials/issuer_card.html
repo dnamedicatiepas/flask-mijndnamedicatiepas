@@ -1,6 +1,7 @@
 {#
   The dark "Uw resultaat, uitgegeven door:" card at the top of every Mijn Pas
   page: who issued the pas, with their logo and a link to their website.
+  Below it is a compact phone version; the CSS shows one of the two.
   Include it from a page fragment in qr-platform/pages/mijn-pas/; it reads
   `issuer` (name / logo / logo_alt / website), which render_mijn_pas() in
   app.py puts in the context.
@@ -26,5 +27,24 @@
              width="536" height="536" alt="">
         <img class="issuer-card__logo" src="{{ url_for('static', filename=issuer.logo) }}" alt="{{ issuer.logo_alt }}">
     </div>
+</section>
+
+{#
+  The compact phone version of the card above. Both are always rendered and
+  the CSS shows one per breakpoint (display: none on the other, so the hidden
+  one is also out of the accessibility tree and the tab order).
+#}
+<section class="issuer-card-mobile shell" aria-labelledby="issuer-card-mobile-title">
+    <div class="issuer-card__glow issuer-card__glow--compact" aria-hidden="true"></div>
+
+    <div class="issuer-card-mobile__issuer">
+        <h1 class="issuer-card-mobile__title" id="issuer-card-mobile-title">Pas uitgegeven door</h1>
+        <img class="issuer-card-mobile__logo" src="{{ url_for('static', filename=issuer.logo) }}" alt="{{ issuer.logo_alt }}">
+    </div>
+
+    <a class="issuer-card-mobile__link" href="{{ issuer.website }}" target="_blank" rel="noopener noreferrer">
+        <span>Bekijk uitgave-informatie</span>
+        <span class="issuer-card-mobile__icon" aria-hidden="true"><i class="fa-light fa-info"></i></span>
+    </a>
 </section>
 {% endif %}
