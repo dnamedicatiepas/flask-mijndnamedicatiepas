@@ -1,0 +1,29 @@
+{% extends "qr-platform/standalone.html" %}
+
+{#
+  /app/: opens the pas last viewed on this device. pwa.js stores its URL
+  under "mijnpas:last" on every Mijn Pas page; the profile in it is never
+  decoded here. Without a stored pas (a new device, or an iOS home-screen app
+  that was not installed from a pas) it asks to scan the QR code.
+#}
+{% block head %}
+    <script>
+        (function () {
+            var last = null;
+            try { last = localStorage.getItem("mijnpas:last"); } catch (e) {}
+            // Only a path on this site, never another origin.
+            if (last && last.charAt(0) === "/" && last.charAt(1) !== "/") location.replace(last);
+        })();
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-heading">
+        <span class="display-heading__line">Mijn Pas</span>
+        <span class="display-heading__accent">scan uw QR-code.</span>
+    </h1>
+    <p class="h2-caption">
+        Scan de QR-code op uw DNAmedicatiepas met de camera van uw telefoon om uw persoonlijke
+        medicatieadviezen te bekijken.
+    </p>
+{% endblock %}
