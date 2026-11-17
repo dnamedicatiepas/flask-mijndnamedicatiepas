@@ -805,3 +805,17 @@ body > main {
 .page--standalone .site-header {
     padding-bottom: 35px;
 }
+
+/* The launcher (/app/): the logo centred above the centred text, larger than
+   the 173px header logo since it is the page's only branding. 70vw keeps it
+   inside a narrow phone. */
+.site-header--centered .logo {
+    width: min(280px, 70vw);
+    margin-inline: auto;
+}
+
+.site-header--centered .logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
