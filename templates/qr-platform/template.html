@@ -19,6 +19,18 @@
     <meta name="theme-color" content="#FBF9FA">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
 
+    {# PWA: the manifest is per pas (see manifest() in app.py); the apple-*
+       tags are what iOS reads for "Zet op beginscherm".
+       use-credentials: browsers fetch the manifest without cookies by
+       default, which a proxy or tunnel that needs a cookie (e.g. ngrok's
+       warning page) answers with HTML instead of the manifest. #}
+    <link rel="manifest" href="{{ url_for('manifest', encoded_profile=encoded_profile) }}" crossorigin="use-credentials">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/pwa/apple-touch-icon.png') }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Mijn Pas">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     {% block page_css %}{% endblock %}
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet">
@@ -27,7 +39,9 @@
         <link href="https://cdn.jsdelivr.net/npm/fontawesome6pro@1.0.2/css/all.min.css" rel="stylesheet">
     {% endblock %}
 </head>
-<body>
+{# data-pas-url: this pas's start page, for pwa.js. An opaque URL; the client
+   never decodes the profile in it. #}
+<body data-pas-url="{{ url_for('medication', encoded_profile=encoded_profile) }}">
 
 {# .page clips the absolutely positioned hero DNA text (see styles.css). Without
    it that text, which is very tall when wrapped on a phone, stretches the
@@ -57,6 +71,8 @@
     {# Fixed pill nav, outside #page so it persists across swaps. #}
 </main>
 </div>
+
+{% include "qr-platform/partials/pwa_banners.html" %}
 
 {#
   QR-PLATFORM SHELL
@@ -114,5 +130,6 @@
 
 <script src="{{ url_for('static', filename='script/spa.js') }}"></script>
 <script src="{{ url_for('static', filename='script/medicatie.js') }}"></script>
+<script src="{{ url_for('static', filename='script/pwa.js') }}" data-sw-url="{{ url_for('service_worker') }}" data-sw-scope="{{ url_for('app_launcher') }}"></script>
 </body>
 </html>

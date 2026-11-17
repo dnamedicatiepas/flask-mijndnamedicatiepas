@@ -92,3 +92,31 @@ absolute path.
 
 `<scheme>` is how the profile is encoded: `v1` (variants, needs the locus definitions) or `v2`
 (alleles, indexes into the translation table). An undecodable profile gives a 404.
+
+## PWA (installable, offline)
+
+The Mijn Pas pages are a Progressive Web App. A patient can put their pas on the home screen, and
+the pages they opened keep working without internet. Only `/app/` is part of the app; the rest of
+the site is not.
+
+| Route | |
+|---|---|
+| `/app/<scheme>/<profile>/manifest.webmanifest` | The web app manifest of one pas. Its `start_url` is that pas's Medicatie page, so the installed app always opens that pas (also on iOS, where a home-screen app does not share storage with Safari). |
+| `/app/sw.js` | The service worker (`static/script/sw.js`), served here so it controls `/app/`. |
+| `/app/` | Opens the pas last viewed on this device, or asks to scan the QR code. |
+| `/app/offline/` | Shown offline for a page that was never saved. |
+
+- The encoded profile is never decoded in the browser. The server writes the pas URL into the
+  page (`data-pas-url`) and `static/script/pwa.js` and `sw.js` only store and reload whole URLs, so
+  a new profile scheme needs no client changes.
+- Pages are network first: online, a patient always sees the current advice. On every full page load
+  `pwa.js` asks `sw.js` to save all tabs of the pas (full pages and the SPA fragments), so all of
+  them open offline after one visit. Offline, a banner shows the date they were saved.
+- `pwa.js` also shows an install banner: an install button where the browser supports it
+  (Chrome, Edge, Android), the "Deel → Zet op beginscherm" steps on iPhone and iPad.
+- When the list of precached files in `sw.js` or the caching changes, bump `VERSION` in `sw.js`, so
+  old caches are deleted.
+- Service workers need HTTPS; `localhost` and `127.0.0.1` are the exception. To try it on a phone,
+  use an HTTPS tunnel to the development server.
+- The app icons in `static/images/pwa/` are rendered from `static/images/favicon.svg` (192 and 512)
+  and `static/images/pwa/icon-maskable.svg` (the maskable 512 and the 180 `apple-touch-icon.png`).
