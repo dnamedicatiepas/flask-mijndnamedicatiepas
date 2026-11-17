@@ -114,9 +114,70 @@ the site is not.
   them open offline after one visit. Offline, a banner shows the date they were saved.
 - `pwa.js` also shows an install banner: an install button where the browser supports it
   (Chrome, Edge, Android), the "Deel → Zet op beginscherm" steps on iPhone and iPad.
-- When the list of precached files in `sw.js` or the caching changes, bump `VERSION` in `sw.js`, so
-  old caches are deleted.
-- Service workers need HTTPS; `localhost` and `127.0.0.1` are the exception. To try it on a phone,
-  use an HTTPS tunnel to the development server.
+- Service workers need HTTPS; `localhost` and `127.0.0.1` are the exception (see "Testing on a
+  phone" below).
 - The app icons in `static/images/pwa/` are rendered from `static/images/favicon.svg` (192 and 512)
   and `static/images/pwa/icon-maskable.svg` (the maskable 512 and the 180 `apple-touch-icon.png`).
+
+### Updating the app
+
+The installed app is the website itself: there is no app store and no separate build. Deploy as
+usual; what a patient sees after a deploy depends on what changed:
+
+| Change | Reaches the patient |
+|---|---|
+| Templates, routes, page content (HTML) | Immediately when online. Pages are network first; the saved copy is only the offline fallback. |
+| CSS, JS, images under `/static/` | One visit late. `sw.js` serves these stale-while-revalidate: the first visit after a deploy uses the saved file and fetches the new one in the background, which is used from the next visit. |
+| `static/script/sw.js` | On the next online visit. The browser checks `/app/sw.js` on every visit (it is served with `no-cache`); a changed file installs and takes over right away (`skipWaiting` + `clients.claim`). |
+| A new tab in `QR_NAV` | Automatically. `pwa.js` saves every page linked in the pill nav (`[data-nav-link]`), so a new tab is offline after one visit. |
+| The manifest (name, icons, colours) | Android: Chrome checks it periodically and updates the installed app, usually within a day. iOS: never; the patient must remove the app and add it again. |
+| The marketing site (`/`, `/voor-professionals/`) | Not part of the app; no effect. |
+
+Never change the pattern of the manifest's `id` / `start_url` (the pas's Medicatie URL): Android
+would treat it as a different app, and installed apps would keep pointing at the old URL.
+
+Release routine:
+
+1. Deploy.
+2. If CSS or JS changed that new HTML depends on, bump `VERSION` in `sw.js` (`"v1"` -> `"v2"`).
+   Every phone then drops its saved files and fetches fresh ones on its next online visit.
+3. If files must be offline before a patient has ever viewed them, add them to `PRECACHE` in
+   `sw.js` and bump `VERSION`. A file missing from the server makes the install fail, so the new
+   worker would not take over.
+
+Known weak spots (not fixed yet):
+
+- **New HTML with old CSS/JS for one visit.** Static URLs carry no version, so after a deploy the
+  first visit can combine new HTML with the saved old CSS/JS. Fix: version every static URL (e.g.
+  `styles.css?v=<modification time>`, added in `app.py` through a `url_defaults` hook for
+  `static`), so a changed file gets a new URL and is never served from an old copy.
+- **Bumping `VERSION` also deletes the saved pas pages.** All caches, including `pages` and
+  `fragments`, are named with `VERSION`. A patient who gets the update and goes offline before the
+  pages are saved again loses the offline copy. Fix: give `pages` and `fragments` names that don't
+  change with `VERSION`, so an update only replaces CSS, JS and images.
+
+### Testing on a phone
+
+A phone can't use the development server on `localhost`, so it needs an HTTPS tunnel:
+
+```sh
+ngrok http 5001          # or: cloudflared tunnel --url http://localhost:5001
+```
+
+Open `https://<tunnel>/app/<scheme>/<profile>/` on the phone, use the app once online, then try it
+in airplane mode. Install from the banner or the browser menu on Android, or from Safari's share
+menu ("Zet op beginscherm") on iPhone.
+
+- ngrok's free plan answers requests without its cookie with a warning page. Browsers fetch the
+  manifest without cookies by default, so it got that page instead of the manifest, and Chrome
+  never offered to install. The `<link rel="manifest">` in `qr-platform/template.html` therefore
+  has `crossorigin="use-credentials"`. If installing still fails behind ngrok, use a Cloudflare
+  quick tunnel, which has no warning page.
+- A free ngrok URL changes on every start, and an installed app stays tied to the URL it was
+  installed from. Use ngrok's free static domain (`ngrok http --url=<domain> 5001`) for longer
+  tests.
+- A tunnel makes the development server public, including the G-Standaard results it shows. Stop
+  it when you're done.
+- Android only, without a tunnel: connect the phone over USB with USB debugging on, open
+  `chrome://inspect` on the computer and forward port 5001. The phone can then use
+  `http://localhost:5001`, which counts as secure.
