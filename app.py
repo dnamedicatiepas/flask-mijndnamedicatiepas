@@ -52,7 +52,7 @@ QR_NAV = [
 # of None renders the tab without a link (section not built yet).
 QR_TABS = [
     {"page": "pas", "endpoint": "medication", "label": "Mijn Pas"},
-    {"page": "contact", "endpoint": None, "label": "Informatie & Contact"},
+    {"page": "help", "endpoint": "help", "label": "Informatie & Contact"},
 ]
 
 # The issuers for the "Uw resultaat, uitgegeven door:" card on the Mijn Pas
@@ -211,6 +211,12 @@ def genoverzicht(scheme, encoded_profile):
 def varianten(scheme, encoded_profile):
     pas = load_pas(scheme, encoded_profile)
     return render_mijn_pas("varianten", encoded_profile, pas, variants=pas["variants"])
+
+# The "Informatie & Contact" tab: not tied to a pas, so the shell is rendered
+# without encoded_profile (no pill nav, manifest or data-pas-url).
+@app.route('/app/help/')
+def help():
+    return render_page("qr-platform/pages/help.html", help, current_page="help")
 
 
 # ===== PWA (installable, offline Mijn Pas) =====

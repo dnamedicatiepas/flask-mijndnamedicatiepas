@@ -1,0 +1,30 @@
+
+{% from "partials/macros.html" import cta_button, logo_list %}
+
+{% block page_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/help.css') }}">
+{% endblock %}
+{% block content %}
+    {# The QR template's <main> isn't a .shell (Mijn Pas pages add it per block),
+       so wrap the panel to get the same 90%-wide column as the public site. #}
+    <div class="shell">
+        <section id="meer-weten">
+            <div class="background-text background-text--on-dark" aria-hidden="true"></div>
+
+            <img class="mw-photo" src="{{ url_for('static', filename='images/meer-weten/nurse-mw.svg') }}"
+                 alt="Patiënt houdt de DNAmedicatiepas vast">
+            <div class="mw-scrim" aria-hidden="true"></div>
+
+            <div class="mw-content">
+                <h2 class="mw-title">Over DNAmedicatiepas</h2>
+                <p class="mw-body">
+                    DNAmedicatiepas is een samenwerkingsverband van Nederlandse ziekenhuizen dat DNA-gestuurde medicatiezorg
+                    toegankelijk maakt. Door DNA-analyse te combineren met evidence-based medicatieadviezen, ondersteunen we
+                    zorgverleners bij het voorschrijven van de juiste medicatie in de optimale dosering.
+                </p>
+            </div>
+
+            {{ logo_list("on-dark") }}
+        </section>
+    </div>
+{% endblock %}
