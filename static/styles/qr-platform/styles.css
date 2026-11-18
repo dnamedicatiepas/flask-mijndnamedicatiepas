@@ -696,3 +696,126 @@ body > main {
         padding: 16px;
     }
 }
+
+/* ===== PWA banners (qr-platform/partials/pwa_banners.html) =====
+   The offline notice and the install offer, stacked just above the fixed
+   pill nav (about 3.5rem tall, 1rem from the bottom). pwa.js unhides them. */
+.pwa-banners {
+    position: fixed;
+    left: 50%;
+    bottom: 5.5rem;
+    transform: translateX(-50%);
+    z-index: 6; /* over the pill nav's shadow */
+    width: min(480px, calc(100% - 32px));
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none; /* the empty stack must not block the page */
+}
+
+.pwa-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    pointer-events: auto;
+    --focus-ring: 2px solid var(--color-paper);
+}
+
+.pwa-banner[hidden] {
+    display: none;
+}
+
+.pwa-banner--offline {
+    background: #5541F0;
+}
+
+.pwa-banner--offline p {
+    flex: 1;
+}
+
+.pwa-banner__icon {
+    flex: none;
+    border-radius: 10px;
+}
+
+.pwa-banner__text {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Beats the global h2 (65px). */
+.pwa-banner .pwa-banner__title {
+    margin: 0 0 2px;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: normal;
+}
+
+.pwa-banner__text p {
+    color: rgba(244, 242, 243, 0.8);
+}
+
+.pwa-banner__actions {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pwa-banner__button,
+.pwa-banner__close {
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.pwa-banner__button {
+    padding: 8px 12px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+}
+
+.pwa-banner__close {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    color: var(--color-paper);
+    font-size: 1.125rem;
+}
+
+.pwa-banner__close:hover {
+    background: rgba(244, 242, 243, 0.1);
+}
+
+/* ===== Standalone pages (qr-platform/standalone.html) =====
+   The launcher and the offline page: only the logo, no nav or pill nav. */
+.page--standalone {
+    padding-bottom: 0;
+}
+
+.page--standalone .site-header {
+    padding-bottom: 35px;
+}
+
+/* The launcher (/app/): the logo centred above the centred text, larger than
+   the 173px header logo since it is the page's only branding. 70vw keeps it
+   inside a narrow phone. */
+.site-header--centered .logo {
+    width: min(280px, 70vw);
+    margin-inline: auto;
+}
+
+.site-header--centered .logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+}

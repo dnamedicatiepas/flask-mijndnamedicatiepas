@@ -2,7 +2,7 @@ import functools
 import os
 import re
 
-from flask import Flask, render_template, request, abort, redirect, url_for
+from flask import Flask, render_template, request, abort, redirect, url_for, make_response, jsonify, send_from_directory
 from markupsafe import Markup
 
 import pongs
@@ -147,11 +147,16 @@ def load_pas(scheme, encoded_profile):
 # If it is, only the inner page fragment gets returned.
 # If not, the return will also include the outer template/shell in the response
 # `current_page` picks the active header tab (see QR_TABS).
+# The same URL answers with a fragment or a full page depending on that header,
+# so the response says so (Vary) for the browser's and the service worker's caches.
 def render_page(template, active_nav, current_page="pas", **context):
     context.update(nav=QR_NAV, active=active_nav, current_page=current_page)
     if request.headers.get("X-Requested-With") == "fetch":
-        return render_template(template, **context)
-    return render_template("qr-platform/template.html", inner_template=template, **context)
+        response = make_response(render_template(template, **context))
+    else:
+        response = make_response(render_template("qr-platform/template.html", inner_template=template, **context))
+    response.vary.add("X-Requested-With")
+    return response
 
 
 # A Mijn Pas page: qr-platform/pages/mijn-pas/<page>.html, whose nav key is also
@@ -206,6 +211,72 @@ def genoverzicht(scheme, encoded_profile):
 def varianten(scheme, encoded_profile):
     pas = load_pas(scheme, encoded_profile)
     return render_mijn_pas("varianten", encoded_profile, pas, variants=pas["variants"])
+
+
+# ===== PWA (installable, offline Mijn Pas) =====
+# The Mijn Pas pages are a Progressive Web App: static/script/sw.js keeps the
+# pages a patient has seen so they open offline, and static/script/pwa.js
+# registers it and shows the install and offline banners. The encoded profile
+# is never decoded in the browser: the server writes the pas's URL into the
+# page (data-pas-url) and the client only stores and reloads whole URLs.
+
+# One manifest per pas: its start_url is the pas's Medicatie page, so an app
+# installed from a pas always opens that pas, also on iOS where a home-screen
+# app does not share storage with Safari. The id is the start_url too, so
+# several passes can be installed side by side.
+@app.route('/app/<any(v1, v2):scheme>/<encoded_profile>/manifest.webmanifest')
+def manifest(scheme, encoded_profile):
+    load_pas(scheme, encoded_profile)  # 404 for a profile that doesn't decode
+    start_url = url_for("medication", encoded_profile=encoded_profile)
+
+    def icon(filename, size, purpose="any"):
+        return {"src": url_for("static", filename=f"images/pwa/{filename}"),
+                "sizes": f"{size}x{size}", "type": "image/png", "purpose": purpose}
+
+    response = jsonify({
+        "id": start_url,
+        "start_url": start_url,
+        "scope": url_for("app_launcher"),
+        "name": "DNAmedicatiepas",
+        "short_name": "Mijn Pas",
+        "description": "Uw persoonlijke medicatieadviezen op basis van uw DNA, ook zonder internet.",
+        "lang": "nl",
+        "dir": "ltr",
+        "display": "standalone",
+        "background_color": "#FBF9FA",
+        "theme_color": "#FBF9FA",
+        "icons": [
+            icon("icon-192.png", 192),
+            icon("icon-512.png", 512),
+            icon("icon-maskable-512.png", 512, "maskable"),
+        ],
+    })
+    response.mimetype = "application/manifest+json"
+    return response
+
+
+# Served from /app/ rather than /static/ so its scope is /app/ (a service
+# worker controls only the paths under its own URL). no-cache: the browser
+# must check for a new version on every registration.
+@app.route('/app/sw.js')
+def service_worker():
+    response = send_from_directory(os.path.join(app.static_folder, "script"), "sw.js",
+                                   mimetype="application/javascript", max_age=0)
+    response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
+# The fallback start page: opens the pas last viewed on this device (stored by
+# pwa.js), or asks to scan the QR code. sw.js precaches it.
+@app.route('/app/')
+def app_launcher():
+    return render_template("qr-platform/pages/launcher.html")
+
+
+# What sw.js shows for a page that was never opened while online.
+@app.route('/app/offline/')
+def app_offline():
+    return render_template("qr-platform/pages/offline.html")
 
 
 # The QR codes on issued passes point to pongs-flask's /v1/<profile> and

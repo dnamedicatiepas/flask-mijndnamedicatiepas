@@ -1,0 +1,38 @@
+{#
+  A plain page under /app/ that is not a Mijn Pas page: the launcher and the
+  offline fallback (see the PWA routes in app.py). sw.js precaches both, so
+  they only link to what is cached too: no site header or footer.
+#}
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Mijn Pas – DNAmedicatiepas{% endblock %}</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#FBF9FA">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/pwa/apple-touch-icon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/qr-platform/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/not-found.css') }}">
+    <link href="https://fonts.cdnfonts.com/css/switzer" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+<div class="page page--standalone">
+    <div class="border-top"></div>
+    <header class="site-header shell{% block header_class %}{% endblock %}">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="DNAmedicatiepas">
+        </div>
+    </header>
+
+    <main class="shell">
+        <section id="not-found">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</div>
+</body>
+</html>

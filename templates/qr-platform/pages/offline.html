@@ -1,0 +1,17 @@
+{% extends "qr-platform/standalone.html" %}
+{% from "partials/macros.html" import cta_button %}
+
+{# What sw.js shows offline for a page it has no saved copy of. #}
+{% block title %}Offline – DNAmedicatiepas{% endblock %}
+
+{% block content %}
+    <h1 class="display-heading">
+        <span class="display-heading__line">U bent</span>
+        <span class="display-heading__accent">offline.</span>
+    </h1>
+    <p class="h2-caption">
+        Deze pagina is nog niet opgeslagen op dit apparaat. Maak verbinding met internet en probeer
+        het opnieuw, of open uw laatst bekeken pas.
+    </p>
+    {{ cta_button("Naar mijn pas", url_for("app_launcher"), variant="dark") }}
+{% endblock %}
