@@ -2,14 +2,22 @@
 {% from "partials/macros.html" import cta_button, logo_list %}
 
 {% block page_css %}
+    {# Not qr-platform/styles.css: template.html already loads it, before
+       styles.css. Loading it again here, after styles.css, lets its
+       `body { font-family: sans-serif }` override the Switzer font. #}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/help.css') }}">
 {% endblock %}
 {% block content %}
     {# The QR template's <main> isn't a .shell (Mijn Pas pages add it per block),
        so wrap the panel to get the same 90%-wide column as the public site. #}
-    <div class="shell">
+    <div class="shell help-page">
         <section id="meer-weten">
             <div class="background-text background-text--on-dark" aria-hidden="true"></div>
+            {# The panel can't clip the glow itself (it stays overflow: visible so
+               the photo can bleed above it), so this layer clips it instead. #}
+            <div class="card__glow-clip" aria-hidden="true">
+                <div class="card__glow"></div>
+            </div>
 
             <img class="mw-photo" src="{{ url_for('static', filename='images/meer-weten/nurse-mw.svg') }}"
                  alt="Patiënt houdt de DNAmedicatiepas vast">
@@ -26,5 +34,6 @@
 
             {{ logo_list("on-dark") }}
         </section>
+        {% include "partials/faq_section.html" %}
     </div>
 {% endblock %}

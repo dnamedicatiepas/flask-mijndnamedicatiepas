@@ -1,8 +1,12 @@
-
-
-
-
-
+/* ===== Page layout ===== */
+/* The public site spaces its sections with `main { gap: 100px }`, but here
+   they sit in a wrapper inside the QR template's #page, so give the wrapper
+   the same gap. */
+.help-page {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
 
 /* ===== Meer weten (dark call-to-action panel on both pages) ===== */
 /* Page stylesheets set only .mw-photo's placement and the bottom margin. */
@@ -136,6 +140,34 @@
 
 .mw-logos li:nth-child(4) img {
     height: 48px;
+}
+
+/* Clips .card__glow to the panel's rounded box. #meer-weten itself must stay
+   overflow: visible for the photo, so it can't do this the way .issuer-card
+   does. No z-index here on purpose: a stacking context would isolate the
+   glow's `mix-blend-mode: color` from the ink panel behind it. */
+.card__glow-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    pointer-events: none;
+}
+
+.card__glow {
+    position: absolute;
+    z-index: 1;
+    left: calc(50% - 0.5px);
+    bottom: -130.31px;
+    width: 1415px;
+    height: 370.31px;
+    transform: translateX(-50%);
+    border-radius: 224.256px;
+    background-image: linear-gradient(90deg, var(--color-paper) 0%, var(--brand-pink) 50%, #7E7FE3 75%, #5FE219 87.5%, #F1F1F1 100%);
+    box-shadow: inset 8.97px 0 107.643px 107.643px var(--color-paper);
+    filter: blur(63.789px);
+    mix-blend-mode: color;
+    pointer-events: none;
 }
 
 @media screen and (max-width: 1000px) {
