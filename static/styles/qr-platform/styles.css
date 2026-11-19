@@ -1,40 +1,39 @@
+.issuer-card, .issuer-card-mobile {
+    isolation: isolate;
+    overflow: hidden;
+    --focus-ring: 2px solid var(--color-paper)
+}
+
+.issuer-card__glow, .pill-nav, .pwa-banners {
+    transform: translateX(-50%)
+}
+
+.issuer-card, .issuer-card-mobile, .pwa-banner {
+    --focus-ring: 2px solid var(--color-paper)
+}
+
 body {
     font-family: sans-serif;
-    margin: 0;
+    margin: 0
 }
 
-/* The fixed pill nav and the PWA banners cover the bottom of the screen.
-   --fixed-bottom-space is their height (set by pwa.js, which measures them);
-   6rem, the pill nav alone, is the floor and the value without JS.
-   scroll-padding-bottom makes the browser scroll a focused element above
-   them instead of leaving it underneath (WCAG 2.4.11 Focus Not Obscured). */
 html {
-    scroll-padding-bottom: max(6rem, var(--fixed-bottom-space, 0px));
+    scroll-padding-bottom: max(6rem, var(--fixed-bottom-space, 0px))
 }
 
-/* Room for the same fixed elements, so the end of the page can be scrolled
-   clear of them. On .page rather than body, so it falls inside .page's
-   min-height: 100vh instead of adding a scroll on short pages. */
 .page {
-    padding-bottom: max(6rem, var(--fixed-bottom-space, 0px));
+    padding-bottom: max(6rem, var(--fixed-bottom-space, 0px))
 }
 
-/* A page with the site footer has no pill nav, and the footer's gradient bar
-   must touch the bottom of the screen. Only a shown PWA banner (pwa.js adds
-   16px of margin to the measured height, taken off again here) adds room. */
 .page--site-footer {
-    padding-bottom: max(0px, calc(var(--fixed-bottom-space, 16px) - 16px));
+    padding-bottom: max(0px, calc(var(--fixed-bottom-space, 16px) - 16px))
 }
 
 .pill-nav {
     position: fixed;
     bottom: 1rem;
     left: 50%;
-    transform: translateX(-50%);
     display: flex;
-    /* At 320px the three tabs measured 329px wide and the fixed, centred bar
-       was cut off on both sides (WCAG 1.4.10 Reflow). It now stays inside the
-       viewport and, with enlarged text, wraps instead of overflowing. */
     flex-wrap: wrap;
     justify-content: center;
     width: max-content;
@@ -44,7 +43,7 @@ html {
     background: #fff;
     border-radius: 999px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
-    z-index: 5;
+    z-index: 5
 }
 
 .pill-nav a {
@@ -52,35 +51,26 @@ html {
     border-radius: 999px;
     color: #333;
     text-decoration: none;
-    font-size: .9rem;
+    font-size: .9rem
 }
 
-/* Keeps the three tabs on one row at 320px, also with a classic scrollbar
-   (about 300px left). Each tab stays well over 24x24px (WCAG 2.5.8). */
 @media screen and (max-width: 400px) {
     .pill-nav {
-        padding: .25rem;
+        padding: .25rem
     }
 
     .pill-nav a {
-        padding-inline: .5rem;
+        padding-inline: .5rem
     }
 }
 
-.pill-nav a[aria-current="page"] {
+.pill-nav a[aria-current=page] {
     background: #222;
-    color: #fff;
+    color: #fff
 }
 
-/* ===== Issuer card (qr-platform/partials/issuer_card.html) =====
-   The dark "Uw resultaat, uitgegeven door:" card on the Mijn Pas pages. It
-   reuses .mw-title / .mw-body / .background-text--on-dark from styles.css,
-   which loads AFTER this file, so overrides of those classes are scoped under
-   .issuer-card to win on specificity rather than source order. */
 .issuer-card {
     position: relative;
-    isolation: isolate; /* keeps the glow's blend mode inside the card */
-    overflow: hidden;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -89,56 +79,45 @@ html {
     margin-bottom: 64px;
     padding: 64px;
     border-radius: 24px;
-    background: var(--color-ink);
-    /* The default ink ring was 1:1 on this ink card, so a focused "Website"
-       button showed no ring at all (WCAG 2.4.7 / 1.4.11). Paper is 15:1. */
-    --focus-ring: 2px solid var(--color-paper);
+    background: var(--color-ink)
 }
 
 .issuer-card .issuer-card__dna {
     padding: 0;
-    /* Fades in towards the bottom, unlike the "Meer weten" panel. */
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, .2) 100%)
 }
 
-/* The blurred colour band along the bottom edge. `color` blending tints the
-   DNA text under it without lighting up the dark background. */
 .issuer-card__glow {
     position: absolute;
     z-index: 1;
-    left: calc(50% - 0.5px);
+    left: calc(50% - .5px);
     bottom: -130.31px;
     width: 1415px;
     height: 370.31px;
-    transform: translateX(-50%);
     border-radius: 224.256px;
-    background-image: linear-gradient(90deg, var(--color-paper) 0%, var(--brand-pink) 50%, #7E7FE3 75%, #5FE219 87.5%, #F1F1F1 100%);
+    background-image: linear-gradient(90deg, var(--color-paper) 0, var(--brand-pink) 50%, #7e7fe3 75%, #5fe219 87.5%, #f1f1f1 100%);
     box-shadow: inset 8.97px 0 107.643px 107.643px var(--color-paper);
     filter: blur(63.789px);
     mix-blend-mode: color;
-    pointer-events: none;
+    pointer-events: none
 }
 
 .issuer-card__content {
     position: relative;
     z-index: 3;
     flex: 0 1 650px;
-    min-width: 0;
+    min-width: 0
 }
 
-/* letter-spacing: the shared .mw-title is set at -0.05em; this card uses
-   normal spacing. */
 .issuer-card .mw-title {
     margin-bottom: 128px;
-    letter-spacing: normal;
+    letter-spacing: normal
 }
 
 .issuer-card .mw-body {
-    max-width: 549px;
+    max-width: 549px
 }
 
-/* The glass circle with the issuer's logo. The negative margins put it 16px
-   from the card's top and right edges instead of inside the 64px padding. */
 .issuer-card__seal {
     position: relative;
     z-index: 2;
@@ -151,7 +130,7 @@ html {
     justify-content: center;
     border-radius: 50%;
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px)
 }
 
 .issuer-card__circle {
@@ -159,7 +138,7 @@ html {
     inset: 0;
     display: block;
     width: 100%;
-    height: auto;
+    height: auto
 }
 
 .issuer-card__logo {
@@ -168,66 +147,34 @@ html {
     height: 60px;
     width: auto;
     max-width: 60%;
-    object-fit: contain;
+    object-fit: contain
 }
 
-@media screen and (max-width: 1000px) {
-    .issuer-card {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 40px 24px 32px;
-    }
-
-    .issuer-card__content {
-        flex: none;
-    }
-
-    .issuer-card .mw-title {
-        margin-bottom: 32px;
-    }
-
-    .issuer-card__seal {
-        flex: none;
-        width: min(100%, 360px);
-        margin: 0 auto;
-    }
-}
-
-/* ===== Issuer card, phone version (same partial) =====
-   The compact card: who issued the pas on top, a link row under a divider.
-   Hidden here and swapped with .issuer-card at the 800px phone breakpoint
-   below; display: none keeps the hidden card out of the accessibility tree. */
 .issuer-card-mobile {
     display: none;
     position: relative;
-    isolation: isolate; /* keeps the glow's blend mode inside the card */
-    overflow: hidden;
     margin-bottom: 32px;
-    padding: 0; /* overrides the global section padding */
+    padding: 0;
     border-radius: 24px;
     background: var(--color-ink);
     color: var(--color-paper);
-    font-size: 0.875rem;
-    line-height: 1.5;
-    /* An ink ring would vanish on the ink card. */
-    --focus-ring: 2px solid var(--color-paper);
+    font-size: .875rem;
+    line-height: 1.5
 }
 
-/* The desktop glow at the size of this card. */
 .issuer-card__glow--compact {
-    left: calc(50% + 0.5px);
+    left: calc(50% + .5px);
     bottom: -60.42px;
     width: 448.675px;
     height: 117.421px;
     border-radius: 71.108px;
     box-shadow: inset 2.844px 0 34.132px 34.132px var(--color-paper);
-    filter: blur(20.226px);
+    filter: blur(20.226px)
 }
 
-.issuer-card-mobile__issuer,
-.issuer-card-mobile__link {
+.issuer-card-mobile__issuer, .issuer-card-mobile__link {
     position: relative;
-    z-index: 2;
+    z-index: 2
 }
 
 .issuer-card-mobile__issuer {
@@ -236,19 +183,17 @@ html {
     align-items: center;
     gap: 16px;
     padding: 42px 16px 40px;
-    border-bottom: 1px solid rgba(217, 217, 217, 0.1);
+    border-bottom: 1px solid rgba(217, 217, 217, .1)
 }
 
-/* Figma has paper at 0.4, about 3.6:1 on ink; 0.6 is about 6.3:1, so it
-   passes 4.5:1 (WCAG 1.4.3). */
 .issuer-card-mobile__title {
     margin: 0;
-    color: rgba(244, 242, 243, 0.6);
+    color: rgba(244, 242, 243, .6);
     font-size: inherit;
     font-weight: 400;
     line-height: inherit;
     letter-spacing: normal;
-    text-align: center;
+    text-align: center
 }
 
 .issuer-card-mobile__logo {
@@ -256,7 +201,7 @@ html {
     height: 48px;
     width: auto;
     max-width: 100%;
-    object-fit: contain;
+    object-fit: contain
 }
 
 .issuer-card-mobile__link {
@@ -265,13 +210,12 @@ html {
     align-items: center;
     gap: 16px;
     padding: 16px;
-    color: inherit;
+    color: inherit
 }
 
-/* Inset, so the ring stays inside the card's rounded corners. */
 .issuer-card-mobile__link:focus-visible {
     outline-offset: -4px;
-    border-radius: 0 0 24px 24px;
+    border-radius: 0 0 24px 24px
 }
 
 .issuer-card-mobile__icon {
@@ -282,52 +226,36 @@ html {
     width: 32px;
     height: 32px;
     border-radius: 32px;
-    background-color: rgba(244, 242, 243, 0.1);
+    background-color: rgba(244, 242, 243, .1);
     line-height: 20px;
-    transition: background-color 0.2s;
+    transition: background-color .2s
 }
 
 .issuer-card-mobile__link:hover .issuer-card-mobile__icon {
-    background-color: rgba(244, 242, 243, 0.2);
+    background-color: rgba(244, 242, 243, .2)
 }
 
-@media screen and (max-width: 800px) {
-    .issuer-card {
-        display: none;
-    }
-
-    .issuer-card-mobile {
-        display: block;
-    }
+.med-filter__chip:hover, .med-item__summary:hover .med-item__toggle {
+    background-color: var(--color-ink-10)
 }
 
-/* ===== Page spacing =====
-   The global #nav padding and `main` margin are sized for the landing pages
-   (200px from the nav to the content). The Figma has 48px from the logo to
-   the issuer card, so both are overridden here with selectors that outrank
-   the global ones. The card's own 64px margin-bottom spaces it from the page
-   content below. */
 .site-header #nav {
-    padding-bottom: 35px; /* + 13px under the logo image in its .nav-item = 48px */
+    padding-bottom: 35px
 }
 
 body > main {
-    margin-top: 0;
+    margin-top: 0
 }
 
-/* The content under the issuer card on every Mijn Pas page, aligned with
-   the card. */
 .mijn-pas__content {
-    max-width: 1280px;
+    max-width: 1280px
 }
 
-/* Medicatie and Genoverzicht: the intro on the left (355px in the design),
-   the list or table on the right (745px). */
 .mijn-pas__content--split {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 64px;
+    gap: 64px
 }
 
 .advice-intro {
@@ -335,67 +263,74 @@ body > main {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    min-width: 0;
+    min-width: 0
 }
 
-/* Beats the global h2 (65px, medium) with the design's 48px regular. */
 .advice-intro h2 {
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 400;
     line-height: 1;
-    letter-spacing: -0.05em;
-    margin-bottom: 0; /* the 32px flex gap spaces it */
+    letter-spacing: -.05em;
+    margin-bottom: 0
 }
 
 .advice-intro p {
     font-size: 1.25rem;
-    line-height: 1.5;
+    line-height: 1.5
 }
 
-/* #5541F0 is about 5.7:1 on the page, so it passes 4.5:1 (WCAG 1.4.3). */
 .advice-intro .advice-intro__warning {
-    color: #5541F0;
+    color: #5541f0
 }
 
-.mijn-pas__content--split #information-tables,
-.mijn-pas__content--split #genoverzicht-table,
-.mijn-pas__content--split #variant-table{
+.mijn-pas__content--split #genoverzicht-table, .mijn-pas__content--split #information-tables, .mijn-pas__content--split #variant-table {
     flex: 0 1 745px;
-    min-width: 0;
+    min-width: 0
 }
 
 @media screen and (max-width: 1000px) {
+    .issuer-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 40px 24px 32px
+    }
+
+    .issuer-card__content {
+        flex: none
+    }
+
+    .issuer-card .mw-title {
+        margin-bottom: 32px
+    }
+
+    .issuer-card__seal {
+        flex: none;
+        width: min(100%, 360px);
+        margin: 0 auto
+    }
+
     .mijn-pas__content--split {
         flex-direction: column;
         align-items: stretch;
-        gap: 32px;
+        gap: 32px
     }
 
-    .advice-intro,
-    .mijn-pas__content--split #information-tables,
-    .mijn-pas__content--split #genoverzicht-table,
-    .mijn-pas__content--split #variant-table {
-        flex: none;
+    .advice-intro, .mijn-pas__content--split #genoverzicht-table, .mijn-pas__content--split #information-tables, .mijn-pas__content--split #variant-table {
+        flex: none
     }
 
     .advice-intro {
-        gap: 16px;
+        gap: 16px
     }
 }
 
-/* ===== Uw Adviezen (qr-platform/pages/mijn-pas/medicatie.html) =====
-   The phenotype filter chips and the list of medications. Each row is a
-   <details>; static/script/medicatie.js hides the rows a chip filters out.
-   Figma's muted text is ink at 0.6, which fails 4.5:1 (WCAG 1.4.3), so the
-   muted text here uses --color-ink-70 instead. */
 .med-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 4px 2px;
-    margin-bottom: 24px;
+    margin-bottom: 24px
 }
 
-/* The grey pill used for a row's phenotype and for the filter chips. */
 .med-tag {
     display: inline-flex;
     align-items: center;
@@ -408,45 +343,48 @@ body > main {
     color: var(--color-ink);
     font-size: 1rem;
     line-height: 1.5;
-    white-space: nowrap;
+    white-space: nowrap
+}
+
+.gene-table tbody .gene-table__diplotype, .gene-table thead th, .gene-table--variants tbody .gene-table__variants, .gene-table__empty {
+    color: var(--color-ink-70)
 }
 
 .med-filter__chip {
     border: 0;
     font-family: inherit;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color .2s, color .2s
 }
 
-.med-filter__chip:hover {
-    background-color: var(--color-ink-10);
-}
-
-.med-filter__chip[aria-pressed="true"] {
+.med-filter__chip[aria-pressed=true] {
     background-color: var(--color-ink);
-    color: #fff;
+    color: #fff
 }
 
-/* The card around the medication list and the gene table. */
-.med-list,
-.gene-table {
+.gene-table, .med-list {
     overflow: clip;
     border: 1px solid var(--color-ink-10);
     border-radius: 24px;
-    background-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, .6);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1)
+}
+
+.med-advice, .med-item__toggle {
+    border-radius: 8px;
+    background-color: var(--color-ink-06)
 }
 
 .med-item {
-    border-bottom: 1px solid var(--color-ink-20);
+    border-bottom: 1px solid var(--color-ink-20)
 }
 
-.med-item:last-child {
-    border-bottom: 0;
+.gene-table tbody tr:last-child > *, .med-item:last-child {
+    border-bottom: 0
 }
 
 .med-item[open] {
-    background-color: rgba(29, 28, 26, 0.04);
+    background-color: rgba(29, 28, 26, .04)
 }
 
 .med-item__summary {
@@ -456,17 +394,15 @@ body > main {
     gap: 16px;
     padding: 24px;
     list-style: none;
-    cursor: pointer;
+    cursor: pointer
 }
 
-/* Safari still draws the disclosure triangle without this. */
 .med-item__summary::-webkit-details-marker {
-    display: none;
+    display: none
 }
 
-/* Inset, so the ring stays inside the card's rounded corners. */
 .med-item__summary:focus-visible {
-    outline-offset: -2px;
+    outline-offset: -2px
 }
 
 .med-item__heading {
@@ -474,29 +410,29 @@ body > main {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    min-width: 0;
+    min-width: 0
+}
+
+.med-item__body, .med-item__text {
+    display: flex;
+    flex-direction: column
 }
 
 .med-item__text {
-    display: flex;
-    flex-direction: column;
     line-height: 1.5;
-    overflow-wrap: break-word;
+    overflow-wrap: break-word
 }
 
 .med-item__name {
     font-size: 1.25rem;
     font-weight: 500;
-    letter-spacing: -0.2px;
+    letter-spacing: -.2px
 }
 
-.med-item__reason,
-.med-item__explanation,
-.med-advice p,
-.med-advice__text {
+.med-advice p, .med-advice__text, .med-item__explanation, .med-item__reason {
     color: var(--color-ink-70);
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.5
 }
 
 .med-item__toggle {
@@ -506,42 +442,33 @@ body > main {
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 8px;
-    background-color: var(--color-ink-06);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     font-size: 1rem;
     line-height: 1;
-    transition: background-color 0.2s, color 0.2s, transform 0.3s ease;
-}
-
-.med-item__summary:hover .med-item__toggle {
-    background-color: var(--color-ink-10);
+    transition: background-color .2s, color .2s, transform .3s
 }
 
 .med-item[open] .med-item__toggle {
     background-color: var(--color-ink);
     color: #fff;
-    transform: scaleY(-1);
+    transform: scaleY(-1)
 }
 
 .med-item__body {
-    display: flex;
-    flex-direction: column;
     gap: 24px;
-    padding: 0 24px 24px;
+    padding: 0 24px 24px
 }
 
-/* The 1.5px gradient border is a masked ::before, since border-image ignores
-   border-radius. */
+.med-advice, .med-advice__text {
+    flex-direction: column;
+    display: flex
+}
+
 .med-advice {
     position: relative;
-    display: flex;
-    flex-direction: column;
     gap: 8px;
-    padding: 16px;
-    border-radius: 8px;
-    background-color: var(--color-ink-06);
+    padding: 16px
 }
 
 .med-advice::before {
@@ -554,202 +481,161 @@ body > main {
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-    pointer-events: none;
+    pointer-events: none
 }
 
-/* The G-Standaard advice text: lists, sometimes nested, and paragraphs. */
 .med-advice__text {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    gap: 8px
 }
 
 .med-advice__text ul {
-    padding-left: 1.25em;
+    padding-left: 1.25em
 }
 
 .med-advice .med-advice__title {
     color: var(--color-ink);
-    font-weight: 600;
+    font-weight: 600
 }
 
-/* Where supported, slide the row open instead of showing it instantly. */
 @supports selector(::details-content) {
     .med-item::details-content {
         block-size: 0;
-        overflow-y: clip;
-        transition: block-size 0.2s ease-out, content-visibility 0.2s ease-out allow-discrete;
+        overflow-y: clip
     }
 
     .med-item[open]::details-content {
-        block-size: auto;
+        block-size: auto
     }
 }
 
-/* ===== Gene table (qr-platform/pages/mijn-pas/genoverzicht.html) =====
-   Gen and Diplotype are 128px columns, Phenotype takes the rest, right
-   aligned. The card itself is shared with .med-list above. As there, Figma's
-   muted ink at 0.6 is --color-ink-70 here (WCAG 1.4.3). */
 .gene-table table {
     width: 100%;
     border-collapse: collapse;
     font-size: 1rem;
     line-height: 1;
-    overflow-wrap: anywhere;
+    overflow-wrap: anywhere
 }
 
-.gene-table th,
-.gene-table td {
+.gene-table td, .gene-table th {
     padding: 24px 0;
     border-bottom: 1px solid var(--color-ink-10);
     font-weight: 400;
     text-align: left;
-    vertical-align: middle;
+    vertical-align: middle
 }
 
-.gene-table tbody tr:last-child > * {
-    border-bottom: 0;
-}
-
-/* border-box (the global reset), so the 24px row padding is inside these. */
 .gene-table .gene-table__gene {
     width: calc(128px + 24px);
-    padding-left: 24px;
+    padding-left: 24px
 }
 
 .gene-table .gene-table__diplotype {
-    width: 128px;
+    width: 128px
 }
 
 .gene-table .gene-table__phenotype {
     padding-right: 24px;
-    text-align: right;
+    text-align: right
 }
 
 .gene-table thead th {
     padding-top: 24px;
-    padding-bottom: 16px;
-    color: var(--color-ink-70);
+    padding-bottom: 16px
 }
 
 .gene-table tbody th {
-    color: var(--color-ink);
+    color: var(--color-ink)
 }
 
-.gene-table tbody .gene-table__diplotype {
-    color: var(--color-ink-70);
-}
-
-/* Phone: the fixed columns would squeeze Phenotype to a few characters, so
-   they size to their content and the phenotype wraps instead. */
-@media screen and (max-width: 800px) {
-    .gene-table th,
-    .gene-table td {
-        padding-block: 16px;
-        line-height: 1.5;
-    }
-
-    .gene-table thead th {
-        padding-top: 16px;
-        padding-bottom: 12px;
-    }
-
-    .gene-table .gene-table__gene,
-    .gene-table .gene-table__diplotype {
-        width: auto;
-        padding-right: 16px;
-        overflow-wrap: normal;
-        white-space: nowrap;
-    }
-
-    .gene-table .gene-table__gene {
-        padding-left: 16px;
-    }
-
-    .gene-table .gene-table__phenotype {
-        padding-right: 16px;
-    }
-}
-
-/* ===== Variant table (qr-platform/pages/mijn-pas/varianten.html) =====
-   The gene table's card and rows, with five variant columns after Gen. Each
-   cell is a comma-separated list of variants that can run over several
-   lines, so the rows are top aligned at 1.5 line height and Gen only takes
-   the width of the gene name. Comes after the gene table rules so these win
-   on source order. */
 .gene-table--variants {
-    overflow-x: auto;
+    overflow-x: auto
 }
 
 .gene-table--variants table {
-    line-height: 1.5;
+    line-height: 1.5
 }
 
-.gene-table--variants tbody th,
-.gene-table--variants tbody td {
-    vertical-align: top;
+.gene-table--variants tbody td, .gene-table--variants tbody th {
+    vertical-align: top
 }
 
 .gene-table--variants .gene-table__gene {
     width: 1%;
     padding-right: 16px;
-    white-space: nowrap;
+    white-space: nowrap
 }
 
 .gene-table--variants .gene-table__variants {
-    padding-right: 16px;
+    padding-right: 16px
 }
 
 .gene-table--variants .gene-table__variants:last-child {
-    padding-right: 24px;
+    padding-right: 24px
 }
 
-.gene-table--variants tbody .gene-table__variants {
-    color: var(--color-ink-70);
-}
-
-/* Inset, so the ring stays inside the card's rounded corners. */
 .gene-table--variants:focus-visible {
-    outline-offset: -2px;
+    outline-offset: -2px
 }
 
 .gene-table__empty {
     padding: 24px;
-    color: var(--color-ink-70);
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.5
 }
 
-/* Phone: six columns don't fit, so the table keeps a readable width and
-   scrolls sideways inside the card. */
 @media screen and (max-width: 800px) {
-    .gene-table--variants table {
-        min-width: 640px;
+    .issuer-card {
+        display: none
     }
 
-    .gene-table--variants .gene-table__variants:last-child {
+    .issuer-card-mobile {
+        display: block
+    }
+
+    .gene-table td, .gene-table th {
+        padding-block: 16px;
+        line-height: 1.5
+    }
+
+    .gene-table thead th {
+        padding-top: 16px;
+        padding-bottom: 12px
+    }
+
+    .gene-table .gene-table__diplotype, .gene-table .gene-table__gene {
+        width: auto;
         padding-right: 16px;
+        overflow-wrap: normal;
+        white-space: nowrap
+    }
+
+    .gene-table .gene-table__gene {
+        padding-left: 16px
+    }
+
+    .gene-table .gene-table__phenotype, .gene-table--variants .gene-table__variants:last-child {
+        padding-right: 16px
+    }
+
+    .gene-table--variants table {
+        min-width: 640px
     }
 
     .gene-table__empty {
-        padding: 16px;
+        padding: 16px
     }
 }
 
-/* ===== PWA banners (qr-platform/partials/pwa_banners.html) =====
-   The offline notice and the install offer, stacked just above the fixed
-   pill nav (about 3.5rem tall, 1rem from the bottom). pwa.js unhides them. */
 .pwa-banners {
     position: fixed;
     left: 50%;
     bottom: 5.5rem;
-    transform: translateX(-50%);
-    z-index: 6; /* over the pill nav's shadow */
+    z-index: 6;
     width: min(480px, calc(100% - 32px));
     display: flex;
     flex-direction: column;
     gap: 8px;
-    pointer-events: none; /* the empty stack must not block the page */
+    pointer-events: none
 }
 
 .pwa-banner {
@@ -761,100 +647,92 @@ body > main {
     background: var(--color-ink);
     color: var(--color-paper);
     box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
-    font-size: 0.9375rem;
+    font-size: .9375rem;
     line-height: 1.4;
-    pointer-events: auto;
-    --focus-ring: 2px solid var(--color-paper);
+    pointer-events: auto
 }
 
 .pwa-banner[hidden] {
-    display: none;
+    display: none
 }
 
 .pwa-banner--offline {
-    background: #5541F0;
+    background: #5541f0
 }
 
 .pwa-banner--offline p {
-    flex: 1;
+    flex: 1
 }
 
 .pwa-banner__icon {
     flex: none;
-    border-radius: 10px;
+    border-radius: 10px
 }
 
 .pwa-banner__text {
     flex: 1;
-    min-width: 0;
+    min-width: 0
 }
 
-/* Beats the global h2 (65px). */
 .pwa-banner .pwa-banner__title {
     margin: 0 0 2px;
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.4;
-    letter-spacing: normal;
+    letter-spacing: normal
 }
 
 .pwa-banner__text p {
-    color: rgba(244, 242, 243, 0.8);
+    color: rgba(244, 242, 243, .8)
 }
 
 .pwa-banner__actions {
     flex: none;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 4px
 }
 
-.pwa-banner__button,
-.pwa-banner__close {
+.pwa-banner__button, .pwa-banner__close {
     border: 0;
     border-radius: 8px;
     font: inherit;
-    cursor: pointer;
+    cursor: pointer
 }
 
 .pwa-banner__button {
     padding: 8px 12px;
     background: var(--color-paper);
-    color: var(--color-ink);
+    color: var(--color-ink)
 }
 
 .pwa-banner__close {
     width: 40px;
     height: 40px;
-    background: transparent;
+    background: 0 0;
     color: var(--color-paper);
-    font-size: 1.125rem;
+    font-size: 1.125rem
 }
 
 .pwa-banner__close:hover {
-    background: rgba(244, 242, 243, 0.1);
+    background: rgba(244, 242, 243, .1)
 }
 
-/* ===== Standalone pages (qr-platform/standalone.html) =====
-   The launcher and the offline page: only the logo, no nav or pill nav. */
 .page--standalone {
-    padding-bottom: 0;
+    padding-bottom: 0
 }
 
 .page--standalone .site-header {
-    padding-bottom: 35px;
+    padding-bottom: 35px
 }
 
-/* The launcher (/app/): the logo centred above the centred text, larger than
-   the 173px header logo since it is the page's only branding. 70vw keeps it
-   inside a narrow phone. */
 .site-header--centered .logo {
     width: min(280px, 70vw);
-    margin-inline: auto;
+    margin-inline: auto
 }
 
 .site-header--centered .logo img {
     display: block;
     width: 100%;
-    height: auto;
+    height: auto
 }
