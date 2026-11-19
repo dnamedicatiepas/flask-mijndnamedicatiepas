@@ -1,0 +1,44 @@
+{#
+  One hospital's card inside the contact card on /app/help/ (Figma 7770:24).
+  help_contact() in app.py returns it on its own as the AJAX fragment;
+  contact_card.html includes it for a preselected hospital. Reads `hospital`,
+  an ISSUERS entry. Lines whose key is missing are left out.
+#}
+<article class="hospital-card" aria-labelledby="hospital-card-title">
+    <div class="hospital-card__identity">
+        {# alt="": the full name is the heading right below. #}
+        <img class="hospital-card__logo" src="{{ url_for('static', filename=hospital.logo_light) }}" alt="">
+        <h3 class="hospital-card__name" id="hospital-card-title">{{ hospital.logo_alt }}</h3>
+    </div>
+
+    <div class="hospital-card__divider" aria-hidden="true"></div>
+
+    <div class="hospital-card__info">
+        {%- if hospital.spokesperson or hospital.spokesperson_email or hospital.spokesperson_phone or hospital.hours %}
+        <div class="hospital-card__block">
+            <h4 class="hospital-card__heading">Contact</h4>
+            {%- if hospital.spokesperson or hospital.spokesperson_email or hospital.spokesperson_phone %}
+            <p>
+                {% if hospital.spokesperson %}<span>{{ hospital.spokesperson }}</span>{% endif %}
+                {% if hospital.spokesperson_email %}<a href="mailto:{{ hospital.spokesperson_email }}">{{ hospital.spokesperson_email }}</a>{% endif %}
+                {% if hospital.spokesperson_phone %}<a href="tel:{{ hospital.spokesperson_phone }}">{{ hospital.spokesperson_phone }}</a>{% endif %}
+            </p>
+            {%- endif %}
+            {%- if hospital.hours %}
+            <p>{{ hospital.hours }}</p>
+            {%- endif %}
+        </div>
+        {%- endif %}
+
+        {%- if hospital.street or hospital.postcode_city %}
+        <div class="hospital-card__block">
+            <h4 class="hospital-card__heading">Adres</h4>
+            {# Whitespace between the lines, so a screen reader doesn't run them together. #}
+            <p>
+                {% if hospital.street %}<span>{{ hospital.street }}</span>{% endif %}
+                {% if hospital.postcode_city %}<span>{{ hospital.postcode_city }}</span>{% endif %}
+            </p>
+        </div>
+        {%- endif %}
+    </div>
+</article>

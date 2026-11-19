@@ -28,10 +28,14 @@
     {% endblock %}
 </head>
 <body>
+{# Outside .page so its overflow: clip can't hide it. tabindex="-1" on <main>
+   makes the skip actually move focus, so the next Tab starts inside main. #}
+<a class="skip-link" href="#inhoud">Ga direct naar de inhoud</a>
+
 <div class="page">
     {% include "partials/site_header.html" %}
 
-    <main class="shell">
+    <main id="inhoud" class="shell" tabindex="-1">
         {% block content %}{% endblock %}
     </main>
 

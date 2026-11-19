@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}DNAmedicatiepas{% endblock %}</title>
+    {# document_title: built by render_page() from the route's page_title. The
+       pages are included, not extended, so they can't override this block
+       themselves. spa.js keeps it current after a swap (X-Page-Title). #}
+    <title>{% block title %}{{ document_title }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/qr-platform/styles.css') }}">
     <meta name="description" content="{% block description %}{% endblock %}">
     {% block meta %}
@@ -19,6 +22,22 @@
     <meta name="theme-color" content="#FBF9FA">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
 
+    {# PWA: the manifest is per pas (see manifest() in app.py); the apple-*
+       tags are what iOS reads for "Zet op beginscherm".
+       use-credentials: browsers fetch the manifest without cookies by
+       default, which a proxy or tunnel that needs a cookie (e.g. ngrok's
+       warning page) answers with HTML instead of the manifest.
+       Pages without a pas (e.g. /app/help/) have no encoded_profile and skip
+       the manifest, data-pas-url and the pill nav. #}
+    {% if encoded_profile %}
+    <link rel="manifest" href="{{ url_for('manifest', encoded_profile=encoded_profile) }}" crossorigin="use-credentials">
+    {% endif %}
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/pwa/apple-touch-icon.png') }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Mijn Pas">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     {% block page_css %}{% endblock %}
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet">
@@ -27,17 +46,27 @@
         <link href="https://cdn.jsdelivr.net/npm/fontawesome6pro@1.0.2/css/all.min.css" rel="stylesheet">
     {% endblock %}
 </head>
-<body>
+{# data-pas-url: this pas's start page, for pwa.js. An opaque URL; the client
+   never decodes the profile in it. #}
+<body{% if encoded_profile %} data-pas-url="{{ url_for('medication', encoded_profile=encoded_profile) }}"{% endif %}>
+{# As in shell.html: outside .page so its overflow: clip can't hide it.
+   tabindex="-1" on <main> makes the skip actually move focus. #}
+<a class="skip-link" href="#inhoud">Ga direct naar de inhoud</a>
 
-
-
+{# .page clips the absolutely positioned hero DNA text (see styles.css). Without
+   it that text, which is very tall when wrapped on a phone, stretches the
+   document past short content like a filtered medication list. #}
+<div class="page{% if site_footer %} page--site-footer{% endif %}">
 {% include "qr-platform/partials/platform_header.html" %}
 
 
-<main>
-    <nav class="pill-nav">
+<main id="inhoud" tabindex="-1">
+    {% if encoded_profile %}
+    {# Named, so it can be told apart from the header's "Hoofdmenu" nav
+       (WCAG 1.3.1 / 2.4.1). #}
+    <nav class="pill-nav" aria-label="Mijn Pas">
         {% for item in nav %}
-            <a href="{{ url_for(item.endpoint, gen_sequence=gen_sequence) }}"
+            <a href="{{ url_for(item.endpoint, encoded_profile=encoded_profile) }}"
                data-ajax
                data-push="true"
                data-nav-link
@@ -46,6 +75,12 @@
             </a>
         {% endfor %}
     </nav>
+    {% endif %}
+
+    {# spa.js says which page was loaded after a swap, since focus stays on the
+       pill nav and a screen reader would otherwise not hear that the content
+       changed (WCAG 4.1.3). Outside #page so it survives the swap. #}
+    <p class="visually-hidden" role="status" data-spa-status></p>
 
     <div id="page">
         {# Full load: render the requested page fragment into the shell. #}
@@ -54,6 +89,18 @@
 
     {# Fixed pill nav, outside #page so it persists across swaps. #}
 </main>
+
+{# The public site's footer, only on pages whose route passes site_footer=True
+   (e.g. /app/help/). It sits in .page after <main>, as in shell.html: outside
+   the .shell column so its gradient bar spans the full width, and after the
+   flex-grown <main> so it is pushed to the bottom on short pages. Those pages
+   are only reached by full page loads, so it never lingers after an AJAX swap. #}
+{% if site_footer %}
+    {% include "partials/site_footer.html" %}
+{% endif %}
+</div>
+
+{% include "qr-platform/partials/pwa_banners.html" %}
 
 {#
   QR-PLATFORM SHELL
@@ -110,5 +157,7 @@
 
 
 <script src="{{ url_for('static', filename='script/spa.js') }}"></script>
+<script src="{{ url_for('static', filename='script/medicatie.js') }}"></script>
+<script src="{{ url_for('static', filename='script/pwa.js') }}" data-sw-url="{{ url_for('service_worker') }}" data-sw-scope="{{ url_for('app_launcher') }}"></script>
 </body>
 </html>

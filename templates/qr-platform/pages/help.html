@@ -1,0 +1,43 @@
+
+{% from "partials/macros.html" import cta_button, logo_list %}
+
+{% block page_css %}
+    {# Not qr-platform/styles.css: template.html already loads it, before
+       styles.css. Loading it again here, after styles.css, lets its
+       `body { font-family: sans-serif }` override the Switzer font. #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/help.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/qr-platform/contact-card.css') }}">
+{% endblock %}
+{% block content %}
+    {# The QR template's <main> isn't a .shell (Mijn Pas pages add it per block),
+       so wrap the panel to get the same 90%-wide column as the public site. #}
+    <div class="shell help-page">
+        <section id="meer-weten" aria-labelledby="meer-weten-title">
+            <div class="background-text background-text--on-dark" aria-hidden="true"></div>
+            {# The panel can't clip the glow itself (it stays overflow: visible so
+               the photo can bleed above it), so this layer clips it instead. #}
+            <div class="card__glow-clip" aria-hidden="true">
+                <div class="card__glow"></div>
+            </div>
+
+            {# Decorative: the photo adds nothing the text doesn't say (WCAG 1.1.1). #}
+            <img class="mw-photo" src="{{ url_for('static', filename='images/meer-weten/nurse-mw.svg') }}" alt="">
+            <div class="mw-scrim" aria-hidden="true"></div>
+
+            <div class="mw-content">
+                {# The page's only <h1> (WCAG 1.3.1 / 2.4.6); the FAQ and the
+                   contact card are <h2> sections under it. #}
+                <h1 class="mw-title" id="meer-weten-title">Over DNAmedicatiepas</h1>
+                <p class="mw-body">
+                    DNAmedicatiepas is een samenwerkingsverband van Nederlandse ziekenhuizen dat DNA-gestuurde medicatiezorg
+                    toegankelijk maakt. Door DNA-analyse te combineren met evidence-based medicatieadviezen, ondersteunen we
+                    zorgverleners bij het voorschrijven van de juiste medicatie in de optimale dosering.
+                </p>
+            </div>
+
+            {{ logo_list("on-dark") }}
+        </section>
+        {% include "partials/faq_section.html" %}
+        {% include "qr-platform/partials/contact_card.html" %}
+    </div>
+{% endblock %}

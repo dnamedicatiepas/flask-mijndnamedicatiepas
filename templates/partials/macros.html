@@ -14,7 +14,9 @@
     href     Link target.
     variant  "default" (translucent), "invert" (light) or "dark".
     icon     "arrow-up-right" (default), "arrow-down" or "plus".
-    target   Optional link target; "_blank" also sets rel="noopener noreferrer".
+    target   Optional link target; "_blank" also sets rel="noopener noreferrer"
+             and adds "(opent in een nieuw tabblad)" for screen readers, after
+             the visible label so the name still starts with it (WCAG 2.5.3).
 
   {{ cta_button("Informatie aanvragen", "#") }}
   {{ cta_button("Bekijk hoe het werkt", "#section42", variant="dark", icon="arrow-down") }}
@@ -30,7 +32,9 @@
 } -%}
 <a class="cta-button{% if variant != 'default' %} cta-button--{{ variant }}{% endif %}" href="{{ href }}"
   {%- if target %} target="{{ target }}"{% if target == "_blank" %} rel="noopener noreferrer"{% endif %}{% endif %}>
-  <span class="cta-button__label">{{ label }}</span>
+  <span class="cta-button__label">{{ label }}
+    {%- if target == "_blank" %}<span class="visually-hidden"> (opent in een nieuw tabblad)</span>{% endif -%}
+  </span>
   <span class="cta-button__icon" aria-hidden="true">{{ icons[icon] | safe }}</span>
 </a>
 {%- endmacro %}
@@ -52,7 +56,7 @@
   "prinses-maxima": "Prinses Máxima Centrum",
   "maasstad": "Maasstad Ziekenhuis",
 } -%}
-<ul class="mw-logos">
+<ul class="mw-logos" role="list">{# Safari drops list semantics from list-style: none lists. #}
   {%- for slug in order %}
   <li><img src="{{ url_for('static', filename='images/logos/' ~ theme ~ '/' ~ slug ~ '.svg') }}" alt="{{ names[slug] }}"></li>
   {%- endfor %}

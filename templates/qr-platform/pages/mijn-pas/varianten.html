@@ -1,7 +1,52 @@
 <header>
-    <h1>This is the varianten page</h1>
+    {% include "qr-platform/partials/issuer_card.html" %}
 </header>
-<main>
-    <h2>PARAMETER TEST</h2>
-    <p>The parameter is: {{ gen_sequence }}</p>
-</main>
+{# Not a <main>: the shell in template.html already has the page's one <main>. #}
+<div class="mijn-pas__content mijn-pas__content--split shell">
+    <div class="advice-intro">
+        {# Names this page's content, not "Uw adviezen" as on Medicatie (WCAG 2.4.6). #}
+        <h2>Uw varianten</h2>
+        <p>De onderstaande resultaten kunnen overgenomen worden in uw medisch dossier.</p>
+    </div>
+    {#- `variants` is the variant table of the pas, see pongs.get_pas().
+        A v2 (allele) profile carries no variants, so it is empty. #}
+    <div id="variant-table">
+        {%- if variants %}
+        {# On a phone the six columns scroll sideways, so the card is a
+           focusable, labelled region for keyboard users (WCAG 2.1.1). #}
+        <div class="gene-table gene-table--variants" role="region" aria-label="Varianten" tabindex="0">
+            <table>
+                <caption class="visually-hidden">Uw varianten per gen</caption>
+                {# lang="en": English terms on a Dutch page are read with English
+                   pronunciation (WCAG 3.1.2). #}
+                <thead>
+                    <tr>
+                        <th scope="col" class="gene-table__gene">Gen</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Allele A</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Allele B</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Unphased</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Covered</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Not Covered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for variant in variants %}
+                        <tr>
+                            <th scope="row" class="gene-table__gene">{{ variant.gene }}</th>
+                            <td class="gene-table__variants">{{ variant.allele_a }}</td>
+                            <td class="gene-table__variants">{{ variant.allele_b }}</td>
+                            <td class="gene-table__variants">{{ variant.unphased }}</td>
+                            <td class="gene-table__variants">{{ variant.covered }}</td>
+                            <td class="gene-table__variants">{{ variant.not_covered }}</td>
+                        </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+        </div>
+        {%- else %}
+        <div class="gene-table">
+            <p class="gene-table__empty">Voor deze pas zijn geen varianten beschikbaar.</p>
+        </div>
+        {%- endif %}
+    </div>
+</div>
