@@ -1,31 +1,32 @@
-.mw-photo, .mw-scrim {
-    position: absolute;
-    bottom: 0;
-    pointer-events: none
-}
-
-.mw-body, .mw-title {
-    color: var(--color-paper)
-}
-
+/* ===== Page layout ===== */
+/* The public site spaces its sections with `main { gap: 100px }`, but here
+   they sit in a wrapper inside the QR template's #page, so give the wrapper
+   the same gap. */
 .help-page {
     display: flex;
     flex-direction: column;
-    gap: 100px
+    gap: 100px;
 }
 
+/* ===== Meer weten (dark call-to-action panel on both pages) ===== */
+/* Page stylesheets set only .mw-photo's placement and the bottom margin. */
 #meer-weten {
     position: relative;
     width: 100%;
     max-width: 1528px;
+    /* The panel's own padding replaces `section { padding-bottom }`, and the
+       photo bleeds ~50px above the panel, so a top margin is what separates it
+       from the FAQ. */
     margin: 120px auto 0;
     padding: 80px 80px 48px;
     border-radius: 24px;
     border: 1px solid var(--color-ink-10);
     background: var(--color-ink);
+    /* The photo may bleed past the panel edges (see .mw-photo). */
     overflow: visible;
     isolation: isolate;
-    --focus-ring: 2px solid var(--color-paper)
+    /* An ink ring would vanish on the ink panel. */
+    --focus-ring: 2px solid var(--color-paper);
 }
 
 .background-text--on-dark {
@@ -36,135 +37,161 @@
     overflow: hidden;
     border-radius: 24px;
     letter-spacing: 12px;
-    background-image: linear-gradient(180deg, rgba(244, 242, 243, .2) 0, rgba(244, 242, 243, 0) 100%)
+    background-image: linear-gradient(180deg, rgba(244, 242, 243, 0.2) 0%, rgba(244, 242, 243, 0) 100%);
 }
 
 .mw-photo {
+    position: absolute;
     z-index: 1;
+    bottom: 0;
     max-width: none;
-    user-select: none
+    pointer-events: none;
+    user-select: none;
 }
 
+/* Same placement as the professionals page (Figma node 7389:743): the 635x635
+   photo sits 72px in from the right edge of a 1528px-wide panel, written as
+   percentages so it scales with the panel. Without a `right`, the absolutely
+   positioned image falls back to its static position at the left padding. */
 #meer-weten .mw-photo {
     right: 4.71%;
     width: 41.56%;
-    height: 120%
+    height: 120%;
 }
 
 .mw-scrim {
+    position: absolute;
     z-index: 2;
     left: 0;
     right: 0;
+    bottom: 0;
     height: 34%;
     border-radius: 0 0 24px 24px;
-    background: linear-gradient(180deg, rgba(29, 28, 26, 0) 0, var(--color-ink) 72%)
+    background: linear-gradient(180deg, rgba(29, 28, 26, 0) 0%, var(--color-ink) 72%);
+    pointer-events: none;
 }
 
 .mw-content {
     position: relative;
     z-index: 3;
-    max-width: 622px
-}
-
-.card__glow, .card__glow-clip {
-    position: absolute;
-    pointer-events: none
+    max-width: 622px;
 }
 
 .mw-title {
     margin: 0 0 32px;
     padding-left: 16px;
     border-left: 1px solid var(--color-paper);
+    color: var(--color-paper);
     font-size: clamp(2.25rem, 4.4vw, 4rem);
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -.05em;
-    overflow-wrap: break-word
+    letter-spacing: -0.05em;
+    /* Was inherited from the global h2 rule before this became the page's h1:
+       "DNAmedicatiepas" is one long word on a phone. */
+    overflow-wrap: break-word;
 }
 
 .mw-body {
     max-width: 531px;
     margin: 0 0 24px;
+    color: var(--color-paper);
     font-size: 1.25rem;
     font-weight: 400;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
+/* Logo strip inside the dark panel, layered above the photo and scrim. */
 #meer-weten .mw-logos {
     position: relative;
     z-index: 3;
     justify-content: space-between;
-    margin-top: 64px
+    margin-top: 64px;
 }
 
+/* ===== Hospital logo strip ===== */
+/* Also used under the explanation on the professionals page; see there. */
 .mw-logos {
     list-style: none;
     display: flex;
     align-items: center;
     gap: 32px;
     width: 100%;
-    max-width: 1280px
+    max-width: 1280px;
 }
 
 .mw-logos img {
     display: block;
     width: auto;
+    /* The per-logo heights below give each image a natural width that is wider
+       than a grid cell on a phone. Cap the width and let object-fit letterbox it
+       rather than stretch the logo out of shape. */
     max-width: 100%;
-    object-fit: contain
+    object-fit: contain;
 }
 
-.mw-logos li:first-child img {
-    height: 27px
+.mw-logos li:nth-child(1) img {
+    height: 27px;
 }
 
 .mw-logos li:nth-child(2) img {
-    height: 36px
+    height: 36px;
 }
 
 .mw-logos li:nth-child(3) img {
-    height: 40px
+    height: 40px;
 }
 
 .mw-logos li:nth-child(4) img {
-    height: 48px
+    height: 48px;
 }
 
+/* Clips .card__glow to the panel's rounded box. #meer-weten itself must stay
+   overflow: visible for the photo, so it can't do this the way .issuer-card
+   does. No z-index here on purpose: a stacking context would isolate the
+   glow's `mix-blend-mode: color` from the ink panel behind it. */
 .card__glow-clip {
+    position: absolute;
     inset: 0;
     overflow: hidden;
-    border-radius: 24px
+    border-radius: 24px;
+    pointer-events: none;
 }
 
 .card__glow {
+    position: absolute;
     z-index: 1;
-    left: calc(50% - .5px);
+    left: calc(50% - 0.5px);
     bottom: -130.31px;
     width: 1415px;
     height: 370.31px;
     transform: translateX(-50%);
     border-radius: 224.256px;
-    background-image: linear-gradient(90deg, var(--color-paper) 0, var(--brand-pink) 50%, #7e7fe3 75%, #5fe219 87.5%, #f1f1f1 100%);
+    background-image: linear-gradient(90deg, var(--color-paper) 0%, var(--brand-pink) 50%, #7E7FE3 75%, #5FE219 87.5%, #F1F1F1 100%);
     box-shadow: inset 8.97px 0 107.643px 107.643px var(--color-paper);
     filter: blur(63.789px);
-    mix-blend-mode: color
+    mix-blend-mode: color;
+    pointer-events: none;
 }
 
 @media screen and (max-width: 1000px) {
     .mw-photo {
-        display: none
+        display: none;
     }
 
     .mw-logos {
         display: grid;
-        grid-template-columns:repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         align-items: center;
         justify-items: center;
-        row-gap: 24px
+        row-gap: 24px;
     }
 
+    /* 80px of side padding leaves ~190px of content on a phone, which .mw-title
+       and the logo grid both overflow. The panel is `overflow: visible` only so
+       .mw-photo can bleed, and the photo is hidden at this size. */
     #meer-weten {
         margin-top: 80px;
         padding: 40px 24px 32px;
-        overflow: hidden
+        overflow: hidden;
     }
 }

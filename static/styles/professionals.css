@@ -1,33 +1,44 @@
-#pasverstrekker, .pas-panel {
-    display: flex;
-    isolation: isolate
-}
+/* Voor Professionals (voor-professionals/index.html). Linked after styles.css,
+   so a rule here beats a shared rule of equal specificity. */
+
+/* ===== Layout overrides ===== */
+/* This page sits tighter under the nav and stacks its sections without the
+   100px gap the other pages use. */
 
 #nav {
-    padding-bottom: 50px
+    padding-bottom: 50px;
 }
 
+/* #meer-weten's bottom margin stands in for the main-to-footer gap. */
 .site-footer {
-    margin-top: 0
+    margin-top: 0;
 }
 
+/* ===== Betrouwbare medicatiebeslissingen (intro) ===== */
 #intro h1 {
     text-align: center;
     max-width: 900px;
     margin: 0 auto;
+    /* "medicatiebeslissingen," is a single unbreakable 22-character word; at a
+       flat 80px it is far wider than a phone, so the size tracks the viewport. */
     font-size: clamp(2rem, 7vw, 5rem);
     font-weight: 500;
-    letter-spacing: -.05em;
-    overflow-wrap: break-word
+    /* em, not px: -4px at the clamped-down size crushes the glyphs together. */
+    letter-spacing: -0.05em;
+    overflow-wrap: break-word;
 }
 
+/* ===== Uw pas, uitgegeven door : (Figma 7468:2) ===== */
 #pasverstrekker {
+    display: flex;
     position: relative;
     width: 100%;
     margin: 0 auto;
-    padding-bottom: 0
+    padding-bottom: 0;
+    isolation: isolate;
 }
 
+/* Decorative vertical pill-bars, bled out to the screen edges. */
 .edge-bars {
     position: absolute;
     top: 0;
@@ -35,89 +46,96 @@
     display: flex;
     gap: 4px;
     z-index: 0;
-    pointer-events: none
+    pointer-events: none;
 }
 
+/* This box spans .shell (90% of the page), so 5vw is 5/90 = 5.5556% of it.
+   Percentages rather than `calc(50% - 50vw)` so the two sides can't drift
+   apart by the width of a classic scrollbar. */
 .edge-bars--left {
-    left: -5.5556%
+    left: -5.5556%;
 }
 
 .edge-bars--right {
     right: -5.5556%;
-    flex-direction: row-reverse
+    flex-direction: row-reverse;
 }
 
 .edge-bar {
     width: 48px;
     border-radius: 24px;
     border: 1px solid var(--color-ink-10);
-    background: var(--color-ink-06)
+    background: var(--color-ink-06);
 }
 
 .edge-bar--gradient {
-    background: linear-gradient(180deg, var(--brand-pink) 0, var(--brand-lilac) 50%, var(--brand-blue) 60%, var(--brand-green) 100%)
+    background: linear-gradient(180deg, var(--brand-pink) 0%, var(--brand-lilac) 50%, var(--brand-blue) 60%, var(--brand-green) 100%);
 }
 
 .pas-panel {
     position: relative;
     z-index: 1;
+    display: flex;
     flex-direction: column;
     max-width: 1004px;
     margin: 0 auto;
-    overflow: hidden
+    overflow: hidden;
+    isolation: isolate;
 }
 
-#explanation, .data-listing {
-    display: flex;
-    flex-direction: column
-}
-
+/* ===== Explanation ===== */
 #explanation {
-    gap: 60px
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
 }
 
 #explanation-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start
+    align-items: flex-start;
 }
 
 #data {
     display: flex;
     gap: 48px;
-    flex-wrap: wrap
+    /* Two fixed columns at a 48px gap do not fit a phone; let them fall onto
+       two rows instead of pushing the section sideways. */
+    flex-wrap: wrap;
 }
 
 .data-listing {
-    gap: 8px
-}
-
-#explanation-text, #initiative-copy {
+    display: flex;
     flex-direction: column;
-    display: flex
+    gap: 8px;
 }
 
 .data-bignumber {
     font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -.04em
+    letter-spacing: -0.04em;
 }
 
-.data-text, .explanation-text__primary, .initiative-eyebrow {
+.data-text {
     font-size: 1.25rem;
     font-weight: 400;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
 #explanation-text {
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
     gap: 32px;
-    max-width: 700px
+    max-width: 700px;
 }
 
 .explanation-text__primary {
-    text-align: left
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
 }
 
 .explanation-text__secondary {
@@ -125,29 +143,29 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    text-align: left
+    text-align: left;
 }
 
-.initiative-description, .stat-card--gradient .stat-card__source {
-    color: var(--color-ink-80)
-}
-
+/* Logo strip under the explanation: centred and evenly spread. */
 #explanation .mw-logos {
     justify-content: space-around;
     margin: 64px auto 0;
-    padding: 0
+    padding: 0;
 }
 
+/* ===== Een baanbrekend initiatief (Figma 7389:939 / 7389:942 / 7389:660) ===== */
 #initiative-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 64px
+    gap: 64px;
 }
 
 #initiative-copy {
+    display: flex;
+    flex-direction: column;
     gap: 40px;
-    max-width: 560px
+    max-width: 560px;
 }
 
 .initiative-heading {
@@ -155,7 +173,13 @@
     flex-direction: column;
     gap: 8px;
     padding-left: 16px;
-    border-left: 1px solid var(--color-ink-20)
+    border-left: 1px solid var(--color-ink-20);
+}
+
+.initiative-eyebrow {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
 .initiative-title {
@@ -163,14 +187,15 @@
     font-size: clamp(1.75rem, 4.5vw, 3rem);
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -.04em;
-    overflow-wrap: break-word
+    letter-spacing: -0.04em;
+    overflow-wrap: break-word;
 }
 
 .initiative-description {
+    color: var(--color-ink-80);
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
 #initiative-image {
@@ -179,19 +204,25 @@
     justify-content: center;
     flex-shrink: 0;
     width: 56%;
-    margin-right: -5.5556%
+    /* Bleeds to the screen's right edge; see .edge-bars for the 5.5556%. */
+    margin-right: -5.5556%;
+    /* Deliberately NOT clipped here: this box only spans .shell (90vw), so an
+       `overflow: hidden` would cut the badge ~5vw short of the screen edge and
+       leave a visible straight edge. .page's `overflow: clip` (styles.css) clips
+       the bleed at the screen edge instead. */
 }
 
 #initiative-image img {
     width: 300%;
     transform: rotate(20deg);
-    height: auto
+    height: auto;
 }
 
+/* ===== Stats (Figma 7389:949 / 7389:943) ===== */
 .stats-grid {
     display: grid;
-    grid-template-columns:1fr 1fr;
-    gap: 4px
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
 }
 
 .stat-card {
@@ -202,13 +233,18 @@
     padding: 32px;
     border-radius: 24px;
     overflow: hidden;
-    overflow-wrap: break-word
+    /* With enlarged text spacing on a phone, words in the 36px quote are wider
+       than the card; break them rather than let the card clip them. */
+    overflow-wrap: break-word;
 }
 
+/* The number and its source link. Wraps (the link drops below the number,
+   still right-aligned) when both don't fit, instead of the card clipping the
+   link. */
 .stat-card div {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between
+    justify-content: space-between;
 }
 
 .stat-card__source {
@@ -219,13 +255,13 @@
     margin-left: auto;
     color: var(--color-ink-70);
     font-size: 1rem;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
 .stat-card--quote {
     justify-content: space-between;
     background: var(--color-ink-06);
-    border: 1px solid var(--color-ink-10)
+    border: 1px solid var(--color-ink-10);
 }
 
 .stat-card--quote .stat-card__quote {
@@ -234,21 +270,29 @@
     font-size: 3rem;
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -1.92px
+    letter-spacing: -1.92px;
 }
 
 .stat-card--gradient {
     justify-content: space-between;
     background: linear-gradient(235deg, var(--brand-pink) 2.6%, var(--brand-lilac) 12.5%, var(--brand-blue) 81.6%, var(--brand-green) 101.4%);
-    border: 1px solid rgba(255, 255, 255, .1)
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ink, not the light #F5EEF8 of the design: light text on these pastels was
+   1.5-2.8:1, ink is 5.4:1 or more everywhere on the gradient (WCAG 1.4.3).
+   The source link sits in the pink/lilac top-right corner, where ink-80 still
+   clears 5:1. */
+.stat-card--gradient .stat-card__source {
+    color: var(--color-ink-80);
 }
 
 .stat-card__number {
     color: var(--color-ink);
     font-size: 8rem;
     font-weight: 500;
-    line-height: .84;
-    letter-spacing: -6.4px
+    line-height: 0.84;
+    letter-spacing: -6.4px;
 }
 
 .stat-card__body {
@@ -256,51 +300,56 @@
     color: var(--color-ink);
     font-size: 1.25rem;
     font-weight: 400;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
 .stat-card__body strong {
-    font-weight: 600
+    font-weight: 600;
 }
 
+/* ===== Meer weten (shared block in styles.css) ===== */
 #meer-weten {
-    margin-bottom: 100px
+    margin-bottom: 100px;
 }
 
+/* Figma node 7389:743 places the 635x635 photo inset 72px from the panel's
+   right edge (not bled past it like the patients page's landscape photo)
+   inside a 1528px-wide panel: 72/1528 and 635/1528 as percentages so it
+   scales the same way at other panel widths. */
 .mw-photo {
     right: 4.71%;
     width: 41.56%;
-    height: 120%
+    height: 120%;
 }
 
 @media (max-width: 1000px) {
     #explanation-top {
         flex-direction: column;
-        gap: 120px
+        gap: 120px;
     }
 
     .stats-grid {
-        grid-template-columns:1fr
+        grid-template-columns: 1fr;
     }
 
     .stat-card--quote .stat-card__quote {
-        font-size: 2.25rem
+        font-size: 2.25rem;
     }
 
     .stat-card__number {
-        font-size: 5.5rem
+        font-size: 5.5rem;
     }
 
     #initiative-top {
-        flex-direction: column
+        flex-direction: column;
     }
 
     #initiative-image {
         width: 100%;
-        margin-right: calc(45% - 50vw)
+        margin-right: calc(45% - 50vw);
     }
 
     #meer-weten {
-        margin-bottom: 64px
+        margin-bottom: 64px;
     }
 }
