@@ -52,42 +52,76 @@ QR_NAV = [
 # of None renders the tab without a link (section not built yet).
 QR_TABS = [
     {"page": "pas", "endpoint": "medication", "label": "Mijn Pas"},
-    {"page": "contact", "endpoint": None, "label": "Informatie & Contact"},
+    {"page": "help", "endpoint": "help", "label": "Informatie & Contact"},
 ]
 
 # The issuers for the "Uw resultaat, uitgegeven door:" card on the Mijn Pas
 # pages (qr-platform/partials/issuer_card.html), keyed by the lab encoded in
 # the pas: the lab_table values in pongs-translation's translation/variants.py.
 # A lab without an entry here (e.g. "University of Florida") shows no card.
-#   name     Short name, used in the body text and the button label.
-#   logo     Path under static/; a light logo, since the card is dark.
-#   logo_alt Full name, read out instead of the logo.
-#   website  The issuer's website, opened from the card's button.
+# The same entries fill the hospital dropdown of the contact card on /app/help/
+# (qr-platform/partials/contact_card.html and hospital_contact.html).
+#   name               Short name, used in the body text, the button label and
+#                      the dropdown.
+#   logo               Path under static/; a light logo, since the card is dark.
+#   logo_light         Path under static/; the dark logo for the white contact card.
+#   logo_alt           Full name, read out instead of the logo; also the
+#                      heading of the hospital's contact card.
+#   website            The issuer's website, opened from the card's button.
+# Optional, shown on the contact card when set:
+#   spokesperson       Contact person.
+#   spokesperson_email
+#   spokesperson_phone
+#   hours              When the contact person can be reached.
+#   street, postcode_city  The address.
+# TODO: `hours` is the placeholder from the Figma design, not real data.
+PLACEHOLDER_HOURS = "Bereikbaar: maandag t/m vrijdag, 9.30 - 15.30 uur"
 ISSUERS = {
     "LUMC": {
         "name": "LUMC",
         "logo": "images/logos/on-dark/lumc.svg",
+        "logo_light": "images/logos/on-light/lumc.svg",
         "logo_alt": "Leids Universitair Medisch Centrum",
         "website": "https://www.lumc.nl",
+        "spokesperson": "Mark Santcroos",
+        "spokesperson_email": "m.a.santcroos@lumc.nl",
+        "spokesperson_phone": "+31621436587",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Albinusdreef 2",
+        "postcode_city": "2333 ZA, Leiden"
     },
     "AmsterdamUMC": {
         "name": "Amsterdam UMC",
         "logo": "images/logos/on-dark/amsterdam-umc.svg",
+        "logo_light": "images/logos/on-light/amsterdam-umc.svg",
         "logo_alt": "Amsterdam UMC",
         "website": "https://www.amsterdamumc.nl",
+        "spokesperson": "Pierre Bet",
+        "spokesperson_email": "pm.bet@amsterdamumc.nl",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Meibergdreef 9",
+        "postcode_city": "1105 AZ, Amsterdam"
     },
     # Not in lab_table yet.
     "Prinses Máxima Centrum": {
         "name": "Prinses Máxima Centrum",
         "logo": "images/logos/on-dark/prinses-maxima.svg",
+        "logo_light": "images/logos/on-light/prinses-maxima.svg",
         "logo_alt": "Prinses Máxima Centrum",
         "website": "https://www.prinsesmaximacentrum.nl",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Heidelberglaan 25",
+        "postcode_city": "3584 CS, Utrecht"
     },
     "Maasstad Ziekenhuis": {
         "name": "Maasstad Ziekenhuis",
         "logo": "images/logos/on-dark/maasstad.svg",
+        "logo_light": "images/logos/on-light/maasstad.svg",
         "logo_alt": "Maasstad Ziekenhuis",
         "website": "https://www.maasstadziekenhuis.nl",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Maasstadweg 21",
+        "postcode_city": "3079 DZ, Rotterdam"
     },
 }
 
@@ -211,6 +245,36 @@ def genoverzicht(scheme, encoded_profile):
 def varianten(scheme, encoded_profile):
     pas = load_pas(scheme, encoded_profile)
     return render_mijn_pas("varianten", encoded_profile, pas, variants=pas["variants"])
+
+# The "Informatie & Contact" tab: not tied to a pas, so the shell is rendered
+# without encoded_profile (no pill nav, manifest or data-pas-url).
+# `selected_key` preselects a hospital in the contact card (see help_contact).
+def render_help(selected_key=None):
+    return render_page("qr-platform/pages/help.html", "help", current_page="help",
+                       page_title="Informatie & Contact", site_footer=True,
+                       hospitals=ISSUERS, selected_key=selected_key)
+
+
+@app.route('/app/help/')
+def help():
+    return render_help()
+
+
+# One hospital's contact details for the contact card on /app/help/. Its
+# dropdown fetches this with X-Requested-With: fetch (via spa.js) and swaps the
+# fragment into the card. A normal load (a shared link, or a failed fetch, which
+# spa.js retries as a full load) gets the whole help page with that hospital
+# already selected.
+@app.route('/app/help/contact/<issuer_key>/')
+def help_contact(issuer_key):
+    if issuer_key not in ISSUERS:
+        abort(404)
+    if request.headers.get("X-Requested-With") != "fetch":
+        return render_help(issuer_key)
+    response = make_response(render_template("qr-platform/partials/hospital_contact.html",
+                                             hospital=ISSUERS[issuer_key]))
+    response.vary.add("X-Requested-With")
+    return response
 
 
 # ===== PWA (installable, offline Mijn Pas) =====

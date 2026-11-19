@@ -9,6 +9,12 @@ body {
     padding-bottom: 6rem;
 }
 
+/* A page with the site footer has no pill nav, and the footer's gradient bar
+   must touch the bottom of the screen. */
+.page--site-footer {
+    padding-bottom: 0;
+}
+
 .pill-nav {
     position: fixed;
     bottom: 1rem;
