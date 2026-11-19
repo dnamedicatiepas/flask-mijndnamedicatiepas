@@ -3,16 +3,27 @@ body {
     margin: 0;
 }
 
-/* Room for the fixed pill nav. On .page rather than body, so it falls inside
-   .page's min-height: 100vh instead of adding a scroll on short pages. */
+/* The fixed pill nav and the PWA banners cover the bottom of the screen.
+   --fixed-bottom-space is their height (set by pwa.js, which measures them);
+   6rem, the pill nav alone, is the floor and the value without JS.
+   scroll-padding-bottom makes the browser scroll a focused element above
+   them instead of leaving it underneath (WCAG 2.4.11 Focus Not Obscured). */
+html {
+    scroll-padding-bottom: max(6rem, var(--fixed-bottom-space, 0px));
+}
+
+/* Room for the same fixed elements, so the end of the page can be scrolled
+   clear of them. On .page rather than body, so it falls inside .page's
+   min-height: 100vh instead of adding a scroll on short pages. */
 .page {
-    padding-bottom: 6rem;
+    padding-bottom: max(6rem, var(--fixed-bottom-space, 0px));
 }
 
 /* A page with the site footer has no pill nav, and the footer's gradient bar
-   must touch the bottom of the screen. */
+   must touch the bottom of the screen. Only a shown PWA banner (pwa.js adds
+   16px of margin to the measured height, taken off again here) adds room. */
 .page--site-footer {
-    padding-bottom: 0;
+    padding-bottom: max(0px, calc(var(--fixed-bottom-space, 16px) - 16px));
 }
 
 .pill-nav {
@@ -21,6 +32,13 @@ body {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
+    /* At 320px the three tabs measured 329px wide and the fixed, centred bar
+       was cut off on both sides (WCAG 1.4.10 Reflow). It now stays inside the
+       viewport and, with enlarged text, wraps instead of overflowing. */
+    flex-wrap: wrap;
+    justify-content: center;
+    width: max-content;
+    max-width: calc(100% - 16px);
     gap: .25rem;
     padding: .35rem;
     background: #fff;
@@ -35,6 +53,18 @@ body {
     color: #333;
     text-decoration: none;
     font-size: .9rem;
+}
+
+/* Keeps the three tabs on one row at 320px, also with a classic scrollbar
+   (about 300px left). Each tab stays well over 24x24px (WCAG 2.5.8). */
+@media screen and (max-width: 400px) {
+    .pill-nav {
+        padding: .25rem;
+    }
+
+    .pill-nav a {
+        padding-inline: .5rem;
+    }
 }
 
 .pill-nav a[aria-current="page"] {
@@ -60,6 +90,9 @@ body {
     padding: 64px;
     border-radius: 24px;
     background: var(--color-ink);
+    /* The default ink ring was 1:1 on this ink card, so a focused "Website"
+       button showed no ring at all (WCAG 2.4.7 / 1.4.11). Paper is 15:1. */
+    --focus-ring: 2px solid var(--color-paper);
 }
 
 .issuer-card .issuer-card__dna {

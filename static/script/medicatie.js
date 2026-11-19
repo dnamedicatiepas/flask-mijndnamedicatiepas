@@ -17,8 +17,17 @@
             other.setAttribute("aria-pressed", other === chip ? "true" : "false");
         });
 
+        var shown = 0;
         tables.querySelectorAll(".med-item").forEach(function (item) {
             item.hidden = phenotype !== "" && item.dataset.phenotype !== phenotype;
+            if (!item.hidden) shown++;
         });
+
+        // The role="status" line under the chips (WCAG 4.1.3).
+        var status = tables.querySelector("[data-phenotype-status]");
+        if (status) {
+            status.textContent = (shown === 1 ? "1 geneesmiddel" : shown + " geneesmiddelen") + " getoond" +
+                (phenotype === "" ? "" : " voor " + phenotype);
+        }
     });
 })();

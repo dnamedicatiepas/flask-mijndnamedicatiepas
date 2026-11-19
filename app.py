@@ -1,6 +1,7 @@
 import functools
 import os
 import re
+from urllib.parse import quote
 
 from flask import Flask, render_template, request, abort, redirect, url_for, make_response, jsonify, send_from_directory
 from markupsafe import Markup
@@ -183,10 +184,16 @@ def load_pas(scheme, encoded_profile):
 # `current_page` picks the active header tab (see QR_TABS).
 # The same URL answers with a fragment or a full page depending on that header,
 # so the response says so (Vary) for the browser's and the service worker's caches.
-def render_page(template, active_nav, current_page="pas", **context):
-    context.update(nav=QR_NAV, active=active_nav, current_page=current_page)
+# `page_title` (optional) is the first part of the <title>. A fragment carries
+# the full title in the X-Page-Title header (percent-encoded: headers are
+# Latin-1), so spa.js can update document.title after a swap (WCAG 2.4.2).
+def render_page(template, active_nav, current_page="pas", page_title=None, **context):
+    document_title = f"{page_title} – DNAmedicatiepas" if page_title else "DNAmedicatiepas"
+    context.update(nav=QR_NAV, active=active_nav, current_page=current_page,
+                   page_title=page_title, document_title=document_title)
     if request.headers.get("X-Requested-With") == "fetch":
         response = make_response(render_template(template, **context))
+        response.headers["X-Page-Title"] = quote(document_title)
     else:
         response = make_response(render_template("qr-platform/template.html", inner_template=template, **context))
     response.vary.add("X-Requested-With")
@@ -196,8 +203,12 @@ def render_page(template, active_nav, current_page="pas", **context):
 # A Mijn Pas page: qr-platform/pages/mijn-pas/<page>.html, whose nav key is also
 # <page>. Each of these pages includes the issuer card, so `issuer` is passed on
 # full and AJAX loads alike. Extra keyword arguments are passed to the page.
+# The title names the tab, e.g. "Genoverzicht – Mijn Pas – DNAmedicatiepas",
+# so each page has its own (WCAG 2.4.2).
 def render_mijn_pas(page, encoded_profile, pas, **context):
+    label = next(item["label"] for item in QR_NAV if item["key"] == page)
     return render_page(f"qr-platform/pages/mijn-pas/{page}.html", page,
+                       page_title=f"{label} – Mijn Pas",
                        encoded_profile=encoded_profile, issuer=get_issuer(pas), **context)
 
 

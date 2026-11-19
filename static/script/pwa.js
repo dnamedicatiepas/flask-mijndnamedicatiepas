@@ -27,6 +27,34 @@
 
     if (pasUrl) store(LAST_PAS_KEY, pasUrl);
 
+    // ===== Space under the fixed bottom stack =====
+    // The pill nav and the banners are fixed to the bottom of the screen. Their
+    // height, measured here, goes into --fixed-bottom-space, which the
+    // stylesheet (qr-platform/styles.css) uses for scroll-padding-bottom and the
+    // page's bottom padding. A focused element is then scrolled above them, not
+    // left underneath (WCAG 2.4.11 Focus Not Obscured). The banners' container
+    // has no height while every banner is hidden, so the observer also fires
+    // when one is shown or hidden.
+    var fixedBottom = [document.querySelector(".pill-nav"), document.querySelector(".pwa-banners")]
+        .filter(Boolean);
+
+    function updateBottomSpace() {
+        var top = window.innerHeight;
+        fixedBottom.forEach(function (el) {
+            var rect = el.getBoundingClientRect();
+            if (rect.height > 0) top = Math.min(top, rect.top);
+        });
+        var space = Math.max(0, Math.ceil(window.innerHeight - top)) + 16;
+        document.documentElement.style.setProperty("--fixed-bottom-space", space + "px");
+    }
+
+    if ("ResizeObserver" in window) {
+        var observer = new ResizeObserver(updateBottomSpace);
+        fixedBottom.forEach(function (el) { observer.observe(el); });
+    }
+    window.addEventListener("resize", updateBottomSpace);
+    updateBottomSpace();
+
     // ===== Service worker =====
     function cacheThisPas(registration) {
         var worker = registration.active;

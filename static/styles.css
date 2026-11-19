@@ -48,6 +48,28 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Beyond AA (2.3.3 is AAA), but cheap: no smooth scrolling, sliding answers
+   or rotating chevrons for people who ask their system for less motion. */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+    /* Its own rule: a browser without ::details-content would drop a whole
+       selector list that contains it. */
+    ::details-content {
+        transition-duration: 0.01ms !important;
+    }
+}
+
 /* ===== Reset & base ===== */
 * {
     padding: 0;
