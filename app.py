@@ -69,12 +69,21 @@ ISSUERS = {
         "logo": "images/logos/on-dark/lumc.svg",
         "logo_alt": "Leids Universitair Medisch Centrum",
         "website": "https://www.lumc.nl",
+        "spokesperson": "Mark Santcroos",
+        "spokesperson_email": "m.a.santcroos@lumc.nl",
+        "spokesperson_phone": "+31621436587",
+        "street": "Albinusdreef 2",
+        "postcode_city": "2333 ZA, Leiden"
     },
     "AmsterdamUMC": {
         "name": "Amsterdam UMC",
         "logo": "images/logos/on-dark/amsterdam-umc.svg",
         "logo_alt": "Amsterdam UMC",
         "website": "https://www.amsterdamumc.nl",
+        "spokesperson": "Pierre Bet",
+        "spokesperson_email": "pm.bet@amsterdamumc.nl",
+        "street": "Meibergdreef 9",
+        "postcode_city": "1105 AZ, Amsterdam"
     },
     # Not in lab_table yet.
     "Prinses Máxima Centrum": {
@@ -82,12 +91,16 @@ ISSUERS = {
         "logo": "images/logos/on-dark/prinses-maxima.svg",
         "logo_alt": "Prinses Máxima Centrum",
         "website": "https://www.prinsesmaximacentrum.nl",
+        "street": "Heidelberglaan 25",
+        "postcode_city": "3584 CS, Utrecht"
     },
     "Maasstad Ziekenhuis": {
         "name": "Maasstad Ziekenhuis",
         "logo": "images/logos/on-dark/maasstad.svg",
         "logo_alt": "Maasstad Ziekenhuis",
         "website": "https://www.maasstadziekenhuis.nl",
+        "street": "Maasstadweg 21",
+        "postcode_city": "3079 DZ, Rotterdam"
     },
 }
 
@@ -216,7 +229,7 @@ def varianten(scheme, encoded_profile):
 # without encoded_profile (no pill nav, manifest or data-pas-url).
 @app.route('/app/help/')
 def help():
-    return render_page("qr-platform/pages/help.html", help, current_page="help")
+    return render_page("qr-platform/pages/help.html", "help", current_page="help", site_footer=True)
 
 
 # ===== PWA (installable, offline Mijn Pas) =====

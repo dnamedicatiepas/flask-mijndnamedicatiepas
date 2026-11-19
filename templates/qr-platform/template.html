@@ -50,7 +50,7 @@
 {# .page clips the absolutely positioned hero DNA text (see styles.css). Without
    it that text, which is very tall when wrapped on a phone, stretches the
    document past short content like a filtered medication list. #}
-<div class="page">
+<div class="page{% if site_footer %} page--site-footer{% endif %}">
 {% include "qr-platform/partials/platform_header.html" %}
 
 
@@ -76,6 +76,15 @@
 
     {# Fixed pill nav, outside #page so it persists across swaps. #}
 </main>
+
+{# The public site's footer, only on pages whose route passes site_footer=True
+   (e.g. /app/help/). It sits in .page after <main>, as in shell.html: outside
+   the .shell column so its gradient bar spans the full width, and after the
+   flex-grown <main> so it is pushed to the bottom on short pages. Those pages
+   are only reached by full page loads, so it never lingers after an AJAX swap. #}
+{% if site_footer %}
+    {% include "partials/site_footer.html" %}
+{% endif %}
 </div>
 
 {% include "qr-platform/partials/pwa_banners.html" %}
