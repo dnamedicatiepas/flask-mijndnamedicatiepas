@@ -4,7 +4,8 @@
 {# Not a <main>: the shell in template.html already has the page's one <main>. #}
 <div class="mijn-pas__content mijn-pas__content--split shell">
     <div class="advice-intro">
-        <h2>Uw adviezen</h2>
+        {# Names this page's content, not "Uw adviezen" as on Medicatie (WCAG 2.4.6). #}
+        <h2>Uw genoverzicht</h2>
         <p>De onderstaande resultaten kunnen overgenomen worden in uw medisch dossier.</p>
     </div>
     {# `genes` is the gene table of the pas, see pongs.get_pas(). #}
@@ -12,11 +13,13 @@
         <div class="gene-table">
             <table>
                 <caption class="visually-hidden">Uw genen, diplotypen en fenotypen</caption>
+                {# lang="en": English terms on a Dutch page are read with English
+                   pronunciation (WCAG 3.1.2). #}
                 <thead>
                     <tr>
                         <th scope="col" class="gene-table__gene">Gen</th>
                         <th scope="col" class="gene-table__diplotype">Diplotype</th>
-                        <th scope="col" class="gene-table__phenotype">Phenotype</th>
+                        <th scope="col" class="gene-table__phenotype" lang="en">Phenotype</th>
                     </tr>
                 </thead>
                 <tbody>

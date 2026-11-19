@@ -16,7 +16,7 @@
 //
 // Bump VERSION when PRECACHE changes or the caching changes shape: the old
 // caches are deleted when the new worker activates.
-var VERSION = "v1";
+var VERSION = "v2";
 var CACHES = {
     pages: "mijnpas-pages-" + VERSION,
     fragments: "mijnpas-fragments-" + VERSION,

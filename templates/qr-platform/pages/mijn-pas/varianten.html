@@ -4,7 +4,8 @@
 {# Not a <main>: the shell in template.html already has the page's one <main>. #}
 <div class="mijn-pas__content mijn-pas__content--split shell">
     <div class="advice-intro">
-        <h2>Uw adviezen</h2>
+        {# Names this page's content, not "Uw adviezen" as on Medicatie (WCAG 2.4.6). #}
+        <h2>Uw varianten</h2>
         <p>De onderstaande resultaten kunnen overgenomen worden in uw medisch dossier.</p>
     </div>
     {#- `variants` is the variant table of the pas, see pongs.get_pas().
@@ -16,14 +17,16 @@
         <div class="gene-table gene-table--variants" role="region" aria-label="Varianten" tabindex="0">
             <table>
                 <caption class="visually-hidden">Uw varianten per gen</caption>
+                {# lang="en": English terms on a Dutch page are read with English
+                   pronunciation (WCAG 3.1.2). #}
                 <thead>
                     <tr>
                         <th scope="col" class="gene-table__gene">Gen</th>
-                        <th scope="col" class="gene-table__variants">Allele A</th>
-                        <th scope="col" class="gene-table__variants">Allele B</th>
-                        <th scope="col" class="gene-table__variants">Unphased</th>
-                        <th scope="col" class="gene-table__variants">Covered</th>
-                        <th scope="col" class="gene-table__variants">Not Covered</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Allele A</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Allele B</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Unphased</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Covered</th>
+                        <th scope="col" class="gene-table__variants" lang="en">Not Covered</th>
                     </tr>
                 </thead>
                 <tbody>

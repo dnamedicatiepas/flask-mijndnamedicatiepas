@@ -25,6 +25,9 @@
                         aria-pressed="false">{{ phenotype }}</button>
             {%- endfor %}
         </div>
+        {# medicatie.js says here how many medications a filter leaves
+           (WCAG 4.1.3): the list changes without focus moving to it. #}
+        <p class="visually-hidden" role="status" data-phenotype-status></p>
 
         <div class="med-list">
             {%- for medication in medications %}

@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {# page_title: passed by the route (render_page's **context). The pages are
-       included, not extended, so they can't override this block themselves. #}
-    <title>{% block title %}{% if page_title %}{{ page_title }} – {% endif %}DNAmedicatiepas{% endblock %}</title>
+    {# document_title: built by render_page() from the route's page_title. The
+       pages are included, not extended, so they can't override this block
+       themselves. spa.js keeps it current after a swap (X-Page-Title). #}
+    <title>{% block title %}{{ document_title }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/qr-platform/styles.css') }}">
     <meta name="description" content="{% block description %}{% endblock %}">
     {% block meta %}
@@ -61,7 +62,9 @@
 
 <main id="inhoud" tabindex="-1">
     {% if encoded_profile %}
-    <nav class="pill-nav">
+    {# Named, so it can be told apart from the header's "Hoofdmenu" nav
+       (WCAG 1.3.1 / 2.4.1). #}
+    <nav class="pill-nav" aria-label="Mijn Pas">
         {% for item in nav %}
             <a href="{{ url_for(item.endpoint, encoded_profile=encoded_profile) }}"
                data-ajax
@@ -73,6 +76,11 @@
         {% endfor %}
     </nav>
     {% endif %}
+
+    {# spa.js says which page was loaded after a swap, since focus stays on the
+       pill nav and a screen reader would otherwise not hear that the content
+       changed (WCAG 4.1.3). Outside #page so it survives the swap. #}
+    <p class="visually-hidden" role="status" data-spa-status></p>
 
     <div id="page">
         {# Full load: render the requested page fragment into the shell. #}
