@@ -86,6 +86,9 @@
     font-weight: 500;
     line-height: 1;
     letter-spacing: -0.05em;
+    /* Was inherited from the global h2 rule before this became the page's h1:
+       "DNAmedicatiepas" is one long word on a phone. */
+    overflow-wrap: break-word;
 }
 
 .mw-body {

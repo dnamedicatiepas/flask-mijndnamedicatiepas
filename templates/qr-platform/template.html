@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}DNAmedicatiepas{% endblock %}</title>
+    {# page_title: passed by the route (render_page's **context). The pages are
+       included, not extended, so they can't override this block themselves. #}
+    <title>{% block title %}{% if page_title %}{{ page_title }} – {% endif %}DNAmedicatiepas{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/qr-platform/styles.css') }}">
     <meta name="description" content="{% block description %}{% endblock %}">
     {% block meta %}
@@ -46,6 +48,9 @@
 {# data-pas-url: this pas's start page, for pwa.js. An opaque URL; the client
    never decodes the profile in it. #}
 <body{% if encoded_profile %} data-pas-url="{{ url_for('medication', encoded_profile=encoded_profile) }}"{% endif %}>
+{# As in shell.html: outside .page so its overflow: clip can't hide it.
+   tabindex="-1" on <main> makes the skip actually move focus. #}
+<a class="skip-link" href="#inhoud">Ga direct naar de inhoud</a>
 
 {# .page clips the absolutely positioned hero DNA text (see styles.css). Without
    it that text, which is very tall when wrapped on a phone, stretches the
@@ -54,7 +59,7 @@
 {% include "qr-platform/partials/platform_header.html" %}
 
 
-<main>
+<main id="inhoud" tabindex="-1">
     {% if encoded_profile %}
     <nav class="pill-nav">
         {% for item in nav %}
