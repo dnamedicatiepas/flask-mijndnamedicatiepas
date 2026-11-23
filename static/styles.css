@@ -669,6 +669,20 @@ h2 {
     object-fit: contain;
 }
 
+/* Block, so the focus ring wraps the image rather than an inline line box. */
+.mw-logos__link {
+    display: block;
+    border-radius: 4px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* A slight lift and fade to show the logo is a link. The reduced-motion rule
+   at the top of this file cuts the transition short. */
+.mw-logos__link:hover {
+    transform: translateY(-2px) scale(1.04);
+    opacity: 0.8;
+}
+
 .mw-logos li:nth-child(1) img {
     height: 27px;
 }

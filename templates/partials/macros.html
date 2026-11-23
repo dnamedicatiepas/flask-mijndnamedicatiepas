@@ -43,10 +43,14 @@
 
 
 {#
-  logo_list: the row of partner hospital logos.
+  logo_list: the row of partner hospital logos, each linking to the hospital's
+  website in a new tab.
 
     theme  "on-dark" or "on-light"; picks the matching folder in images/logos/.
     order  Logo slugs in display order.
+
+  The alt text is the link's name, so it stays the hospital's name; the new-tab
+  notice follows it for screen readers, as in cta_button.
 #}
 
 {% macro logo_list(theme, order=["amsterdam-umc", "lumc", "prinses-maxima", "maasstad", "erasmusmc"]) -%}
@@ -57,9 +61,21 @@
   "maasstad": "Maasstad Ziekenhuis",
   "erasmusmc": "Erasmus MC"
 } -%}
+{%- set urls = {
+  "amsterdam-umc": "https://www.amsterdamumc.nl",
+  "lumc": "https://www.lumc.nl",
+  "prinses-maxima": "https://www.prinsesmaximacentrum.nl",
+  "maasstad": "https://www.maasstadziekenhuis.nl",
+  "erasmusmc": "https://www.erasmusmc.nl"
+} -%}
 <ul class="mw-logos" role="list">{# Safari drops list semantics from list-style: none lists. #}
   {%- for slug in order %}
-  <li><img src="{{ url_for('static', filename='images/logos/' ~ theme ~ '/' ~ slug ~ '.svg') }}" alt="{{ names[slug] }}"></li>
+  <li>
+    <a class="mw-logos__link" href="{{ urls[slug] }}" target="_blank" rel="noopener noreferrer">
+      <img src="{{ url_for('static', filename='images/logos/' ~ theme ~ '/' ~ slug ~ '.svg') }}" alt="{{ names[slug] }}">
+      <span class="visually-hidden"> (opent in een nieuw tabblad)</span>
+    </a>
+  </li>
   {%- endfor %}
 </ul>
 {%- endmacro %}
