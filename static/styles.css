@@ -225,6 +225,11 @@ section {
     display: inline-block;
 }
 
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
 .segmented-toggle {
     display: inline-flex;
     align-items: center;

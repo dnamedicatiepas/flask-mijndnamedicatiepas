@@ -124,6 +124,16 @@ ISSUERS = {
         "street": "Maasstadweg 21",
         "postcode_city": "3079 DZ, Rotterdam"
     },
+    "Erasmus MC": {
+        "name": "Erasmus MC",
+        "logo": "images/logos/on-dark/erasmusmc.svg",
+        "logo_light": "images/logos/on-light/erasmusmc.svg",
+        "logo_alt": "Erasmus MC",
+        "webstie": "https://www.erasmusmc.nl",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Dr. Molewaterplein 40",
+        "postcode_city": "3015 GD, Rotterdam"
+    }
 }
 
 

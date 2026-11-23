@@ -49,12 +49,13 @@
     order  Logo slugs in display order.
 #}
 
-{% macro logo_list(theme, order=["amsterdam-umc", "lumc", "prinses-maxima", "maasstad"]) -%}
+{% macro logo_list(theme, order=["amsterdam-umc", "lumc", "prinses-maxima", "maasstad", "erasmusmc"]) -%}
 {%- set names = {
   "amsterdam-umc": "Amsterdam UMC",
   "lumc": "Leids Universitair Medisch Centrum",
   "prinses-maxima": "Prinses Máxima Centrum",
   "maasstad": "Maasstad Ziekenhuis",
+  "erasmusmc": "Erasmus MC"
 } -%}
 <ul class="mw-logos" role="list">{# Safari drops list semantics from list-style: none lists. #}
   {%- for slug in order %}

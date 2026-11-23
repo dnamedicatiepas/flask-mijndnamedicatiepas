@@ -1,8 +1,11 @@
 {# The page footer and the gradient bar that closes the page. #}
 {% from "partials/macros.html" import cta_button %}
 <footer class="site-footer shell">
-    <div>
-        <p class="body-text">© Consortium B.V.</p>
+    <div class="column">
+        <p class="body-text">© Consortium mijnDNAmedicatiepas</p>
+        <a href="https://oddgrips.com/">
+            <p class="body-text">Designed by © Oddgrips</p>
+        </a>
     </div>
     <div class="logo">
         <a href="{{ url_for('patienten') }}">
@@ -10,7 +13,7 @@
         </a>
     </div>
     <div>
-        {{ cta_button("Informatie aanvragen", "#") }}
+        {{ cta_button("Informatie aanvragen", "/app/help/") }}
     </div>
 </footer>
 
