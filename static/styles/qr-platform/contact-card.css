@@ -1,0 +1,318 @@
+/* ===== Contact card (qr-platform/partials/contact_card.html) ===== */
+/* Figma 7769:227: the consortium's details on the left, the hospital dropdown
+   and the chosen hospital's card (hospital_contact.html) on the right.
+   Figma sets the form and hospital text in Inter; the site loads Switzer only.
+   Figma's muted #56534a is --color-ink-70 here, the lightest ink that keeps
+   4.5:1 (WCAG 1.4.3). */
+.contact-card {
+    display: grid;
+    grid-template-columns: 534px minmax(0, 1fr);
+    width: 100%;
+    max-width: 1280px;
+    /* min-height, not height, so larger text or spacing can grow it (WCAG 1.4.4 / 1.4.12). */
+    min-height: 508px;
+    margin-inline: auto;
+    /* The global `section { padding-bottom }` doesn't apply to this panel. */
+    padding: 0;
+    border: 1px solid var(--color-ink-10);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--color-ink);
+    /* No overflow: hidden (Figma clips): it would cut off the open menu and
+       focus rings (WCAG 2.4.7 / 2.4.11). */
+}
+
+/* ----- Left: intro and the consortium's details ----- */
+.contact-card__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 64px;
+    padding: 48px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.contact-card__lead {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Overrides the global h2 (size, spacing, align-self). */
+.contact-card__title {
+    margin: 0;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.contact-card__details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-card__subtitle,
+.hospital-card__heading {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+}
+
+.contact-card__details p {
+    overflow-wrap: anywhere;
+}
+
+/* ----- Right: the dropdown and the hospital's card ----- */
+.contact-card__select {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 48px;
+    border-left: 1px solid var(--color-ink-10);
+}
+
+.hospital-select__label {
+    margin-bottom: -4px; /* Figma: 4px from label to field, 8px elsewhere */
+    color: var(--color-ink-70);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.hospital-select {
+    position: relative;
+}
+
+.hospital-select__button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 40px;
+    padding: 7px 12px; /* 8px in Figma, minus the 1px border */
+    border: 1px solid var(--color-ink-10);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* Figma's open state; #414567 is ~9:1 on white. */
+.hospital-select__button[aria-expanded="true"] {
+    border-color: #414567;
+}
+
+/* 24px boxes as in Figma; Secondary/950, ~11:1 on white (WCAG 1.4.11). */
+.hospital-select__icon {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #353750;
+    font-size: 1rem;
+}
+
+.hospital-select__value {
+    flex: 1;
+    min-width: 0;
+    color: var(--color-ink-70);
+}
+
+.hospital-select__value--chosen {
+    color: var(--color-ink);
+}
+
+.hospital-select__button[aria-expanded="true"] .hospital-select__chevron {
+    transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hospital-select__chevron {
+        transition: transform 0.2s ease;
+    }
+}
+
+.hospital-select__menu {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    border: 1px solid var(--color-ink-10);
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(29, 28, 26, 0.08);
+    list-style: none;
+}
+
+.hospital-select__menu[hidden] {
+    display: none;
+}
+
+/* 40px tall: over the 24px of WCAG 2.5.8. */
+.hospital-select__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px;
+    border-radius: 4px;
+    color: var(--color-ink);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.hospital-select__option > span {
+    flex: 1;
+}
+
+.hospital-select__option:hover,
+.hospital-select__option[aria-current="true"] {
+    background: var(--color-ink-06);
+}
+
+/* Inset, so the ring stays inside the menu's padding. */
+.hospital-select__option:focus-visible {
+    outline-offset: -2px;
+}
+
+.hospital-select__check {
+    visibility: hidden;
+    color: #353750;
+}
+
+.hospital-select__option[aria-current="true"] .hospital-select__check {
+    visibility: visible;
+}
+
+.hospital-contact {
+    margin-top: 16px;
+}
+
+.hospital-contact__hint {
+    color: var(--color-ink-70);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* ----- The chosen hospital (hospital_contact.html, Figma 7770:24) ----- */
+.hospital-card {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    padding: 24px;
+    border: 1px solid var(--color-ink-10);
+    border-radius: 16px;
+    background: #fff;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.hospital-card__identity {
+    display: flex;
+    flex: 0 0 176px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+/* Figma's logo is a 144px square; the repo's logos are mostly wide lockups,
+   so they get the column's full width at that height. */
+.hospital-card__logo {
+    display: block;
+    width: 100%;
+    height: 144px;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.hospital-card__name {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+.hospital-card__divider {
+    flex: none;
+    width: 1px;
+    background: var(--color-ink-10);
+}
+
+.hospital-card__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+
+.hospital-card__block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* One line per detail. */
+.hospital-card__block p > * {
+    display: block;
+}
+
+.hospital-card a {
+    color: inherit;
+    text-decoration: underline;
+    /* An email address is one long word; let it wrap at 320px (WCAG 1.4.10). */
+    overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 1000px) {
+    .contact-card {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .contact-card__intro {
+        gap: 40px;
+        padding: 32px 24px;
+    }
+
+    .contact-card__select {
+        padding: 32px 24px;
+        border-left: 0;
+        border-top: 1px solid var(--color-ink-10);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .hospital-card {
+        flex-direction: column;
+    }
+
+    .hospital-card__identity {
+        flex-basis: auto;
+    }
+
+    .hospital-card__logo {
+        width: 176px;
+        height: 112px;
+    }
+
+    .hospital-card__divider {
+        width: auto;
+        height: 1px;
+    }
+}
