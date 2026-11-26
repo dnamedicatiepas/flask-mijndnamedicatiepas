@@ -78,6 +78,28 @@ QR_TABS = [
 # TODO: `hours` is the placeholder from the Figma design, not real data.
 PLACEHOLDER_HOURS = "Bereikbaar: maandag t/m vrijdag, 9.30 - 15.30 uur"
 ISSUERS = {
+    "AmsterdamUMC": {
+        "name": "Amsterdam UMC",
+        "logo": "images/logos/on-dark/amsterdam-umc.svg",
+        "logo_light": "images/logos/on-light/amsterdam-umc.svg",
+        "logo_alt": "Amsterdam UMC",
+        "website": "https://www.amsterdamumc.nl",
+        "spokesperson": "Pierre Bet",
+        "spokesperson_email": "pm.bet@amsterdamumc.nl",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Meibergdreef 9",
+        "postcode_city": "1105 AZ, Amsterdam"
+    },
+    "Erasmus MC": {
+        "name": "Erasmus MC",
+        "logo": "images/logos/on-dark/erasmusmc.svg",
+        "logo_light": "images/logos/on-light/erasmusmc.svg",
+        "logo_alt": "Erasmus MC",
+        "website": "https://www.erasmusmc.nl",
+        "hours": PLACEHOLDER_HOURS,
+        "street": "Dr. Molewaterplein 40",
+        "postcode_city": "3015 GD, Rotterdam"
+    },
     "LUMC": {
         "name": "LUMC",
         "logo": "images/logos/on-dark/lumc.svg",
@@ -91,17 +113,15 @@ ISSUERS = {
         "street": "Albinusdreef 2",
         "postcode_city": "2333 ZA, Leiden"
     },
-    "AmsterdamUMC": {
-        "name": "Amsterdam UMC",
-        "logo": "images/logos/on-dark/amsterdam-umc.svg",
-        "logo_light": "images/logos/on-light/amsterdam-umc.svg",
-        "logo_alt": "Amsterdam UMC",
-        "website": "https://www.amsterdamumc.nl",
-        "spokesperson": "Pierre Bet",
-        "spokesperson_email": "pm.bet@amsterdamumc.nl",
+    "Maasstad Ziekenhuis": {
+        "name": "Maasstad Ziekenhuis",
+        "logo": "images/logos/on-dark/maasstad.svg",
+        "logo_light": "images/logos/on-light/maasstad.svg",
+        "logo_alt": "Maasstad Ziekenhuis",
+        "website": "https://www.maasstadziekenhuis.nl",
         "hours": PLACEHOLDER_HOURS,
-        "street": "Meibergdreef 9",
-        "postcode_city": "1105 AZ, Amsterdam"
+        "street": "Maasstadweg 21",
+        "postcode_city": "3079 DZ, Rotterdam"
     },
     # Not in lab_table yet.
     "Prinses Máxima Centrum": {
@@ -114,26 +134,8 @@ ISSUERS = {
         "street": "Heidelberglaan 25",
         "postcode_city": "3584 CS, Utrecht"
     },
-    "Maasstad Ziekenhuis": {
-        "name": "Maasstad Ziekenhuis",
-        "logo": "images/logos/on-dark/maasstad.svg",
-        "logo_light": "images/logos/on-light/maasstad.svg",
-        "logo_alt": "Maasstad Ziekenhuis",
-        "website": "https://www.maasstadziekenhuis.nl",
-        "hours": PLACEHOLDER_HOURS,
-        "street": "Maasstadweg 21",
-        "postcode_city": "3079 DZ, Rotterdam"
-    },
-    "Erasmus MC": {
-        "name": "Erasmus MC",
-        "logo": "images/logos/on-dark/erasmusmc.svg",
-        "logo_light": "images/logos/on-light/erasmusmc.svg",
-        "logo_alt": "Erasmus MC",
-        "website": "https://www.erasmusmc.nl",
-        "hours": PLACEHOLDER_HOURS,
-        "street": "Dr. Molewaterplein 40",
-        "postcode_city": "3015 GD, Rotterdam"
-    }
+
+
 }
 
 
@@ -366,7 +368,7 @@ def app_offline():
 
 # The QR codes on issued passes point to pongs-flask's /v1/<profile> and
 # /v2/<profile>; they open the pas here.
-@app.route('/<any(v1, v2):scheme>/<encoded_profile>')
+@app.route('/<any(v1, v2):scheme>/<encoded_profile>/')
 def pongs_profile(scheme, encoded_profile):
     return redirect(url_for("medication", scheme=scheme, encoded_profile=encoded_profile))
 
