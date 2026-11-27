@@ -18,7 +18,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_prefix=1)
 # defaults expect the G-Standaard database in instance/ and the koppelingen and
 # locus_definitions repositories next to this one. A config file named by the
 # MIJNDNAMEDICATIEPAS_CONF environment variable (an absolute path) overrides them.
-_workspace_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_workspace_dir = os.path.dirname(os.path.abspath(__file__))
 app.config.from_mapping(
     SQLALCHEMY_DATABASE_URI="sqlite:///" + os.path.join(app.instance_path, "gstandaard.db").replace("\\", "/"),
     TRANSLATION_TABLES_DIR=os.path.join(_workspace_dir, "koppelingen", "vertaling_haplotypes_tsitnrs"),
