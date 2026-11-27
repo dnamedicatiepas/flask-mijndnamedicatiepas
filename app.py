@@ -10,6 +10,10 @@ import pongs
 
 app = Flask(__name__)
 
+# Temporary while running under /new
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_prefix=1)
+
 # The data sources of the PONGS procedure (see pongs.py and the README). The
 # defaults expect the G-Standaard database in instance/ and the koppelingen and
 # locus_definitions repositories next to this one. A config file named by the
