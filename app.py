@@ -188,7 +188,7 @@ def _get_pas(scheme, encoded_profile):
 def load_pas(scheme, encoded_profile):
     try:
         return _get_pas(scheme, encoded_profile)
-    except pongs.InvalidProfile:
+    except Exception:
         abort(404)
 
 

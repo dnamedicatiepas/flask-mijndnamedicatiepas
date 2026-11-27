@@ -32,10 +32,6 @@ db = SQLAlchemy()
 SCHEMES = ("v1", "v2")
 
 
-class InvalidProfile(Exception):
-    """The encoded profile can't be decoded, or its version has no data."""
-
-
 def get_pas(scheme, encoded_profile):
     """Run the procedure for one pas.
 
@@ -49,13 +45,13 @@ def get_pas(scheme, encoded_profile):
                 by protocol (the medicine). gene/phenotype are the gene result
                 that triggered the advice.
 
-    Raises InvalidProfile if the profile can't be decoded.
+    Raises Exception if the profile can't be decoded.
     """
     if scheme == "v1":
         return _get_pas_v1(encoded_profile)
     if scheme == "v2":
         return _get_pas_v2(encoded_profile)
-    raise InvalidProfile(f"Unknown scheme: {scheme}")
+    raise Exception(f"Unknown scheme: {scheme}")
 
 
 def _get_pas_v1(encoded_profile):
@@ -68,12 +64,12 @@ def _get_pas_v1(encoded_profile):
         variant_table = variant_tables[version_id]
     except Exception as e:
         # Anything can go wrong decoding a corrupt or made-up profile.
-        raise InvalidProfile(f"Can't decode v1 profile: {e}") from e
+        raise Exception(f"Can't decode v1 profile: {e}") from e
 
     locus_definition_path = os.path.join(current_app.config['LOCUS_DEFINITIONS'], version_string)
     locus_files = glob.glob(locus_definition_path + '/*.yaml')
     if not locus_files:
-        raise InvalidProfile(f"No locus definitions for {version_string}")
+        raise Exception(f"No locus definitions for {version_string}")
 
     variant_json = vl2json(sample_variants, variant_table)
     coverage = vl2cov(sample_variants, variant_table)
@@ -126,7 +122,7 @@ def _get_pas_v2(encoded_profile):
         haps = [translation_table[idx] for idx in sample_alleles]
     except Exception as e:
         # Anything can go wrong decoding a corrupt or made-up profile.
-        raise InvalidProfile(f"Can't decode v2 profile: {e}") from e
+        raise Exception(f"Can't decode v2 profile: {e}") from e
 
     diplotypes = [(h['gene'], h['allele_a'], h['allele_b']) for h in haps]
     genes, tsitnrs = _translate(version_string, diplotypes)
@@ -152,7 +148,10 @@ def _translate(version_string, diplotypes):
     phenotype in the G-Standaard (advice no longer available) is left out of
     the gene table, but its tsitnr is still evaluated, as in pongs-flask.
     """
-    translation_table = _read_translation_table(version_string)
+    try:
+        translation_table = _read_translation_table(version_string)
+    except:
+        raise Exception("Failed to read translation table")
 
     genes = []
     tsitnrs = {}
