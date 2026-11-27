@@ -28,7 +28,7 @@ app.config.from_envvar("MIJNDNAMEDICATIEPAS_CONF", silent=True)
 pongs.db.init_app(app)
 
 # Used for <link rel="canonical"> and og:url, which must be absolute.
-SITE_URL = "https://mijndnamedicatiepas.nl"
+# SITE_URL = "https://mijndnamedicatiepas.nl/new"
 
 # The "Voor Patiënten" / "Voor Professionals" toggle in the header. `page` is
 # matched against the `current_page` a route passes to mark the active tab.
@@ -228,7 +228,7 @@ def render_mijn_pas(page, encoded_profile, pas, **context):
 
 @app.context_processor
 def inject_globals():
-    return {"site_url": SITE_URL, "nav_tabs": NAV_TABS, "faq_items": FAQ_ITEMS, "qr_tabs": QR_TABS}
+    return {"site_url": request.root_url, "nav_tabs": NAV_TABS, "faq_items": FAQ_ITEMS, "qr_tabs": QR_TABS}
 
 
 # The Mijn Pas pages take the profile's scheme (v1 or v2) from the URL. Links
